@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>세종대 AI 어시스턴트</title>
+    <!-- 디자인을 예쁘게 만들어주는 Tailwind CSS 자동 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 h-screen flex flex-col items-center justify-center p-4">
+    <div class="w-full max-w-2xl bg-white rounded-xl shadow-2xl flex flex-col h-[85vh] overflow-hidden">
+        
+        <!-- 상단 헤더 -->
+        <div class="bg-red-700 p-5 text-white font-bold text-xl flex items-center shadow-md">
+            🎓 세종대 전용 AI 캠퍼스 플랫폼
+        </div>
+        
+        <!-- 대화가 표시되는 창 -->
+        <div id="chat-box" class="flex-1 p-5 overflow-y-auto space-y-4 bg-gray-50">
+            <div class="bg-white border border-gray-200 text-gray-800 p-4 rounded-xl rounded-tl-none w-max max-w-[80%] shadow-sm">
+                안녕하세요! 세종대 학사 일정, 공학인증, 실시간 식단 등 무엇이든 물어보세요.
+            </div>
+        </div>
+
+        <!-- 질문 입력 창 -->
+        <div class="p-4 bg-white border-t border-gray-200 flex gap-3">
+            <input type="text" id="user-input" class="flex-1 border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-600 transition" placeholder="여기에 질문을 입력하세요...">
+            <button onclick="sendMessage()" class="bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-lg font-bold transition duration-200 shadow-md">전송</button>
+        </div>
+    </div>
+
+    <!-- 백엔드 서버와 통신하는 자바스크립트 로직 -->
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const chatBox = document.getElementById('chat-box');
+            
+            // 내가 보낸 질문 화면에 표시
+            chatBox.innerHTML += `<div class="bg-red-600 text-white p-4 rounded-xl rounded-tr-none w-max max-w-[80%] ml-auto shadow-sm">${message}</div>`;
+            input.value = '';
+
+            // AI가 답변을 고민하는 '...' 표시 추가
+            const aiMessageId = 'ai-msg-' + Date.now();
+            chatBox.innerHTML += `<div id="${aiMessageId}" class="bg-white border border-gray-200 text-gray-800 p-4 rounded-xl rounded-tl-none w-max max-w-[80%] mt-4 shadow-sm">...</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                // 백엔드 서버로 질문 전송 (로컬 테스트용 주소. 배포 시 Render 주소로 변경)
+                const response = await fetch('http://localhost:8000/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+
+                // 스트리밍(타이핑 효과) 데이터 받아오기
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                const aiElement = document.getElementById(aiMessageId);
+                aiElement.innerHTML = ''; 
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    const chunk = decoder.decode(value);
+                    const lines = chunk.split('\n');
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            aiElement.innerHTML += line.replace('data: ', '');
+                            chatBox.scrollTop = chatBox.scrollHeight;
+                        }
+                    }
+                }
+            } catch (error) {
+                document.getElementById(aiMessageId).innerHTML = "서버 연결에 실패했습니다. 백엔드 서버가 켜져 있는지 확인해주세요.";
+            }
+        }
+
+        // 엔터키를 눌러도 전송되도록 설정
+        document.getElementById('user-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
