@@ -210,6 +210,16 @@
       else d.capstone.forEach((n) => { if (!inList(n, major.required)) push("DESIGN", `종합설계 ${n}`, !!has(n), has(n) ? "이수" : "미이수", has(n) ? [] : [n]); });
     }
 
+    // 종합설계를 듣는 학기까지 기초·요소설계 학점이 다 차 있어야 한다 (공학교육센터 안내)
+    const firstCap = capTaken.map((c) => termOrder(c.term)).filter((t) => t != null).sort((a, b) => a - b)[0];
+    if (firstCap != null && major.designMin) {
+      const capCr = Math.max(...capTaken.map((c) => designCredit(rule, c.name)), 3);
+      const before = designRows.filter((r) => r.counted && !inList(r.name, d.capstone) && termOrder(r.term) != null && termOrder(r.term) <= firstCap).reduce((s, r) => s + r.design, 0);
+      const needBefore = major.designMin - capCr;
+      if (needBefore > 0) push("DESIGN", "종합설계 수강 학기까지 기초·요소설계 학점 확보", before >= needBefore,
+        `종합설계 학기까지 ${before}/${needBefore}학점${before >= needBefore ? "" : " · 이대로면 설계학점 전체가 인정되지 않을 수 있음"}`, []);
+    }
+
     // 추가 조건
     (rule.extra || []).forEach((x) => {
       const got = courses.filter((c) => inList(c.name, x.courses));

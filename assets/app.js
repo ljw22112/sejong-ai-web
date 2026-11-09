@@ -8,7 +8,8 @@
   const GROUP_LABEL = { GE: "전문교양", MSC: "MSC", MAJOR: "전공", DESIGN: "설계", EXTRA: "추가 조건" };
   const FAMILY_ORDER = ["sw", "robot", "ee", "mech", "aero", "nano", "nuclear", "civil", "arch", "env", "energy"];
 
-  let DATA = null, KNOWN = [];
+  let DATA = null, KNOWN = [], GRADD = null, OFFERED = null;
+  const GR = window.GRAD;
   const S = { courses: [], program: null, admit: null, basis: null, track: null, next: null, cap: 15, autoProgram: false };
 
   const PERSON = { sid: "", name: "", gradDate: "" }; // 저장하지 않음
@@ -36,6 +37,14 @@
     KNOWN = [...names].filter((n) => n.length >= 2);
 
     if (DATA.updated) $("#stamp").textContent = `요건 기준 ${DATA.updated.replace(/-/g, ".")} · 매 학기 공학교육센터 요건 자동 확인`;
+    // 부가 데이터: 없어도 동작
+    const opt = (u) => fetch(u).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+    [GRADD, OFFERED] = await Promise.all([opt("data/grad.json"), opt("data/offered.json")]);
+    opt("data/notices.json").then((n) => {
+      if (!n || !n.items || !n.items.length) return;
+      $("#notices").innerHTML = n.items.slice(0, 4).map((x) => `<li><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.title)}</a> <span class="date">${esc(x.date)}</span></li>`).join("");
+      $("#noticeBox").hidden = false;
+    });
     const saved = store.load();
     if (saved && saved.courses) Object.assign(S, saved);
     fillPrograms();
@@ -46,10 +55,24 @@
   }
 
   const prog = () => DATA.programs[S.program];
+  const latestYear = () => Object.keys(prog().years).sort().pop();
+  /** 공학교육센터 안내: 교과목은 입학 연도 기준, 최소이수학점은 최신 연도 기준 */
   const rule = () => {
     const p = prog();
-    return p.years[S.basis] || p.years[S.admit] || p.years[Object.keys(p.years).sort().pop()];
+    const admitR = p.years[S.admit] || p.years[latestYear()];
+    if (S.basis === "latest") {
+      const L = p.years[latestYear()];
+      if (!L || L === admitR) return admitR;
+      return Object.assign({}, admitR, {
+        ge: Object.assign({}, admitR.ge, { min: L.ge.min }),
+        msc: Object.assign({}, admitR.msc, { min: L.msc.min }),
+        major: Object.assign({}, admitR.major, { min: L.major.min, designMin: L.major.designMin }),
+        totalMin: L.totalMin, mergedFrom: latestYear(),
+      });
+    }
+    return p.years[S.basis] || admitR;
   };
+  const basisLabel = () => (S.basis === "latest" ? `${S.admit}학번 과목 · ${latestYear()}년 최소학점 기준` : `${S.basis}년 공학인증요건 기준`);
 
   function fillPrograms() {
     const sel = $("#program");
@@ -65,13 +88,14 @@
     $("#admit").innerHTML = years.map((y) => `<option value="${y}">${y}학번</option>`).join("");
     $("#admit").value = S.admit;
     const later = years.filter((y) => y >= S.admit);
-    if (!later.includes(S.basis)) S.basis = S.admit;
-    $("#basis").innerHTML = later.map((y) => `<option value="${y}">${y === S.admit ? "입학 연도 기준" : `${y}년 기준`}</option>`).join("");
+    if (S.basis !== "latest" && !later.includes(S.basis)) S.basis = "latest";
+    $("#basis").innerHTML = `<option value="latest">최신 최소학점 + 내 학번 과목 (권장)</option>` + later.map((y) => `<option value="${y}">${y === S.admit ? "입학 연도 기준 그대로" : `${y}년 기준 그대로`}</option>`).join("");
     $("#basis").value = S.basis;
     const notes = [];
     if (S.autoProgram) notes.push("성적표 과목으로 학과를 추정했습니다. 다르면 바꿔 주세요.");
     if (p.status) notes.push(p.status);
-    if (S.basis !== S.admit) notes.push("인증기준이 바뀐 경우 졸업 시점 기준을 적용받을 수 있습니다. 적용 가능 여부는 공학교육센터에 확인하세요.");
+    if (S.basis === "latest") notes.push(`공학교육센터 안내대로 교과목은 ${S.admit}학번 기준, 최소이수학점은 최신(${latestYear()}년) 기준으로 계산합니다.`);
+    else if (S.basis !== S.admit) notes.push("다른 연도 기준 적용 가능 여부는 공학교육센터에 확인하세요.");
     $("#programNote").innerHTML = notes.map(esc).join("<br>");
 
     const tracks = C.forFamily(p.family);
@@ -377,6 +401,15 @@
     $("#curTerm").addEventListener("change", (e) => { S.curTerm = e.target.value; render(); });
     ["sid", "sname", "gradDate"].forEach((id) => $("#" + id).addEventListener("input", (e) => { PERSON[id === "sname" ? "name" : id] = e.target.value; render(); }));
     $("#printBtn").addEventListener("click", () => window.print());
+    $("#ttBtn").addEventListener("click", makeTimetable);
+    $("#ttNext").addEventListener("click", () => { ttState.i = (ttState.i + 1) % ttState.list.length; renderTimetable(); });
+    $("#summaryBtn").addEventListener("click", () => {
+      document.body.classList.add("print-summary");
+      const done = () => { document.body.classList.remove("print-summary"); window.removeEventListener("afterprint", done); };
+      window.addEventListener("afterprint", done);
+      window.print();
+      setTimeout(done, 1500);
+    });
     $("#csvBtn").addEventListener("click", () => {
       const r = rule(), res = E.evaluate(r, S.courses);
       const blob = new Blob([SH.csv(r, res, S.courses, sheetInfo())], { type: "text/csv;charset=utf-8" });
@@ -451,7 +484,7 @@
     const plannedCr = rec.chosen.reduce((s, c) => s + c.credit, 0) + planned.reduce((s, c) => s + c.credit, 0);
     const nPlanned = rec.chosen.length + planned.length;
     v.innerHTML = res.ok
-      ? `<span class="big">공학인증 요건을 모두 채웠습니다</span><p>${esc(prog().dept)} ${esc(S.basis)}년 기준. 졸업 전 공학교육센터에서 최종 확인을 받으세요.</p>`
+      ? `<span class="big">공학인증 요건을 모두 채웠습니다</span><p>${esc(prog().dept)} ${esc(basisLabel())}. 졸업 전 공학교육센터에서 최종 확인을 받으세요.</p>`
       : `<span class="big">${shortAreas.length ? shortAreas.map((a) => `${a.label} ${fmt(a.min - a.earned)}학점`).join(", ") + " 부족" : "학점은 채웠고 필수 과목이 남았습니다"}</span>
          <p>필수 조건 ${openChecks.length}개가 아직 남았습니다. ${after.ok ? `아래 계획대로 ${plannedCr}학점(${nPlanned}과목)을 더 들으면 요건을 채웁니다.` : `아래 계획으로는 아직 채우지 못하는 요건이 있습니다: ${after.areas.filter((a) => !a.ok).map((a) => `${a.label} ${fmt(a.min - a.earned)}학점`).concat(after.checks.filter((c) => !c.ok).slice(0, 2).map((c) => c.label)).join(", ")}.`}</p>`;
 
@@ -485,8 +518,18 @@
     const tg = $("#toggleDone");
     if (tg) tg.onclick = () => { S.showDone = !S.showDone; render(); };
 
+    // 학과 졸업요건 + 인증 유지/포기 비교
+    const g = renderGrad(res, rec, planned);
+    if (g) {
+      const open = g.rows.filter((x) => x.ok === false);
+      const unk = g.rows.filter((x) => x.ok === null).length;
+      $("#verdict").insertAdjacentHTML("beforeend", `<p class="both"><span class="pill ${res.ok ? "ok" : "no"}">공학인증 ${res.ok ? "충족" : "미충족"}</span><span class="pill ${g.ok ? "ok" : open.length ? "no" : "unk"}">학과 졸업 ${g.ok ? "충족" : open.length ? `미충족 ${open.length}개` : "확인 필요"}</span>${unk ? `<span class="hint">이수구분 정보가 없어 ${unk}개 항목은 판정하지 못했습니다.</span>` : ""}</p>`);
+      if (res.ok && !g.ok && open.length) $("#verdict").className = "verdict no";
+    }
+    $("#ttSub").textContent = OFFERED ? `${OFFERED.semester || "현재"} 수강편람 기준 · 강좌 ${OFFERED.count}개` : "";
+
     // 계획
-    $("#planSub").textContent = `${track ? track.label : ""} 진로 기준 · 학기당 인증과목 최대 ${S.cap}학점`;
+    $("#planSub").textContent = `${track ? track.label : ""} 진로 기준 · 학기당 인증과목 최대 ${S.cap}학점` + (OFFERED ? ` · 개설 여부는 ${OFFERED.semester || "현재"} 수강편람(${OFFERED.updated}) 기준` : "");
     const d = r.design || {};
     $("#plan").innerHTML = rec.semesters.length ? rec.semesters.filter((s) => s.courses.length).map((s) => {
       const sum = s.courses.reduce((a, c) => a + c.credit, 0);
@@ -496,6 +539,10 @@
         if (c.design) tags.push(`<span class="tag dsg">설계 ${fmt(c.design)}</span>`);
         if (c.fit > 0) tags.push('<span class="tag fit">진로</span>');
         if (c.mine) tags.push('<span class="tag mine">내 계획</span>');
+        const off = offeredInfo(c.name);
+        if (off) tags.push(off.length
+          ? `<span class="tag open" title="${esc(off.slice(0, 6).map((x) => `${x.cl}분반 ${x.t || "시간 미정"} ${x.p}`).join("\n"))}">이번 학기 ${off.length}분반</span>`
+          : '<span class="tag closed" title="현재 수강편람에 없는 과목입니다">이번 학기 미개설</span>');
         const when = c.mine ? "" : c.year && c.sem ? `권장 ${c.year}-${c.sem}` : c.sem ? `${c.sem}학기 개설` : "";
         const btn = c.mine
           ? `<button type="button" class="mini" data-unplan="${esc(c.name)}" aria-label="${esc(c.name)} 계획에서 삭제">삭제</button>`
@@ -539,17 +586,24 @@
     const guesses = res.courses.filter((c) => c.guess).length;
     const n = r.notes || {};
     $("#notes").innerHTML = `
-      ${res.renamed.length ? `<p class="warn">${esc(S.basis)}학번 기준에는 이름이 다르게 올라 있어 같은 과목으로 인정한 과목: ${res.renamed.map((x) => `${esc(x.from)} → ${esc(x.to)}`).join(", ")}. 학번별 대체과목 인정은 학과마다 다를 수 있으니 확인해 주세요.</p>` : ""}
+      ${res.renamed.length ? `<p class="warn">${esc(S.admit)}학번 기준에는 이름이 다르게 올라 있어 같은 과목으로 인정한 과목: ${res.renamed.map((x) => `${esc(x.from)} → ${esc(x.to)}`).join(", ")}. 학번별 대체과목 인정은 학과마다 다를 수 있으니 확인해 주세요.</p>` : ""}
       ${guesses ? `<p class="warn">교과과정표에 없는 과목 ${guesses}개는 성적표 이수구분(전필·전선)만 보고 전공으로 셌습니다. 노란 테두리 과목을 확인해 주세요.</p>` : ""}
       ${notDesign.length ? `<p class="warn">설계학점으로 인정하지 않은 과목: ${notDesign.map((x) => `${esc(x.name)}(${esc(x.why)})`).join(", ")}</p>` : ""}
-      ${r.catalogFrom ? `<p>${esc(S.basis)}학번 이수체계표가 게시되지 않아, 과목 분류와 추천에는 ${esc(r.catalogFrom)}학번 표를 사용했습니다.</p>` : ""}
-      <p>${esc(prog().name)} 프로그램, ${esc(S.basis)}년 공학인증요건 기준. 원문: <a href="${esc(r.src)}" target="_blank" rel="noopener">공학교육센터 페이지</a></p>
+      ${r.catalogFrom ? `<p>${esc(S.admit)}학번 이수체계표가 게시되지 않아, 과목 분류와 추천에는 ${esc(r.catalogFrom)}학번 표를 사용했습니다.</p>` : ""}
+      <p>${esc(prog().name)} 프로그램, ${esc(basisLabel())}. 원문: <a href="${esc(r.src)}" target="_blank" rel="noopener">공학교육센터 페이지</a></p>
       <details><summary>요건 원문 보기</summary>
         ${["GE", "MSC", "MAJOR", "TOTAL", "notice"].filter((k) => n[k]).map((k) => `<p class="raw"><b>${{ GE: "전문교양", MSC: "MSC/BSM", MAJOR: "전공·설계", TOTAL: "인증 최소학점", notice: "공지" }[k]}</b>\n${esc(n[k])}</p>`).join("")}
       </details>`;
   }
 
   const fmt = (x) => (Math.round(x * 10) / 10).toString();
+
+  function offeredInfo(name) {
+    if (!OFFERED || !OFFERED.courses) return null;
+    const k = E.nkey(name);
+    for (const n of Object.keys(OFFERED.courses)) if (E.nkey(n) === k || E.same(n, name)) return OFFERED.courses[n];
+    return [];
+  }
 
   function termOptions() {
     const out = [];
@@ -562,10 +616,122 @@
     return out.join("");
   }
 
+  const CERT_LABEL = { 영어졸업인증: "영어", 고전독서졸업인증: "고전독서", 고전독서인증: "고전독서", 소프트웨어코딩졸업인증: "SW코딩" };
+  function renderGrad(res, rec, planned) {
+    const box = $("#gradBlock");
+    const dr = GRADD && GR ? GR.deptRule(GRADD, S.program, Number(S.admit)) : null;
+    if (!dr) { box.hidden = true; return; }
+    box.hidden = false;
+    S.certs = S.certs || {};
+    const g = GR.evaluateGrad(dr, S.courses, S.certs);
+    $("#gradSub").textContent = `${dr.dept} ${dr.year}학번 교과과정 기준${dr.year !== String(S.admit) ? ` (${S.admit}학번 표가 없어 가장 가까운 연도)` : ""}${dr.from ? ` · ${dr.from}년 표 준용` : ""}`;
+    $("#gradRows").innerHTML = g.rows.map((x) => {
+      const mark = x.ok === null ? '<span class="mark unk" aria-label="판정 불가">?</span>' : `<span class="mark ${x.ok ? "ok" : "no"}" aria-label="${x.ok ? "충족" : "미충족"}">${x.ok ? "✓" : ""}</span>`;
+      const unit = x.unit || "학점";
+      return `<li>${mark}<span>${esc(x.label)}<span class="det">${esc(x.note || "")}</span></span><span class="grp">${x.unknown ? "-" : `${fmt(x.earned)} / ${fmt(x.min)}${unit}`}</span></li>`;
+    }).join("");
+    if (dr.cert) {
+      $("#certs").hidden = false;
+      $("#certs").innerHTML = `<legend>통과한 졸업인증 (${dr.cert.items.length}개 중 ${dr.cert.pick}개 필요)</legend>` +
+        dr.cert.items.map((it) => `<label class="cert"><input type="checkbox" data-cert="${esc(it)}" ${S.certs[it] ? "checked" : ""}> ${esc(CERT_LABEL[it] || it)}</label>`).join("") +
+        (dr.cert.note ? `<p class="hint">${esc(dr.cert.note)}</p>` : "");
+      $("#certs").onchange = (e) => { if (e.target.dataset.cert) { S.certs[e.target.dataset.cert] = e.target.checked; render(); } };
+    } else $("#certs").hidden = true;
+
+    // 공학인증 유지 vs 포기
+    const planCr = rec.chosen.reduce((s2, c) => s2 + c.credit, 0) + planned.reduce((s2, c) => s2 + c.credit, 0);
+    const cmp = GR.compare(g, res, planCr, 18);
+    const cell = (x) => `<b>${x.credits}학점</b><span>약 ${x.semesters}학기 (학기당 18학점)</span><span>남은 조건 ${x.open}개</span>`;
+    $("#compare").innerHTML = `
+      <h3>공학인증 유지 vs 포기</h3>
+      <div class="cmp">
+        <div><h4>유지</h4>${cell(cmp.keep)}</div>
+        <div><h4>포기 (학과 졸업요건만)</h4>${cell(cmp.quit)}</div>
+      </div>
+      <p class="hint">2016학번부터는 공학인증을 이수해야 졸업할 수 있고, 포기는 ${esc(GR.QUIT_REASONS.slice(0, 7).join("·"))} 등 사유가 있을 때만 3학년 2학기에 포기서로 가능합니다. 사유가 없어지면 다시 인증을 이수해야 합니다. 남은 학점은 이수구분 기준 추정치입니다.</p>`;
+    return g;
+  }
+
+  // ---------- 추천 시간표 ----------
+  const TT = window.TIMETABLE;
+  let ttState = { list: [], i: 0 };
+  function ttCandidates(r, res, rec, g) {
+    const d = r.design || {};
+    const taken = (n) => res.courses.some((c) => E.same(c.name, n)) || (S.exclude || []).some((x) => E.same(x, n));
+    const out = [];
+    const add = (name, credit, weight, reason, kind) => {
+      if (!name || taken(name) || out.some((c) => E.same(c.name, name))) return;
+      out.push({ name, credit: credit || 3, weight, reason, kind });
+    };
+    const first = rec.semesters[0];
+    (first ? first.courses : []).forEach((c) => add(c.name, c.credit, c.kind === "required" || c.mine ? 110 : 100, c.mine ? "내 계획" : `계획 ${first.label}`, c.kind || "plan"));
+    rec.chosen.forEach((c) => { if (!E.inList(c.name, d.capstone)) add(c.name, c.credit, c.kind === "required" ? 60 : c.design ? 50 : 35, "공학인증 계획", c.kind); });
+    (g && g.missingCommon ? g.missingCommon : []).forEach((x) => add(x.name, x.credit, 40, "교양 공통필수", "grad"));
+    const track = C.tracks.find((t) => t.id === S.track);
+    rec.picks.forEach((p2) => add(p2.name, p2.credit, 20 + p2.fit * 3, "진로", "fit"));
+    (r.catalog || []).filter((c) => c.area === "MAJOR").map((c) => ({ c, f: E.careerScore(track, c.name) })).filter((x) => x.f > 0)
+      .sort((a, b) => b.f - a.f).slice(0, 15).forEach((x) => add(x.c.name, x.c.credit, 10 + x.f * 2, "진로", "fit"));
+    if (OFFERED) {
+      // 이번 수강편람에 있는 우리 학과 전공 과목 중 진로에 맞는 것
+      const depts = (GR && GR.DEPT[S.program]) || [];
+      const deptOf = (secs) => secs.some((x) => depts.some((dn) => (x.d || "").replace(/\s/g, "").includes(dn.replace(/(학과|전공|학부)$/, ""))));
+      Object.entries(OFFERED.courses).map(([n, secs]) => ({ n, secs, f: E.careerScore(track, n) }))
+        .filter((x) => x.f > 0 && x.secs.some((y) => /^전[필선기]/.test(y.k)) && deptOf(x.secs))
+        .sort((a, b) => b.f - a.f).slice(0, 25)
+        .forEach((x) => add(x.n, x.secs[0].cr || 3, 8 + x.f * 2, "진로 · 이번 학기 개설 전공", "fit"));
+      // 균형교양이 모자라면 개설된 균형교양
+      const bal = g && g.rows.find((r2) => r2.id === "balance");
+      if (bal && bal.ok === false) Object.entries(OFFERED.courses).filter(([, secs]) => secs.some((y) => y.k === "균필")).slice(0, 12)
+        .forEach(([n, secs]) => add(n, secs[0].cr || 3, 30, "균형교양 부족분", "grad"));
+    }
+    return out;
+  }
+
+  function renderTimetable() {
+    const out = $("#ttOut");
+    const t = ttState.list[ttState.i];
+    $("#ttNext").hidden = ttState.list.length < 2;
+    if (!t) { out.innerHTML = `<p class="warn">조건에 맞는 시간표를 찾지 못했습니다. 쉬는 요일이나 시간 조건을 줄이거나, 목표 학점을 낮춰 보세요.</p>`; return; }
+    const timed = t.courses.filter((c) => c.slots.length), untimed = t.courses.filter((c) => !c.slots.length);
+    const start = 9 * 60, end = Math.max(18 * 60, ...timed.flatMap((c) => c.slots.map((x) => Math.ceil(x.e / 30) * 30)));
+    const rows = (end - start) / 30;
+    let cells = `<div class="tt-h"></div>` + TT.DAYS.slice(0, 5).map((dname) => `<div class="tt-h">${dname}</div>`).join("");
+    for (let i = 0; i < rows; i++) cells += `<div class="tt-t" style="grid-row:${i + 2}">${i % 2 === 0 ? `${(start + i * 30) / 60}` : ""}</div>`;
+    timed.forEach((c, k) => c.slots.filter((x) => x.d < 5).forEach((x) => {
+      const r0 = Math.floor((x.s - start) / 30) + 2, r1 = Math.ceil((x.e - start) / 30) + 2;
+      cells += `<div class="tt-b k${k % 6} ${c.kind === "required" ? "req" : ""}" style="grid-column:${x.d + 2};grid-row:${r0}/${r1}" title="${esc(c.name)} ${esc(c.sec.cl)}분반 ${esc(c.sec.p)}"><b>${esc(c.name)}</b><span>${esc(c.sec.p || "")}</span></div>`;
+    }));
+    out.innerHTML = `
+      <p class="tt-sum"><b>${t.credits}학점 · ${t.courses.length}과목</b> (${ttState.i + 1}/${ttState.list.length}안)</p>
+      <div class="tt-grid" style="grid-template-rows: 26px repeat(${rows}, 20px)">${cells}</div>
+      <ul class="tt-list">${t.courses.map((c) => `<li><span><b>${esc(c.name)}</b> ${esc(c.sec.cl)}분반 · ${esc(c.sec.p || "교수 미정")} · ${esc(c.sec.t || "시간 미정")}</span><span class="why">${esc(c.reason)} · ${fmt(c.credit)}학점</span></li>`).join("")}</ul>
+      ${untimed.length ? `<p class="hint">시간이 정해지지 않은 과목(온라인·집중 이수 등): ${untimed.map((c) => esc(c.name)).join(", ")}</p>` : ""}
+      <p class="hint">${esc(OFFERED.semester || "현재")} 수강편람(${esc(OFFERED.updated)}, 올클 공개 데이터) 기준입니다. 수강신청 때 분반·여석·수강 대상 학년을 꼭 다시 확인하세요.</p>`;
+  }
+
+  function makeTimetable() {
+    if (!OFFERED || !TT) { $("#ttOut").innerHTML = `<p class="warn">개설 강좌 정보를 불러오지 못했습니다.</p>`; return; }
+    const r = rule(), res = E.evaluate(r, S.courses);
+    const track = C.tracks.find((t) => t.id === S.track);
+    const [ny, ns] = S.next.split("-").map(Number);
+    const rec = E.recommend(r, res, { track, nextYear: ny, nextSem: ns, cap: S.cap, exclude: S.exclude || [] });
+    const dr = GRADD && GR ? GR.deptRule(GRADD, S.program, Number(S.admit)) : null;
+    const g = dr ? GR.evaluateGrad(dr, S.courses, S.certs || {}) : null;
+    const cands = ttCandidates(r, res, rec, g);
+    const offDays = [...document.querySelectorAll(".offdays input:checked")].map((x) => +x.value);
+    const prefs = { cap: +$("#ttCap").value, offDays, noBefore: $("#ttNo9").checked ? 10 * 60 : 0, noAfter: $("#ttNoNight").checked ? 18 * 60 : 0 };
+    // 같은 과목이 여러 학과에 열리면 우리 학과 분반만 쓴다
+    const depts = ((GR && GR.DEPT[S.program]) || []).map((dn) => dn.replace(/(학과|전공|학부)$/, ""));
+    const mine = (x) => depts.some((dn) => (x.d || "").replace(/\s/g, "").includes(dn));
+    const sectionsOf = (n) => { const all = offeredInfo(n) || []; const own = all.filter(mine); return own.length ? own : all; };
+    ttState = { list: TT.build(cands, sectionsOf, prefs, 5), i: 0 };
+    renderTimetable();
+  }
+
   function sheetInfo() {
     const now = new Date();
     return {
-      programName: prog().name, basis: S.basis, currentTerm: S.curTerm || "",
+      programName: prog().name, basis: S.admit, currentTerm: S.curTerm || "",
       sid: PERSON.sid, name: PERSON.name, gradDate: PERSON.gradDate,
       date: `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, "0")}.${String(now.getDate()).padStart(2, "0")}`,
     };
@@ -589,32 +755,38 @@
   }
 
   const SAMPLE = `2024학년도 1학기
-문제해결을위한글쓰기와발표	교필	3	A+
-미적분학1	전기	3	B+
+세종인을위한진로설계	공필	1	P
+문제해결을위한글쓰기와발표	공필	3	A+
+미적분학1	기필	3	B+
 확률및통계	전기	3	A0
 C프로그래밍및실습	전기	3	A+
 2024학년도 2학기
-대학영어	교필	2	A0
-서양철학:쟁점과토론	교필	3	B0
+세종인을위한전공탐색	공필	1	P
+대학영어	공필	2	A0
+서양철학:쟁점과토론	공필	3	B0
+우주자연인간	공필	1	A0
 공업수학1	전기	3	B+
 선형대수	전기	3	A0
-고급C프로그래밍및실습	전선	3	A0
+고급C프로그래밍및실습	전기	3	A0
 2025학년도 1학기
 자료구조및실습	전필	3	A+
 디지털시스템	전필	3	B+
 공학설계기초(산학프로젝트입문)	전필	3	A0
 웹프로그래밍	전선	3	A0
-일반물리학1	전기	3	C+
+일반물리학1	기필	3	C+
+심리학의이해	균필	3	A0
 2025학년도 2학기
 알고리즘및실습	전필	3	B+
 이산수학및프로그래밍	전기	3	A0
 데이터베이스	전선	3	A+
 세계사	교선	3	A0
+인공지능과빅데이터	기필	3	B+
 2026학년도 1학기
 운영체제	전필	3	B0
 기계학습	전선	3	A+
 컴퓨터네트워크	전필	3	F
-경영학	교선	3	A0`;
+경영학	교선	3	A0
+현대사회와윤리	균필	3	B+`;
 
   boot();
 })();

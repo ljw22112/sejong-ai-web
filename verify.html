@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>요건 원문 대조표</title>
+  <meta name="description" content="세종대 공학인증 점검 사이트가 쓰는 학과·학번별 공학인증 요건과 학과 졸업요건을 원문과 나란히 보는 검증용 페이지">
+  <link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .vwrap { max-width: 1100px; margin: 0 auto; padding: 24px 20px 48px; }
+    .vhead { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 16px; }
+    .vhead .field { margin: 0; min-width: 240px; }
+    .vyear { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-md); padding: 16px 18px; margin-bottom: 14px; }
+    .vyear h2 { font-size: 17px; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .vyear h2 a { font-size: 13px; font-weight: 500; color: var(--ink-2); }
+    .vgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px; }
+    @media (max-width: 760px) { .vgrid { grid-template-columns: 1fr; } }
+    .vgrid h3 { font-size: 13px; color: var(--ink-2); margin: 0 0 6px; }
+    .vgrid dl { margin: 0; display: grid; grid-template-columns: 120px 1fr; gap: 4px 10px; font-size: 13px; }
+    .vgrid dt { color: var(--ink-3); }
+    .vgrid dd { margin: 0; }
+    .raw { white-space: pre-wrap; font-size: 12px; color: var(--ink-2); background: #f7f8fb; border-radius: var(--r-sm); padding: 10px; margin: 0; max-height: 260px; overflow: auto; }
+    .vcheck { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-in">
+      <div>
+        <h1>요건 원문 대조표</h1>
+        <p class="lede">사이트가 판정에 쓰는 학과·학번별 요건을 공학교육센터 원문과 나란히 보여 줍니다. 틀린 곳이 있으면 ‘오류 제보’로 알려 주세요.</p>
+      </div>
+      <div class="top-actions">
+        <a class="btn on-dark" href="./">점검 화면으로</a>
+        <a class="btn on-dark ghosty" href="https://github.com/ljw22112/sejong-ai-web/issues/new?title=%EC%9A%94%EA%B1%B4%20%EC%98%A4%EB%A5%98%20%EC%A0%9C%EB%B3%B4" target="_blank" rel="noopener">오류 제보</a>
+      </div>
+    </div>
+  </header>
+  <main class="vwrap">
+    <div class="vhead">
+      <label class="field">인증 프로그램 <select id="prog"></select></label>
+      <p class="hint" id="stamp"></p>
+    </div>
+    <div id="out"></div>
+  </main>
+  <script src="assets/engine.js"></script>
+  <script src="assets/grad.js"></script>
+  <script>
+    (async function () {
+      const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+      const [A, G] = await Promise.all([fetch("data/abeek.json").then((r) => r.json()), fetch("data/grad.json").then((r) => r.json()).catch(() => null)]);
+      document.getElementById("stamp").textContent = `공학인증 요건 수집 ${A.updated} · 학과 졸업요건 수집 ${G ? G.updated : "-"}`;
+      const sel = document.getElementById("prog");
+      sel.innerHTML = Object.entries(A.programs).map(([id, p]) => `<option value="${id}">${esc(p.name)} · ${esc(p.dept)}</option>`).join("");
+      const q = new URLSearchParams(location.search).get("p");
+      if (q && A.programs[q]) sel.value = q;
+      const list = (l) => (l && l.length ? l.map(esc).join(", ") : "-");
+      function draw() {
+        const id = sel.value, p = A.programs[id];
+        history.replaceState(null, "", `?p=${id}`);
+        document.getElementById("out").innerHTML = (p.status ? `<p class="warn">${esc(p.status)}</p>` : "") + Object.keys(p.years).sort().reverse().map((y) => {
+          const r = p.years[y], d = r.design || {};
+          const dr = G ? GRAD.deptRule(G, id, Number(y)) : null;
+          const n = r.notes || {};
+          return `<section class="vyear">
+            <h2>${y}학번 <a href="${esc(r.src)}" target="_blank" rel="noopener">공학교육센터 원문 열기</a></h2>
+            <div class="vgrid">
+              <div>
+                <h3>사이트가 쓰는 공학인증 요건</h3>
+                <dl>
+                  <dt>전문교양</dt><dd>${r.ge.min}학점 · 필수 ${list(r.ge.required)}${r.ge.pickN ? ` · 선택 ${r.ge.pickN}과목 이상 (${list(r.ge.electives)})` : ""}</dd>
+                  <dt>MSC/BSM</dt><dd>${r.msc.min}학점 · 필수 ${list(r.msc.required)}${r.msc.electives.length ? ` · 선택 ${list(r.msc.electives)}` : ""}</dd>
+                  <dt>전공</dt><dd>${r.major.min}학점 (설계 ${r.major.designMin ?? "-"}) · 필수 ${list(r.major.required)}</dd>
+                  <dt>기초설계</dt><dd>${list(d.basic)}</dd>
+                  <dt>요소설계</dt><dd>${list(d.element)}</dd>
+                  <dt>종합설계</dt><dd>${list(d.capstone)}${d.capstoneAnyOf ? " 중 1과목" : ""}</dd>
+                  ${(r.extra || []).map((x) => `<dt>추가 조건</dt><dd>${esc(x.label)}</dd>`).join("")}
+                  ${(r.prereqs || []).length ? `<dt>선후수</dt><dd>${r.prereqs.map((x) => esc(x.join(" → "))).join(", ")}</dd>` : ""}
+                  <dt>학과 졸업요건</dt><dd>${dr ? `${esc(dr.dept)} (${dr.year} 교과과정) · 졸업 ${dr.req.grad} · 공통 ${dr.req.geCommon} · 균형 ${dr.req.geBalance} · 학문기초 ${dr.req.geBasic} · 전공기초 ${dr.req.majorBasic} · 전필 ${dr.req.majorReq} · 전선 ${dr.req.majorElec}` : "-"}</dd>
+                </dl>
+              </div>
+              <div>
+                <h3>원문 발췌</h3>
+                <p class="raw">${esc([n.GE && "[전문교양] " + n.GE, n.MSC && "[MSC/BSM] " + n.MSC, n.MAJOR && "[전공·설계] " + n.MAJOR, n.TOTAL && "[최소학점] " + n.TOTAL].filter(Boolean).join("\n\n"))}</p>
+              </div>
+            </div>
+          </section>`;
+        }).join("");
+      }
+      sel.addEventListener("change", draw);
+      draw();
+    })();
+  </script>
+</body>
+</html>

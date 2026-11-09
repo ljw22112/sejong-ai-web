@@ -10,7 +10,12 @@
   <meta property="og:description" content="로그인 없이 성적표 하나로 공학인증 졸업요건 점검 · 진로별 남은 학기 계획 · 졸업심사 체크표 미리 채우기">
   <meta property="og:url" content="https://ljw22112.github.io/sejong-ai-web/">
   <meta property="og:locale" content="ko_KR">
+  <meta property="og:image" content="https://ljw22112.github.io/sejong-ai-web/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#1c2140">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -94,6 +99,11 @@
           </label>
         </div>
       </section>
+      <section class="step notices" id="noticeBox" hidden>
+        <h2>공학교육센터 공지</h2>
+        <ul id="notices"></ul>
+        <p class="hint">3학년 2학기에 확약서·포기서를, 졸업 학기에 졸업심사 서류를 냅니다. 학과 공지도 함께 확인하세요.</p>
+      </section>
     </aside>
 
     <!-- 결과 -->
@@ -120,6 +130,9 @@
         </div>
         <div id="panelResult" role="tabpanel" aria-labelledby="tabResult">
         <div class="verdict" id="verdict"></div>
+        <div class="result-actions">
+          <button type="button" class="btn ghost" id="summaryBtn">상담용 한 장 요약 인쇄</button>
+        </div>
 
         <section class="block">
           <h2>영역별 학점</h2>
@@ -131,6 +144,16 @@
           <ul id="checks" class="checks"></ul>
         </section>
 
+        <section class="block" id="gradBlock">
+          <div class="block-head">
+            <h2>학과 졸업요건</h2>
+            <span class="sub" id="gradSub"></span>
+          </div>
+          <ul id="gradRows" class="checks grad"></ul>
+          <fieldset class="certs" id="certs"></fieldset>
+          <div id="compare"></div>
+        </section>
+
         <section class="block">
           <div class="block-head">
             <h2>추천 수강 계획</h2>
@@ -139,6 +162,29 @@
           <ol id="plan" class="plan"></ol>
           <div id="planTools" class="plan-tools"></div>
           <div id="picks"></div>
+        </section>
+
+        <section class="block" id="ttBlock">
+          <div class="block-head">
+            <h2>추천 시간표</h2>
+            <span class="sub" id="ttSub"></span>
+          </div>
+          <p class="hint">위 계획의 다음 학기 과목을 먼저 넣고, 남는 학점은 희망 진로 과목과 아직 못 들은 교양 필수로 채워 시간이 겹치지 않게 짭니다. 수강신청 전에 학기 수강편람이 반영되면 다음 학기 기준으로 바뀝니다.</p>
+          <div class="tt-prefs">
+            <label class="field">목표 학점
+              <select id="ttCap"><option>12</option><option>15</option><option selected>18</option><option>21</option></select>
+            </label>
+            <fieldset class="offdays"><legend>쉬고 싶은 요일</legend>
+              <label><input type="checkbox" value="0"> 월</label><label><input type="checkbox" value="1"> 화</label><label><input type="checkbox" value="2"> 수</label><label><input type="checkbox" value="3"> 목</label><label><input type="checkbox" value="4"> 금</label>
+            </fieldset>
+            <label class="cert"><input type="checkbox" id="ttNo9"> 9시 수업 빼기</label>
+            <label class="cert"><input type="checkbox" id="ttNoNight"> 18시 이후 빼기</label>
+          </div>
+          <div class="sheet-actions">
+            <button type="button" class="btn dark" id="ttBtn">추천 시간표 짜기</button>
+            <button type="button" class="btn ghost" id="ttNext" hidden>다른 조합 보기</button>
+          </div>
+          <div id="ttOut"></div>
         </section>
 
         <section class="block">
@@ -209,7 +255,7 @@
   </main>
 
   <footer class="wrap foot">
-    <p>요건은 세종대학교 공학교육센터 ‘교과과정/공학인증요건’ 페이지(2021~2026학번)를 자동 수집해 만든 것입니다. 학번별 대체과목, 학과 공지, 개설 여부는 반영되지 않을 수 있으니 최종 확인은 공학교육센터와 학과 사무실에서 하세요.</p>
+    <p><a href="verify.html">학과별 요건 원문 대조표(조교·학생 검증용)</a> · 요건은 세종대학교 공학교육센터 ‘교과과정/공학인증요건’ 페이지(2021~2026학번)를 자동 수집해 만든 것입니다. 학번별 대체과목, 학과 공지, 개설 여부는 반영되지 않을 수 있으니 최종 확인은 공학교육센터와 학과 사무실에서 하세요.</p>
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -218,6 +264,9 @@
   <script src="assets/careers.js"></script>
   <script src="assets/parser.js"></script>
   <script src="assets/sheet.js"></script>
+  <script src="assets/grad.js"></script>
+  <script src="assets/timetable.js"></script>
   <script src="assets/app.js"></script>
+  <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));</script>
 </body>
 </html>
