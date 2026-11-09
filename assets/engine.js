@@ -3,11 +3,25 @@
   "use strict";
 
   // ---------- 과목명 정규화 ----------
+  // 표기만 다른 같은 과목 (확실한 것)
   const ALIASES = [
-    ["문제해결을위한글쓰기와발표", "비판적사고와창의적글쓰기", "비판적사고와글쓰기"],
     ["선형대수", "선형대수학"],
     ["확률및통계", "확률과통계"],
     ["capstone디자인", "캡스톤디자인", "capstone디자인산학협력프로젝트"],
+  ];
+  // 학번에 따라 이름이 바뀐 과목 (공학교육센터 학번별 요건을 비교해 정리. 대체 인정은 학과 확인 필요)
+  const RENAMED = [
+    ["문제해결을위한글쓰기와발표", "비판적사고와창의적글쓰기", "비판적사고와글쓰기"],
+    ["미적분학1", "기초미적분학", "일변수미적분학", "미적분학"],
+    ["미적분학2", "다변수미적분학"],
+    ["일반물리학1", "일반물리학및실험1"],
+    ["일반물리학2", "일반물리학및실험2"],
+    ["일반화학1", "일반화학"],
+    ["확률및통계", "확률통계및프로그래밍", "확률과통계및프로그래밍"],
+    ["선형대수", "선형대수및프로그래밍"],
+    ["공업수학1", "공업수학"],
+    ["SW기초코딩", "소프트웨어기초코딩"],
+    ["고급프로그래밍활용", "프로그래밍활용-C"],
   ];
   function nkey(s) {
     return String(s || "")
@@ -28,6 +42,14 @@
     const ka = keys(a);
     for (const k of keys(b)) if (k && ka.has(k)) return true;
     return false;
+  }
+  const RENAMED_OF = {};
+  RENAMED.forEach((g) => { const c = "~" + nkey(g[0]); g.forEach((n) => (RENAMED_OF[nkey(n)] = c)); });
+  /** 학번별 이름 변경으로 같은 과목으로 볼 수 있는가 (same 이 아닐 때만 의미) */
+  function renamed(a, b) {
+    const ra = [...keys(a)].map((k) => RENAMED_OF[k]).filter(Boolean);
+    const rb = [...keys(b)].map((k) => RENAMED_OF[k]).filter(Boolean);
+    return ra.some((x) => rb.includes(x));
   }
   function inList(name, list) { return (list || []).some((x) => same(name, x)); }
   function findIn(name, list) { return (list || []).find((x) => same(name, x)); }
@@ -86,8 +108,26 @@
   }
 
   // ---------- 판정 ----------
+  function ruleNames(rule) {
+    if (rule._names) return rule._names;
+    const d = rule.design || {};
+    const out = [];
+    [(rule.ge || {}).required, (rule.ge || {}).electives, (rule.msc || {}).required, (rule.msc || {}).electives,
+      (rule.major || {}).required, d.basic, d.element, d.capstone].forEach((l) => (l || []).forEach((n) => out.push(n)));
+    (rule.catalog || []).forEach((c) => out.push(c.name));
+    Object.defineProperty(rule, "_names", { value: out, enumerable: false });
+    return out;
+  }
+  /** 이 학번 요건에 없는 과목명이 '이름만 바뀐 과목'이면 이 학번의 과목명으로 바꿔 판정한다 */
+  function mapRenamed(rule, c) {
+    const names = ruleNames(rule);
+    if (names.some((n) => same(c.name, n))) return c;
+    const hit = names.find((n) => renamed(c.name, n));
+    return hit ? Object.assign({}, c, { name: hit, origName: c.name, renamed: true }) : c;
+  }
+
   function evaluate(rule, rawCourses) {
-    const courses = uniqueCourses(rawCourses).map((c) => Object.assign({}, c, classify(rule, c)));
+    const courses = uniqueCourses(rawCourses).map((c) => mapRenamed(rule, c)).map((c) => Object.assign({}, c, classify(rule, c)));
     const by = (a) => courses.filter((c) => c.area === a);
     const sum = (arr, f) => arr.reduce((s, c) => s + (Number(f ? f(c) : c.credit) || 0), 0);
     const has = (name) => courses.find((c) => same(c.name, name));
@@ -162,7 +202,8 @@
     ];
     areas.forEach((a) => (a.ok = a.earned >= a.min));
     const ok = areas.every((a) => a.ok) && checks.every((c) => c.ok);
-    return { ok, areas, checks, courses, designRows };
+    const renamedList = courses.filter((c) => c.renamed).map((c) => ({ from: c.origName, to: c.name }));
+    return { ok, areas, checks, courses, designRows, renamed: renamedList };
   }
 
   // ---------- 진로 추천 ----------
@@ -187,8 +228,9 @@
     const catalog = [];
     (rule.catalog || []).forEach((c) => { if (!catalog.some((x) => same(x.name, c.name))) catalog.push(c); });
     const info = (n) => catalog.find((c) => same(c.name, n)) || { name: n, credit: 3, design: designCredit(rule, n), area: null };
+    const excluded = (n) => inList(n, opts.exclude || []);
     const add = (n, reason, kind) => {
-      if (takenHas(n) || isChosen(n)) return false;
+      if (takenHas(n) || isChosen(n) || excluded(n)) return false;
       const e = info(n);
       const area = e.area || (inList(n, (rule.msc || {}).required) || inList(n, (rule.msc || {}).electives) ? "MSC" : inList(n, (rule.ge || {}).electives) || inList(n, (rule.ge || {}).required) ? "GE" : "MAJOR");
       chosen.push({ name: e.name || n, credit: e.credit || 3, design: designCredit(rule, n), year: e.year, sem: e.sem, area, reason, kind, fit: careerScore(track, n) });
@@ -228,7 +270,7 @@
     }
     // 5) 진로 심화(선택): 요건은 채웠어도 들으면 좋은 과목
     const picks = catalog
-      .filter((c) => c.area === "MAJOR" && !takenHas(c.name) && !isChosen(c.name) && careerScore(track, c.name) > 0)
+      .filter((c) => c.area === "MAJOR" && !takenHas(c.name) && !isChosen(c.name) && !excluded(c.name) && careerScore(track, c.name) > 0)
       .sort((a, b) => careerScore(track, b.name) - careerScore(track, a.name))
       .slice(0, opts.extraPicks ?? 6)
       .map((c) => ({ name: c.name, credit: c.credit, design: designCredit(rule, c.name), year: c.year, sem: c.sem, fit: careerScore(track, c.name) }));
@@ -241,7 +283,8 @@
       if (s === 1) s = 2; else { s = 1; y++; }
     }
     const cap = opts.cap || 15;
-    const load = (sm) => sm.courses.reduce((a, c) => a + c.credit, 0);
+    const pre = opts.preload || {};
+    const load = (sm) => sm.courses.reduce((a, c) => a + c.credit, 0) + (pre[`${sm.year}-${sm.sem}`] || 0);
     const kindRank = (c) => (inList(c.name, d.basic) ? 0 : inList(c.name, d.capstone) ? 9 : c.kind === "required" ? 1 : c.kind === "design" ? 2 : 3);
     const order = [...chosen].sort((a, b) => kindRank(a) - kindRank(b) || (a.year || 0) - (b.year || 0) || (a.sem || 0) - (b.sem || 0));
     let basicIdx = result.checks.some((c) => c.group === "DESIGN" && /기초설계/.test(c.label) && c.ok) ? -1 : null;
@@ -276,7 +319,7 @@
     return { semesters: sems, unplaced, picks, chosen, gaps };
   }
 
-  const api = { nkey, keys, same, inList, findIn, evaluate, recommend, classify, uniqueCourses, termOrder, careerScore, designCredit };
+  const api = { renamed, mapRenamed, nkey, keys, same, inList, findIn, evaluate, recommend, classify, uniqueCourses, termOrder, careerScore, designCredit };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.ABEEK = api;
 })(typeof self !== "undefined" ? self : this);

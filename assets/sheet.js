@@ -102,7 +102,8 @@
       if (c.how === "직접 지정") notes.push("영역 직접 지정");
       if (dr && !dr.counted) notes.push(`설계 미인정: ${dr.why}`);
       if (c.guess) notes.push("교과과정표 외 과목(확인 필요)");
-      return `<td class="l">${esc(c.name)}</td><td>${now ? "" : fmt(c.credit)}</td><td>${now ? fmt(c.credit) : ""}</td>
+      if (c.renamed) notes.push(`${c.name} 대체 인정(확인 필요)`);
+      return `<td class="l">${esc(c.origName || c.name)}</td><td>${now ? "" : fmt(c.credit)}</td><td>${now ? fmt(c.credit) : ""}</td>
         <td>${esc(termLabel(c, hist))}</td><td>${withDesign && dr ? (dr.counted ? fmt(dr.design) : "0") : ""}</td>
         <td class="l">${prs.map((p) => esc(p.pre)).join("<br>")}</td><td>${prs.map((p) => (p.ok == null ? "?" : p.ok ? "O" : "X")).join("<br>")}</td>
         <td class="l small">${esc(notes.join(" / "))}</td>`;
@@ -163,8 +164,8 @@
     const crit = (text, ok) => `<p class="crit">[ 인증기준 ] ${esc(text)} : 인증기준 ${box(ok)} 충족 ${box(!ok)} 미충족</p>`;
     const ge = rule.ge, msc = rule.msc, m = rule.major, d = rule.design || {};
 
-    const geRows = by("GE").map((c) => `<tr><td>${E.inList(c.name, ge.required) ? "인증필수" : E.inList(c.name, ge.electives) ? "인증선택" : "전문교양"}</td><td class="l">${esc(c.name)}</td><td>${fmt(c.credit)}</td></tr>`).join("");
-    const mscRows = by("MSC").map((c) => `<tr><td>${mscKind(c.name)}</td><td class="l">${esc(c.name)}</td><td>${fmt(c.credit)}</td></tr>`).join("");
+    const geRows = by("GE").map((c) => `<tr><td>${E.inList(c.name, ge.required) ? "인증필수" : E.inList(c.name, ge.electives) ? "인증선택" : "전문교양"}</td><td class="l">${esc(c.origName || c.name)}</td><td>${fmt(c.credit)}</td></tr>`).join("");
+    const mscRows = by("MSC").map((c) => `<tr><td>${mscKind(c.name)}</td><td class="l">${esc(c.origName || c.name)}</td><td>${fmt(c.credit)}</td></tr>`).join("");
     const extras = (rule.extra || []);
     const extraCols = extras.map((x) => x.label.replace(/\s*\d+.*$/, "").replace(/교과목|과목/g, "").trim() || x.label);
     const dmap = new Map(res.designRows.map((r) => [E.nkey(r.name), r]));
@@ -174,7 +175,7 @@
     const mrow = (c, kind, i, n) => {
       const r = dmap.get(E.nkey(c.name));
       const cells = extras.map((x) => (E.inList(c.name, x.courses) ? fmt(x.minCredits ? c.credit : 1) : ""));
-      return `<tr>${i === 0 ? `<td rowspan="${n}">${kind}</td>` : ""}<td class="l">${esc(c.name)}${r && !r.counted ? " *" : ""}</td><td>${fmt(c.credit)}</td><td>${r ? (r.counted ? fmt(r.design) : "0") : ""}</td>${cells.map((x) => `<td>${x}</td>`).join("")}</tr>`;
+      return `<tr>${i === 0 ? `<td rowspan="${n}">${kind}</td>` : ""}<td class="l">${esc(c.origName || c.name)}${r && !r.counted ? " *" : ""}</td><td>${fmt(c.credit)}</td><td>${r ? (r.counted ? fmt(r.design) : "0") : ""}</td>${cells.map((x) => `<td>${x}</td>`).join("")}</tr>`;
     };
     const tot = (f) => major.reduce((s, c) => s + (Number(f(c)) || 0), 0);
     const extraTot = extras.map((x) => major.reduce((s, c) => s + (E.inList(c.name, x.courses) ? (x.minCredits ? c.credit : 1) : 0), 0));
@@ -237,6 +238,7 @@
     pre.filter((r) => r.ok === false && r.kind === "지정").forEach((r) => mine.push(`<b>${esc(r.pre)} → ${esc(r.post)}</b> 선후수 순서가 지켜지지 않았습니다(${esc(r.note)}). 선이수 여부에 X를 적고, <b>후수과목이수능력확인서</b>를 써서 ${esc(r.post)} 담당 교수님 서명을 받아 제출해야 합니다.`));
     notCounted.forEach((r) => mine.push(`<b>${esc(r.name)}</b>${j(r.name, "은/는").slice(r.name.length)} ${esc(r.why)}${/[가-힣]$/.test(r.why) && (r.why.charCodeAt(r.why.length - 1) - 0xac00) % 28 ? "이라서" : "라서"} 설계학점이 0으로 인정됩니다. 설계 이수학점 칸을 비우거나 0으로 적으세요.`));
     if (now.length) mine.push(`이번 학기 수강 중인 ${esc(j(now.map((c) => c.name).join(", "), "은/는"))} ‘이번학기 수강학점’ 칸에 적습니다. 성적이 나오기 전이라도 상담표에는 포함합니다.`);
+    (res.renamed || []).forEach((x) => mine.push(`<b>${esc(x.from)}</b>${j(x.from, "은/는").slice(x.from.length)} ${esc(info.basis)}학번 기준의 <b>${esc(x.to)}</b>${j(x.to, "으로/로").slice(x.to.length)} 인정해 계산했습니다. 체크표에는 실제 들은 과목명을 적고 비고에 ‘${esc(x.to)} 대체’라고 적은 뒤, 학과 조교에게 인정 여부를 확인하세요.`));
     guesses.forEach((c) => mine.push(`<b>${esc(c.name)}</b>${j(c.name, "은/는").slice(c.name.length)} ${esc(info.basis)}학번 교과과정표에 없는 과목입니다. 대체과목으로 인정받는 경우에만 넣고, 비고에 ‘대체과목 인정’과 원래 과목명을 적으세요.`));
     const geEl = (rule.ge.electives || []).filter((n) => res.courses.some((c) => E.same(c.name, n)));
     if (rule.ge.pickN && geEl.length < rule.ge.pickN) mine.push(`전문교양 인증선택 과목(${(rule.ge.electives || []).join(", ")}) 중 ${rule.ge.pickN - geEl.length}과목이 더 필요합니다. 일반 균형교양은 인증선택으로 인정되지 않습니다.`);

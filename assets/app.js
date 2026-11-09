@@ -35,6 +35,7 @@
     }));
     KNOWN = [...names].filter((n) => n.length >= 2);
 
+    if (DATA.updated) $("#stamp").textContent = `요건 기준 ${DATA.updated.replace(/-/g, ".")} · 매 학기 공학교육센터 요건 자동 확인`;
     const saved = store.load();
     if (saved && saved.courses) Object.assign(S, saved);
     fillPrograms();
@@ -123,7 +124,7 @@
     if (a) S.admit = a;
     const g = guessProgram(S.courses);
     if (g) { S.program = g; S.autoProgram = true; }
-    S.basis = null; S.next = null;
+    S.basis = null; S.next = null; S.planned = []; S.exclude = [];
     st.textContent = `${source}에서 ${list.length}과목을 읽었습니다.`;
     st.className = "status";
     syncSelects();
@@ -141,6 +142,18 @@
         text = await P.parsePdf(file, window.pdfjsLib);
         if (!text.trim()) throw new Error("이 PDF에는 글자 정보가 없습니다(스캔본). 학사정보시스템 표를 복사해 붙여넣어 주세요.");
       } else {
+        if (/\.(xlsx|xls)$/i.test(file.name)) {
+          if (!window.XLSX) throw new Error("엑셀 해석기를 불러오지 못했습니다. 인터넷 연결을 확인하거나 표를 붙여넣어 주세요.");
+          const wb = window.XLSX.read(await file.arrayBuffer(), { type: "array" });
+          let best = [];
+          wb.SheetNames.forEach((n) => {
+            const rows = window.XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, raw: false, defval: "" });
+            const got = P.parseRows(rows, KNOWN);
+            if (got.length > best.length) best = got;
+          });
+          accept(best, file.name);
+          return;
+        }
         text = await file.text();
       }
       accept(P.parseText(text, KNOWN), file.name);
@@ -158,7 +171,17 @@
     drop.addEventListener("drop", (e) => e.dataTransfer.files[0] && readFile(e.dataTransfer.files[0]));
     $("#pasteBtn").addEventListener("click", () => accept(P.parseText($("#paste").value, KNOWN), "붙여넣은 내용"));
     $("#sampleBtn").addEventListener("click", () => { accept(P.parseText(SAMPLE, KNOWN), "예시 성적"); });
-    $("#program").addEventListener("change", (e) => { S.program = e.target.value; S.autoProgram = false; S.basis = null; syncSelects(); render(); });
+    $("#sampleBtn2").addEventListener("click", () => { accept(P.parseText(SAMPLE, KNOWN), "예시 성적"); $("#out").scrollIntoView({ behavior: "smooth", block: "start" }); });
+    $("#shareBtn").addEventListener("click", async () => {
+      const data = { title: "세종대 공학인증 점검", text: "로그인 없이 성적표 하나로 공학인증 졸업요건 점검, 남은 학기 계획, 졸업심사 체크표까지", url: location.origin + location.pathname };
+      try {
+        if (navigator.share) { await navigator.share(data); return; }
+        await navigator.clipboard.writeText(`${data.text}\n${data.url}`);
+        $("#shareBtn").textContent = "링크를 복사했습니다";
+        setTimeout(() => ($("#shareBtn").textContent = "친구에게 공유"), 2000);
+      } catch (e) { /* 공유 취소 */ }
+    });
+    $("#program").addEventListener("change", (e) => { S.program = e.target.value; S.autoProgram = false; S.planned = []; S.exclude = []; S.basis = null; syncSelects(); render(); });
     $("#admit").addEventListener("change", (e) => { S.admit = e.target.value; S.basis = null; syncSelects(); render(); });
     $("#basis").addEventListener("change", (e) => { S.basis = e.target.value; syncSelects(); render(); });
     $("#nextTerm").addEventListener("change", (e) => { S.next = e.target.value; render(); });
@@ -202,6 +225,25 @@
       document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     });
+    $("#plan").addEventListener("click", (e) => {
+      const b = e.target.closest("button"); if (!b) return;
+      if (b.dataset.exclude) { S.exclude = (S.exclude || []).concat(b.dataset.exclude); render(); }
+      if (b.dataset.unplan) { S.planned = (S.planned || []).filter((p) => p.name !== b.dataset.unplan); render(); }
+    });
+    $("#planTools").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-unexclude]"); if (!b) return;
+      S.exclude = (S.exclude || []).filter((n) => n !== b.dataset.unexclude); render();
+    });
+    $("#planTools").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = $("#planName").value.trim(); if (!name) return;
+      const r = rule();
+      const cat = (r.catalog || []).find((c) => E.same(c.name, name));
+      const [y, s2] = $("#planTerm").value.split("-").map(Number);
+      S.planned = (S.planned || []).filter((p) => !E.same(p.name, name)).concat({ name: cat ? cat.name : name, credit: cat ? cat.credit : 3, year: y, sem: s2 });
+      S.exclude = (S.exclude || []).filter((n) => !E.same(n, name));
+      render();
+    });
     $("#addForm").addEventListener("submit", (e) => {
       e.preventDefault();
       const name = $("#addName").value.trim(); if (!name) return;
@@ -223,7 +265,20 @@
     const res = E.evaluate(r, S.courses);
     const track = C.tracks.find((t) => t.id === S.track);
     const [ny, ns] = S.next.split("-").map(Number);
-    const rec = E.recommend(r, res, { track, nextYear: ny, nextSem: ns, cap: S.cap });
+    // 계획 시뮬레이터: 직접 넣은 과목(planned)과 뺀 과목(exclude)
+    const calTerm = (y, s2) => `${Number(S.admit) + y - 1}-${s2}`;
+    const planned = (S.planned || []).map((p, i) => ({ id: "plan" + i, name: p.name, credit: p.credit, grade: "", cat: "", term: calTerm(p.year, p.sem), planned: true, year: p.year, sem: p.sem }));
+    const preload = {};
+    planned.forEach((p) => (preload[`${p.year}-${p.sem}`] = (preload[`${p.year}-${p.sem}`] || 0) + p.credit));
+    const resBase = planned.length ? E.evaluate(r, S.courses.concat(planned)) : res;
+    const rec = E.recommend(r, resBase, { track, nextYear: ny, nextSem: ns, cap: S.cap, exclude: S.exclude || [], preload });
+    rec.semesters.forEach((sm) => planned.filter((p) => p.year === sm.year && p.sem === sm.sem).forEach((p) => sm.courses.unshift(Object.assign({ mine: true, design: E.designCredit(r, p.name), reason: "직접 넣은 계획" }, p))));
+    planned.filter((p) => !rec.semesters.some((sm) => sm.year === p.year && sm.sem === p.sem)).forEach((p) => {
+      rec.semesters.push({ year: p.year, sem: p.sem, label: p.year <= 4 ? `${p.year}학년 ${p.sem}학기` : `추가 ${p.sem}학기`, courses: [Object.assign({ mine: true, design: E.designCredit(r, p.name), reason: "직접 넣은 계획" }, p)] });
+    });
+    rec.semesters.sort((a, b) => a.year - b.year || a.sem - b.sem);
+    const recAsTaken = rec.semesters.flatMap((sm) => sm.courses.filter((c) => !c.mine).map((c, i) => ({ id: `rec-${sm.year}-${sm.sem}-${i}`, name: c.name, credit: c.credit, grade: "", cat: "", term: calTerm(sm.year, sm.sem) })));
+    const after = E.evaluate(r, S.courses.concat(planned, recAsTaken));
     store.save();
     if (S.tab === "sheet") { renderSheet(r, res); return; }
 
@@ -232,15 +287,16 @@
     const openChecks = res.checks.filter((c) => !c.ok);
     const v = $("#verdict");
     v.className = "verdict " + (res.ok ? "ok" : "no");
-    const planned = rec.chosen.reduce((s, c) => s + c.credit, 0);
+    const plannedCr = rec.chosen.reduce((s, c) => s + c.credit, 0) + planned.reduce((s, c) => s + c.credit, 0);
+    const nPlanned = rec.chosen.length + planned.length;
     v.innerHTML = res.ok
       ? `<span class="big">공학인증 요건을 모두 채웠습니다</span><p>${esc(prog().dept)} ${esc(S.basis)}년 기준. 졸업 전 공학교육센터에서 최종 확인을 받으세요.</p>`
       : `<span class="big">${shortAreas.length ? shortAreas.map((a) => `${a.label} ${fmt(a.min - a.earned)}학점`).join(", ") + " 부족" : "학점은 채웠고 필수 과목이 남았습니다"}</span>
-         <p>필수 조건 ${openChecks.length}개가 아직 남았습니다. 아래 계획대로 ${planned}학점(${rec.chosen.length}과목)을 더 들으면 요건을 채웁니다.</p>`;
+         <p>필수 조건 ${openChecks.length}개가 아직 남았습니다. ${after.ok ? `아래 계획대로 ${plannedCr}학점(${nPlanned}과목)을 더 들으면 요건을 채웁니다.` : `아래 계획으로는 아직 채우지 못하는 요건이 있습니다: ${after.areas.filter((a) => !a.ok).map((a) => `${a.label} ${fmt(a.min - a.earned)}학점`).concat(after.checks.filter((c) => !c.ok).slice(0, 2).map((c) => c.label)).join(", ")}.`}</p>`;
 
     // 눈금자
     const plannedBy = { GE: 0, MSC: 0, MAJOR: 0, DESIGN: 0 };
-    rec.chosen.forEach((c) => { plannedBy[c.area] = (plannedBy[c.area] || 0) + c.credit; plannedBy.DESIGN += c.design || 0; });
+    after.areas.forEach((a) => { const now = res.areas.find((x) => x.id === a.id); plannedBy[a.id] = Math.max(0, a.earned - now.earned); });
     $("#rulers").innerHTML = res.areas.map((a) => {
       const total = Math.max(a.min, Math.ceil(a.earned));
       const have = Math.floor(a.earned), plan = Math.max(0, Math.min(Math.ceil(a.min - a.earned), Math.round(plannedBy[a.id] || 0)));
@@ -278,12 +334,26 @@
         if (c.kind === "required") tags.push('<span class="tag req">필수</span>');
         if (c.design) tags.push(`<span class="tag dsg">설계 ${fmt(c.design)}</span>`);
         if (c.fit > 0) tags.push('<span class="tag fit">진로</span>');
-        const when = c.year && c.sem ? `권장 ${c.year}-${c.sem}` : c.sem ? `${c.sem}학기 개설` : "";
-        return `<li class="c"><span><span class="nm">${esc(c.name)}</span>${tags.join("")}<span class="why">${esc([c.reason, when].filter(Boolean).join(" · "))}</span></span><span class="cr">${fmt(c.credit)}학점</span></li>`;
+        if (c.mine) tags.push('<span class="tag mine">내 계획</span>');
+        const when = c.mine ? "" : c.year && c.sem ? `권장 ${c.year}-${c.sem}` : c.sem ? `${c.sem}학기 개설` : "";
+        const btn = c.mine
+          ? `<button type="button" class="mini" data-unplan="${esc(c.name)}" aria-label="${esc(c.name)} 계획에서 삭제">삭제</button>`
+          : `<button type="button" class="mini" data-exclude="${esc(c.name)}" aria-label="${esc(c.name)} 빼고 다시 짜기" title="이 과목 없이 다시 짜기">빼기</button>`;
+        return `<li class="c"><span><span class="nm">${esc(c.name)}</span>${tags.join("")}<span class="why">${esc([c.reason, when].filter(Boolean).join(" · "))}</span></span><span class="cr">${fmt(c.credit)}학점 ${btn}</span></li>`;
       }).join("")}</ul></li>`;
     }).join("") : `<li><div class="when">추가 수강 없음</div><ul><li class="c"><span>인증 요건만 보면 더 들을 과목이 없습니다.</span></li></ul></li>`;
     if (rec.gaps.length) $("#plan").innerHTML += `<li><div class="when">더 필요한 학점</div><ul><li class="c"><span>교과과정표에서 고를 과목이 부족합니다. ${rec.gaps.map((g) => `${esc(g.label)} ${fmt(g.left)}학점`).join(", ")}을 인정 과목으로 더 들어야 합니다. 학과 사무실에서 인정 과목 목록을 확인하세요.</span></li></ul></li>`;
     if (rec.unplaced.length) $("#plan").innerHTML += `<li><div class="when">배치 못 함</div><ul>${rec.unplaced.map((c) => `<li class="c"><span class="nm">${esc(c.name)}</span><span class="cr">${fmt(c.credit)}학점</span></li>`).join("")}</ul></li>`;
+    const ex = S.exclude || [];
+    $("#planTools").innerHTML = `
+      <form id="planForm" class="plan-add">
+        <input id="planName" list="planNames" placeholder="듣고 싶은 과목 넣기 (예: 컴퓨터그래픽스)" aria-label="계획에 넣을 과목">
+        <datalist id="planNames">${[...new Set((r.catalog || []).map((c) => c.name))].map((n) => `<option value="${esc(n)}">`).join("")}</datalist>
+        <select id="planTerm" aria-label="넣을 학기">${termOptions()}</select>
+        <button class="btn ghost" type="submit">계획에 넣기</button>
+      </form>
+      ${ex.length ? `<p class="hint">뺀 과목: ${ex.map((n) => `<button type="button" class="chip-x" data-unexclude="${esc(n)}" title="다시 추천에 포함">${esc(n)} ✕</button>`).join(" ")}</p>` : ""}
+      <p class="after ${after.ok ? "ok" : "no"}">${after.ok ? "이 계획대로 들으면 공학인증 요건을 모두 채웁니다." : `이 계획으로는 채우지 못하는 요건: ${esc(after.areas.filter((a) => !a.ok).map((a) => `${a.label} ${fmt(a.min - a.earned)}학점`).concat(after.checks.filter((c) => !c.ok).map((c) => c.label)).slice(0, 4).join(", "))}. 뺀 과목을 되돌리거나 다른 과목을 넣어 보세요.`}</p>`;
     $("#picks").innerHTML = rec.picks.length ? `<div class="picks"><h3>요건과 별개로 이 진로에 도움이 되는 과목</h3><p>${rec.picks.map((p) => esc(p.name) + (p.year ? ` (${p.year}-${p.sem || "?"})` : "")).join(", ")}</p></div>` : "";
 
     // 과목 표
@@ -293,7 +363,7 @@
       const ev = evalMap.get(c.id);
       const failed = !ev && c.grade && /^(F|NP|U|W)$/i.test(c.grade);
       const area = ev ? ev.area : null;
-      const how = ev ? ev.how : failed ? "미이수 등급" : "재수강 이전 기록";
+      const how = ev ? (ev.renamed ? `‘${ev.name}’(으)로 인정 · 이름 바뀐 과목` : ev.how) : failed ? "미이수 등급" : "재수강 이전 기록";
       const opts = ["auto", "GE", "MSC", "MAJOR", "OTHER"].map((k) => `<option value="${k}" ${(c.area || "auto") === k ? "selected" : ""}>${k === "auto" ? `자동: ${area ? AREA_LABEL[area] : "-"}` : AREA_LABEL[k]}</option>`).join("");
       const dc = ev && ev.area === "MAJOR" ? E.designCredit(r, c.name) : 0;
       return `<tr class="${failed ? "fail" : ""} ${ev && ev.guess ? "guess" : ""}">
@@ -308,6 +378,7 @@
     const guesses = res.courses.filter((c) => c.guess).length;
     const n = r.notes || {};
     $("#notes").innerHTML = `
+      ${res.renamed.length ? `<p class="warn">${esc(S.basis)}학번 기준에는 이름이 다르게 올라 있어 같은 과목으로 인정한 과목: ${res.renamed.map((x) => `${esc(x.from)} → ${esc(x.to)}`).join(", ")}. 학번별 대체과목 인정은 학과마다 다를 수 있으니 확인해 주세요.</p>` : ""}
       ${guesses ? `<p class="warn">교과과정표에 없는 과목 ${guesses}개는 성적표 이수구분(전필·전선)만 보고 전공으로 셌습니다. 노란 테두리 과목을 확인해 주세요.</p>` : ""}
       ${notDesign.length ? `<p class="warn">설계학점으로 인정하지 않은 과목: ${notDesign.map((x) => `${esc(x.name)}(${esc(x.why)})`).join(", ")}</p>` : ""}
       ${r.catalogFrom ? `<p>${esc(S.basis)}학번 이수체계표가 게시되지 않아, 과목 분류와 추천에는 ${esc(r.catalogFrom)}학번 표를 사용했습니다.</p>` : ""}
@@ -318,6 +389,17 @@
   }
 
   const fmt = (x) => (Math.round(x * 10) / 10).toString();
+
+  function termOptions() {
+    const out = [];
+    const [ny, ns] = (S.next || "1-1").split("-").map(Number);
+    let y = ny, s2 = ns;
+    for (let i = 0; i < 8 && y <= 5; i++) {
+      out.push(`<option value="${y}-${s2}">${y <= 4 ? `${y}학년 ${s2}학기` : `추가 ${s2}학기`}</option>`);
+      if (s2 === 1) s2 = 2; else { s2 = 1; y++; }
+    }
+    return out.join("");
+  }
 
   function sheetInfo() {
     const now = new Date();

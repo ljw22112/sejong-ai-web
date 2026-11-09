@@ -4,7 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>세종대 공학인증 점검</title>
-  <meta name="description" content="세종대학교 공학교육인증(ABEEK) 졸업요건을 성적표로 점검하고, 희망 진로에 맞춰 남은 학기 수강을 추천합니다.">
+  <meta name="description" content="로그인 없이 성적표 하나로 세종대 공학인증(ABEEK) 졸업요건을 점검하고, 진로에 맞춘 남은 학기 계획과 졸업심사 체크표까지 미리 채워 봅니다.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="세종대 공학인증 점검">
+  <meta property="og:description" content="로그인 없이 성적표 하나로 공학인증 졸업요건 점검 · 진로별 남은 학기 계획 · 졸업심사 체크표 미리 채우기">
+  <meta property="og:url" content="https://ljw22112.github.io/sejong-ai-web/">
+  <meta property="og:locale" content="ko_KR">
+  <meta name="theme-color" content="#1c2140">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -15,7 +21,14 @@
         <h1>공학인증 점검</h1>
         <p class="lede">성적표를 넣으면 세종대 공학인증(ABEEK) 졸업요건을 영역별로 따져 보고, 모자란 부분을 희망 진로에 맞춰 남은 학기에 배치합니다.</p>
       </div>
-      <p class="privacy">성적표는 이 브라우저 안에서만 읽고, 어디에도 전송하지 않습니다.</p>
+      <div class="top-side">
+        <p class="privacy">로그인 없음 · 성적표는 이 브라우저 안에서만 읽고 어디에도 보내지 않습니다.</p>
+        <p class="stamp" id="stamp">요건 기준일 확인 중</p>
+        <div class="top-actions">
+          <button type="button" class="btn on-dark" id="shareBtn">친구에게 공유</button>
+          <a class="btn on-dark ghosty" href="https://github.com/ljw22112/sejong-ai-web/issues/new" target="_blank" rel="noopener">오류 제보</a>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -25,9 +38,9 @@
       <section class="step">
         <h2><span class="n">1</span>성적 넣기</h2>
         <label class="drop" id="drop">
-          <input type="file" id="file" accept=".pdf,.txt,.csv,.tsv" hidden>
-          <strong>성적증명서 PDF 선택</strong>
-          <span>또는 파일을 여기로 끌어다 놓기 · PDF, CSV, TXT</span>
+          <input type="file" id="file" accept=".pdf,.xlsx,.xls,.txt,.csv,.tsv" hidden>
+          <strong>성적증명서 PDF · 기이수성적 엑셀 선택</strong>
+          <span>또는 파일을 여기로 끌어다 놓기 · PDF, XLSX, CSV</span>
         </label>
         <details class="paste">
           <summary>표를 복사해서 붙여넣기</summary>
@@ -81,8 +94,18 @@
     <!-- 결과 -->
     <section class="results" aria-live="polite">
       <div id="empty" class="empty">
-        <h2>성적을 넣으면 여기에 결과가 나옵니다</h2>
-        <p>왼쪽에서 성적증명서를 고르거나, 예시 성적으로 화면을 먼저 확인해 보세요. 학과와 입학 연도는 성적표를 읽은 뒤에도 바꿀 수 있습니다.</p>
+        <h2>로그인 없이, 성적표 하나로 공학인증을 끝까지</h2>
+        <p class="empty-lede">포털 비밀번호를 묻지 않습니다. 성적증명서 PDF나 학사정보시스템 기이수성적 엑셀을 넣으면 판정부터 남은 학기 계획, 졸업심사 서류까지 이어서 봅니다.</p>
+        <dl class="why">
+          <div><dt>성적이 밖으로 나가지 않아요</dt><dd>파일은 이 브라우저 안에서만 읽습니다. 서버도, 회원가입도 없습니다.</dd></div>
+          <div><dt>졸업심사 서류를 미리 채워 봐요</dt><dd>이수체계준수 상담표와 졸업심사서를 내 성적으로 채우고, 재수강·선후수·설계학점 작성 팁까지 알려 줍니다.</dd></div>
+          <div><dt>진로에 맞춰 남은 학기를 짜요</dt><dd>모자란 학점을 희망 진로 과목으로 채우고, 과목을 빼거나 넣으면 요건을 채우는지 바로 다시 판정합니다.</dd></div>
+          <div><dt>학번마다 다른 기준을 그대로</dt><dd>15개 인증 프로그램, 2021~2026학번 기준. 이름이 바뀐 옛 과목도 알아서 맞춰 보고, 매 학기 공학교육센터 요건을 다시 확인합니다.</dd></div>
+        </dl>
+        <div class="empty-cta">
+          <button type="button" class="btn dark" id="sampleBtn2">예시 성적으로 30초 둘러보기</button>
+          <span class="hint">내 성적은 ‘1 성적 넣기’에서 넣으면 됩니다.</span>
+        </div>
       </div>
 
       <div id="out" hidden>
@@ -109,6 +132,7 @@
             <span class="sub" id="planSub"></span>
           </div>
           <ol id="plan" class="plan"></ol>
+          <div id="planTools" class="plan-tools"></div>
           <div id="picks"></div>
         </section>
 
@@ -184,6 +208,7 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="assets/engine.js"></script>
   <script src="assets/careers.js"></script>
   <script src="assets/parser.js"></script>

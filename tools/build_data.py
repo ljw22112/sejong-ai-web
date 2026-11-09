@@ -364,7 +364,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--cache")
     a = ap.parse_args()
-    data = {"source": "https://abeek.sejong.ac.kr (교과과정/공학인증요건)", "programs": {}}
+    import datetime
+    data = {"source": "https://abeek.sejong.ac.kr (교과과정/공학인증요건)", "updated": datetime.date.today().isoformat(), "programs": {}}
     for pid, (pname, dept, family) in PROGRAMS.items():
         idx = page(a.cache, f"idx{pid}.html") if a.cache and os.path.exists(os.path.join(a.cache, f"idx{pid}.html")) else fetch(f"{BASE}program{pid}02.html")
         links = re.findall(r'href="\s*(program' + pid + r'02_\d+\.html)\s*"[^>]*>\s*(?:<[^>]+>\s*)*([^<]*)', idx)

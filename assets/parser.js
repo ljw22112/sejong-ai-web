@@ -113,7 +113,32 @@
     return pdfItemsToText(pages);
   }
 
-  const api = { parseText, parseLine, pdfItemsToText, parsePdf, GRADE };
+  /** 엑셀(학사정보시스템 기이수성적 등) 행 배열 → 과목 목록. 머리글을 찾아 칸을 맞추고, 못 찾으면 텍스트로 처리 */
+  function parseRows(rows, known) {
+    const norm = (v) => String(v ?? "").replace(/\s+/g, "");
+    const hi = rows.findIndex((r) => r.some((v) => /^(교과목명|과목명|교과목)$/.test(norm(v))) && r.some((v) => /^학점$/.test(norm(v))));
+    if (hi < 0) return parseText(rows.map((r) => r.map((v) => String(v ?? "")).join("\t")).join("\n"), known);
+    const h = rows[hi].map(norm);
+    const col = (re) => h.findIndex((v) => re.test(v));
+    const cY = col(/^(년도|학년도|수강년도|이수년도)$/), cS = col(/^(학기|수강학기|이수학기)$/), cT = col(/^(학기구분|년도학기|수강학기)$/);
+    const cN = col(/^(교과목명|과목명|교과목)$/), cC = col(/^(이수구분|구분)$/), cCr = col(/^학점$/), cG = col(/^(등급|성적|평가등급)$/);
+    const out = [];
+    let lastY = "", lastS = "";
+    rows.slice(hi + 1).forEach((r) => {
+      const name = String(r[cN] ?? "").trim();
+      const credit = Number(String(r[cCr] ?? "").replace(/[^0-9.]/g, ""));
+      if (!name || !credit || credit > 6 || /합계|소계|총계|평점평균/.test(name)) return;
+      let y = cY >= 0 ? String(r[cY] ?? "").trim() : "", sm = cS >= 0 ? String(r[cS] ?? "").trim() : "";
+      if (cT >= 0 && (!y || !sm)) { const m = String(r[cT] ?? "").match(TERM); if (m) { y = m[1]; sm = m[2]; } }
+      y = y || lastY; sm = sm || lastS; lastY = y; lastS = sm;
+      const smm = sm.match(/(1|2|하계|동계|여름|겨울)/);
+      const grade = String(r[cG] ?? "").trim().toUpperCase();
+      out.push({ name, credit, grade: GRADE.test(grade) ? grade : grade ? grade : "", cat: cC >= 0 ? String(r[cC] ?? "").trim() : "", term: /^\d{4}$/.test(y) && smm ? `${y}-${smm[1]}` : "" });
+    });
+    return out;
+  }
+
+  const api = { parseRows, parseText, parseLine, pdfItemsToText, parsePdf, GRADE };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.TRANSCRIPT = api;
 })(typeof self !== "undefined" ? self : this);
