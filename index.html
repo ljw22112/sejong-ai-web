@@ -38,9 +38,9 @@
       <section class="step">
         <h2><span class="n">1</span>성적 넣기</h2>
         <label class="drop" id="drop">
-          <input type="file" id="file" accept=".pdf,.xlsx,.xls,.txt,.csv,.tsv" hidden>
+          <input type="file" id="file" accept=".pdf,.xlsx,.xls,.png,.jpg,.jpeg,.webp,.txt,.csv,.tsv,image/*" hidden>
           <strong>성적증명서 PDF · 기이수성적 엑셀 선택</strong>
-          <span>또는 파일을 여기로 끌어다 놓기 · PDF, XLSX, CSV</span>
+          <span>또는 파일을 여기로 끌어다 놓기 · PDF, 엑셀, 캡처 이미지</span>
         </label>
         <details class="paste">
           <summary>표를 복사해서 붙여넣기</summary>
@@ -49,6 +49,11 @@
           <button type="button" class="btn ghost" id="pasteBtn">붙여넣은 내용 읽기</button>
         </details>
         <p class="status" id="readStatus" role="status"></p>
+        <details class="raw" id="rawBox" hidden>
+          <summary>읽은 글자 보기</summary>
+          <pre id="rawText"></pre>
+          <button type="button" class="btn ghost" id="rawToPaste">붙여넣기 칸으로 옮겨서 고치기</button>
+        </details>
         <button type="button" class="link" id="sampleBtn">예시 성적으로 먼저 둘러보기</button>
       </section>
 

@@ -123,7 +123,30 @@
     const names = ruleNames(rule);
     if (names.some((n) => same(c.name, n))) return c;
     const hit = names.find((n) => renamed(c.name, n));
-    return hit ? Object.assign({}, c, { name: hit, origName: c.name, renamed: true }) : c;
+    if (hit) return Object.assign({}, c, { name: hit, origName: c.name, renamed: true });
+    // 글자 인식으로 앞뒤가 잘린 과목명: 이 학번 과목 중 하나에만 통째로 들어 있으면 그 과목
+    const k = nkey(c.name);
+    if (c.ocr && k.length >= 5) {
+      // 잘린 부분이 이 학번 과목명 어딘가와 거의 같으면(글자 1~2개 오인식 허용) 그 과목
+      const lev = (a, b) => {
+        const d = Array.from({ length: a.length + 1 }, (_, i) => [i]);
+        for (let j = 1; j <= b.length; j++) d[0][j] = j;
+        for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++)
+          d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+        return d[a.length][b.length];
+      };
+      const tol = Math.max(1, Math.floor(k.length * 0.2));
+      const scored = [...new Set(names)].map((n) => {
+        const nk = nkey(n);
+        if (nk.length < k.length || k.length < 0.5 * nk.length) return null;
+        let best = 99;
+        for (let i = 0; i + k.length <= nk.length; i++) best = Math.min(best, lev(k, nk.slice(i, i + k.length)));
+        return best <= tol ? { n, best } : null;
+      }).filter(Boolean).sort((a, b) => a.best - b.best);
+      if (scored.length && (scored.length === 1 || scored[0].best < scored[1].best))
+        return Object.assign({}, c, { name: scored[0].n, origName: c.name, ocrFixed: true });
+    }
+    return c;
   }
 
   function evaluate(rule, rawCourses) {

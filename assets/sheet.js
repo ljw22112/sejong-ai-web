@@ -103,7 +103,7 @@
       if (dr && !dr.counted) notes.push(`설계 미인정: ${dr.why}`);
       if (c.guess) notes.push("교과과정표 외 과목(확인 필요)");
       if (c.renamed) notes.push(`${c.name} 대체 인정(확인 필요)`);
-      return `<td class="l">${esc(c.origName || c.name)}</td><td>${now ? "" : fmt(c.credit)}</td><td>${now ? fmt(c.credit) : ""}</td>
+      return `<td class="l">${esc((c.renamed ? c.origName : c.name))}</td><td>${now ? "" : fmt(c.credit)}</td><td>${now ? fmt(c.credit) : ""}</td>
         <td>${esc(termLabel(c, hist))}</td><td>${withDesign && dr ? (dr.counted ? fmt(dr.design) : "0") : ""}</td>
         <td class="l">${prs.map((p) => esc(p.pre)).join("<br>")}</td><td>${prs.map((p) => (p.ok == null ? "?" : p.ok ? "O" : "X")).join("<br>")}</td>
         <td class="l small">${esc(notes.join(" / "))}</td>`;
@@ -164,8 +164,8 @@
     const crit = (text, ok) => `<p class="crit">[ 인증기준 ] ${esc(text)} : 인증기준 ${box(ok)} 충족 ${box(!ok)} 미충족</p>`;
     const ge = rule.ge, msc = rule.msc, m = rule.major, d = rule.design || {};
 
-    const geRows = by("GE").map((c) => `<tr><td>${E.inList(c.name, ge.required) ? "인증필수" : E.inList(c.name, ge.electives) ? "인증선택" : "전문교양"}</td><td class="l">${esc(c.origName || c.name)}</td><td>${fmt(c.credit)}</td></tr>`).join("");
-    const mscRows = by("MSC").map((c) => `<tr><td>${mscKind(c.name)}</td><td class="l">${esc(c.origName || c.name)}</td><td>${fmt(c.credit)}</td></tr>`).join("");
+    const geRows = by("GE").map((c) => `<tr><td>${E.inList(c.name, ge.required) ? "인증필수" : E.inList(c.name, ge.electives) ? "인증선택" : "전문교양"}</td><td class="l">${esc((c.renamed ? c.origName : c.name))}</td><td>${fmt(c.credit)}</td></tr>`).join("");
+    const mscRows = by("MSC").map((c) => `<tr><td>${mscKind(c.name)}</td><td class="l">${esc((c.renamed ? c.origName : c.name))}</td><td>${fmt(c.credit)}</td></tr>`).join("");
     const extras = (rule.extra || []);
     const extraCols = extras.map((x) => x.label.replace(/\s*\d+.*$/, "").replace(/교과목|과목/g, "").trim() || x.label);
     const dmap = new Map(res.designRows.map((r) => [E.nkey(r.name), r]));
@@ -175,7 +175,7 @@
     const mrow = (c, kind, i, n) => {
       const r = dmap.get(E.nkey(c.name));
       const cells = extras.map((x) => (E.inList(c.name, x.courses) ? fmt(x.minCredits ? c.credit : 1) : ""));
-      return `<tr>${i === 0 ? `<td rowspan="${n}">${kind}</td>` : ""}<td class="l">${esc(c.origName || c.name)}${r && !r.counted ? " *" : ""}</td><td>${fmt(c.credit)}</td><td>${r ? (r.counted ? fmt(r.design) : "0") : ""}</td>${cells.map((x) => `<td>${x}</td>`).join("")}</tr>`;
+      return `<tr>${i === 0 ? `<td rowspan="${n}">${kind}</td>` : ""}<td class="l">${esc((c.renamed ? c.origName : c.name))}${r && !r.counted ? " *" : ""}</td><td>${fmt(c.credit)}</td><td>${r ? (r.counted ? fmt(r.design) : "0") : ""}</td>${cells.map((x) => `<td>${x}</td>`).join("")}</tr>`;
     };
     const tot = (f) => major.reduce((s, c) => s + (Number(f(c)) || 0), 0);
     const extraTot = extras.map((x) => major.reduce((s, c) => s + (E.inList(c.name, x.courses) ? (x.minCredits ? c.credit : 1) : 0), 0));

@@ -112,54 +112,209 @@
   }
 
   // ---------- 입력 ----------
-  function accept(list, source) {
+  function accept(list, source, rawText) {
     const st = $("#readStatus");
     if (!list.length) {
-      st.textContent = `${source}에서 과목을 찾지 못했습니다. 과목명·학점·등급이 한 줄에 있는지 확인하거나, 표를 복사해 붙여넣어 보세요.`;
+      st.textContent = `${source}에서 과목을 찾지 못했습니다. 아래 ‘읽은 글자’를 확인하고 붙여넣기 칸에서 고쳐 읽거나, 기이수성적 엑셀을 넣어 보세요.`;
       st.className = "status err";
+      showRaw(rawText);
       return;
     }
+    showRaw("");
     S.courses = list.map((c, i) => Object.assign({ id: Date.now() + "-" + i }, c));
     const a = guessAdmit(S.courses);
     if (a) S.admit = a;
     const g = guessProgram(S.courses);
     if (g) { S.program = g; S.autoProgram = true; }
     S.basis = null; S.next = null; S.planned = []; S.exclude = [];
-    st.textContent = `${source}에서 ${list.length}과목을 읽었습니다.`;
+    st.textContent = list.some((c) => c.ocr)
+      ? `${source}에서 글자 인식으로 ${list.length}과목을 읽었습니다. 인식이 틀릴 수 있으니 ‘읽어 들인 과목’ 표를 한 번 확인해 주세요.`
+      : `${source}에서 ${list.length}과목을 읽었습니다.`;
     st.className = "status";
     syncSelects();
     render();
   }
 
+  // ---------- 글자 인식(OCR): 이미지형 PDF·사진. 브라우저 안에서 실행 ----------
+  let tessLoading = null;
+  function loadTesseract() {
+    if (window.Tesseract) return Promise.resolve(window.Tesseract);
+    if (!tessLoading) tessLoading = new Promise((ok, no) => {
+      const sc = document.createElement("script");
+      sc.src = "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js";
+      sc.onload = () => ok(window.Tesseract);
+      sc.onerror = () => { tessLoading = null; no(new Error("글자 인식 도구를 불러오지 못했습니다. 인터넷 연결을 확인해 주세요.")); };
+      document.head.appendChild(sc);
+    });
+    return tessLoading;
+  }
+
+  /** 글자 인식 전처리: 크기 키우기, 흑백, 표 선 지우기 */
+  async function prep(src) {
+    let w, h, draw;
+    if (src instanceof HTMLCanvasElement) { w = src.width; h = src.height; draw = (ctx, W, H) => ctx.drawImage(src, 0, 0, W, H); }
+    else { const bm = await createImageBitmap(src); w = bm.width; h = bm.height; draw = (ctx, W, H) => ctx.drawImage(bm, 0, 0, W, H); }
+    const k = w < 2200 ? 2200 / w : 1;
+    const W = Math.round(w * k), H = Math.round(h * k);
+    const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+    const ctx = cv.getContext("2d", { willReadFrequently: true });
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+    ctx.imageSmoothingQuality = "high"; draw(ctx, W, H);
+    const img = ctx.getImageData(0, 0, W, H), px = img.data;
+    const dark = new Uint8Array(W * H);
+    for (let i = 0; i < W * H; i++) dark[i] = (px[i * 4] * 0.3 + px[i * 4 + 1] * 0.59 + px[i * 4 + 2] * 0.11) < 165 ? 1 : 0;
+    // 가로선: 한 줄에 어두운 칸이 길게 이어지면 지움
+    const runH = Math.max(120, W * 0.12);
+    for (let y = 0; y < H; y++) {
+      let run = 0;
+      for (let x = 0; x <= W; x++) {
+        if (x < W && dark[y * W + x]) run++;
+        else { if (run >= runH) for (let xx = x - run; xx < x; xx++) dark[y * W + xx] = 2; run = 0; }
+      }
+    }
+    // 세로선: 글자 높이보다 훨씬 길게 이어지면 지움
+    const runV = Math.max(40, Math.round(W * 0.02));
+    for (let x = 0; x < W; x++) {
+      let run = 0;
+      for (let y = 0; y <= H; y++) {
+        if (y < H && dark[y * W + x] === 1) run++;
+        else { if (run >= runV) for (let yy = y - run; yy < y; yy++) dark[yy * W + x] = 2; run = 0; }
+      }
+    }
+    for (let i = 0; i < W * H; i++) { const v = dark[i] === 1 ? 0 : 255; px[i * 4] = px[i * 4 + 1] = px[i * 4 + 2] = v; px[i * 4 + 3] = 255; }
+    ctx.putImageData(img, 0, 0);
+    return cv;
+  }
+
+  function crop(cv, x0, x1) {
+    const c = document.createElement("canvas");
+    c.width = Math.round(x1 - x0); c.height = cv.height;
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height);
+    ctx.drawImage(cv, x0, 0, c.width, cv.height, 0, 0, c.width, cv.height);
+    return c;
+  }
+
+  async function ocr(images, st) {
+    const T = await loadTesseract();
+    let page = 0, total = images.length;
+    const worker = await T.createWorker(["kor", "eng"], 1, {
+      logger: (m) => {
+        if (m.status === "recognizing text") st.textContent = `글자 인식 중 ${page}/${total} · ${Math.round(m.progress * 100)}%`;
+        else if (/loading|initializ/.test(m.status)) st.textContent = "글자 인식 준비 중 (처음 한 번은 10~20초 걸립니다)…";
+      },
+    });
+    await worker.setParameters({ preserve_interword_spaces: "1" });
+    const run = async (cv, psm) => { await worker.setParameters({ tessedit_pageseg_mode: String(psm) }); return (await worker.recognize(cv)).data.text; };
+    let full = "", halves = "";
+    const preps = [];
+    for (const img of images) preps.push(await prep(img));
+    for (const cv of preps) { page++; full += (await run(cv, 3)) + "\n"; }
+    // 두 단 증명서: 왼쪽·오른쪽을 따로 읽은 결과가 더 많으면 그쪽을 쓴다
+    if (P.parseText(full, KNOWN, { fuzzy: true }).length < 8) {
+      total = preps.length * 2; page = 0;
+      for (const cv of preps) {
+        page++; halves += (await run(crop(cv, 0, cv.width / 2), 6)) + "\n";
+        page++; halves += (await run(crop(cv, cv.width / 2, cv.width), 6)) + "\n";
+      }
+    }
+    await worker.terminate();
+    const a = P.parseText(full, KNOWN, { fuzzy: true }).length, b = halves ? P.parseText(halves, KNOWN, { fuzzy: true }).length : -1;
+    return b > a ? halves : full;
+  }
+
+  async function pdfPages(file) {
+    const pdfjs = window.pdfjsLib;
+    if (!pdfjs) throw new Error("PDF 해석기를 불러오지 못했습니다. 인터넷 연결을 확인하거나 표를 붙여넣어 주세요.");
+    pdfjs.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    let doc;
+    try {
+      doc = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+    } catch (e) {
+      if (e && e.name === "PasswordException") throw new Error("암호가 걸린 PDF입니다. 암호를 풀어 저장하거나, 화면을 캡처한 이미지를 넣어 주세요.");
+      throw new Error("PDF를 열지 못했습니다. 파일이 손상되었거나 보호된 문서일 수 있습니다. 화면 캡처 이미지나 기이수성적 엑셀을 넣어 주세요.");
+    }
+    const items = [];
+    for (let p = 1; p <= doc.numPages; p++) items.push((await (await doc.getPage(p)).getTextContent()).items);
+    const render = async () => {
+      const out = [];
+      for (let p = 1; p <= Math.min(doc.numPages, 6); p++) {
+        const pg = await doc.getPage(p);
+        const vp = pg.getViewport({ scale: 3 });
+        const cv = document.createElement("canvas");
+        cv.width = vp.width; cv.height = vp.height;
+        const ctx = cv.getContext("2d");
+        ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, cv.width, cv.height);
+        await pg.render({ canvasContext: ctx, viewport: vp }).promise;
+        out.push(cv);
+      }
+      return out;
+    };
+    return { text: P.pdfItemsToText(items), render };
+  }
+
+  function showRaw(text) {
+    const box = $("#rawBox");
+    if (!text || !text.trim()) { box.hidden = true; return; }
+    box.hidden = false;
+    $("#rawText").textContent = text.slice(0, 4000);
+    $("#rawToPaste").onclick = () => {
+      $("#paste").value = text;
+      $("#paste").closest("details").open = true;
+      $("#paste").focus();
+    };
+  }
+
   async function readFile(file) {
     const st = $("#readStatus");
     st.className = "status"; st.textContent = `${file.name} 읽는 중…`;
+    showRaw("");
+    let lastText = "";
     try {
-      let text;
       if (/\.pdf$/i.test(file.name) || file.type === "application/pdf") {
-        if (!window.pdfjsLib) throw new Error("PDF 해석기를 불러오지 못했습니다. 인터넷 연결을 확인하거나 표를 붙여넣어 주세요.");
-        window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-        text = await P.parsePdf(file, window.pdfjsLib);
-        if (!text.trim()) throw new Error("이 PDF에는 글자 정보가 없습니다(스캔본). 학사정보시스템 표를 복사해 붙여넣어 주세요.");
-      } else {
-        if (/\.(xlsx|xls)$/i.test(file.name)) {
-          if (!window.XLSX) throw new Error("엑셀 해석기를 불러오지 못했습니다. 인터넷 연결을 확인하거나 표를 붙여넣어 주세요.");
-          const wb = window.XLSX.read(await file.arrayBuffer(), { type: "array" });
-          let best = [];
-          wb.SheetNames.forEach((n) => {
-            const rows = window.XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, raw: false, defval: "" });
-            const got = P.parseRows(rows, KNOWN);
-            if (got.length > best.length) best = got;
-          });
-          accept(best, file.name);
-          return;
+        const pdf = await pdfPages(file);
+        lastText = pdf.text;
+        let list = P.parseText(pdf.text, KNOWN);
+        const hangul = (pdf.text.match(/[가-힣]/g) || []).length;
+        if (list.length < 3) {
+          // 글자 정보가 없거나 글꼴이 깨진 증명서(이미지형)는 화면을 그려서 글자 인식
+          st.textContent = hangul < 20 ? "글자 정보가 없는 PDF라서 화면 글자를 인식합니다…" : "글자가 제대로 읽히지 않아 화면 글자를 인식합니다…";
+          const text = await ocr(await pdf.render(), st);
+          lastText = text;
+          const got = P.parseText(text, KNOWN, { fuzzy: true });
+          if (got.length > list.length) list = got;
+          if (list.length) list.forEach((c) => (c.ocr = true));
         }
-        text = await file.text();
+        accept(list, file.name, lastText);
+        return;
       }
-      accept(P.parseText(text, KNOWN), file.name);
+      if (/\.(png|jpe?g|webp|bmp|gif)$/i.test(file.name) || /^image\//.test(file.type)) {
+        const text = await ocr([file], st);
+        lastText = text;
+        const list = P.parseText(text, KNOWN, { fuzzy: true });
+        list.forEach((c) => (c.ocr = true));
+        accept(list, file.name, lastText);
+        return;
+      }
+      if (/\.(xlsx|xls)$/i.test(file.name)) {
+        if (!window.XLSX) throw new Error("엑셀 해석기를 불러오지 못했습니다. 인터넷 연결을 확인하거나 표를 붙여넣어 주세요.");
+        const wb = window.XLSX.read(await file.arrayBuffer(), { type: "array" });
+        let best = [];
+        wb.SheetNames.forEach((n) => {
+          const rows = window.XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, raw: false, defval: "" });
+          lastText += rows.map((r) => r.join("\t")).join("\n") + "\n";
+          const got = P.parseRows(rows, KNOWN);
+          if (got.length > best.length) best = got;
+        });
+        accept(best, file.name, lastText);
+        return;
+      }
+      lastText = await file.text();
+      accept(P.parseText(lastText, KNOWN), file.name, lastText);
     } catch (e) {
       st.textContent = e.message || String(e);
       st.className = "status err";
+      showRaw(lastText);
     }
   }
 
@@ -193,6 +348,12 @@
       render();
     });
     $("#courseRows").addEventListener("change", (e) => {
+      if (e.target.dataset.rename) {
+        const c = S.courses.find((x) => x.id === e.target.dataset.rename);
+        const v = e.target.value.trim();
+        if (c && v) { c.name = v; c.ocr = false; render(); }
+        return;
+      }
       const id = e.target.dataset.id; if (!id) return;
       const c = S.courses.find((x) => x.id === id);
       c.area = e.target.value === "auto" ? undefined : e.target.value;
@@ -363,12 +524,12 @@
       const ev = evalMap.get(c.id);
       const failed = !ev && c.grade && /^(F|NP|U|W)$/i.test(c.grade);
       const area = ev ? ev.area : null;
-      const how = ev ? (ev.renamed ? `‘${ev.name}’(으)로 인정 · 이름 바뀐 과목` : ev.how) : failed ? "미이수 등급" : "재수강 이전 기록";
+      const how = ev ? (ev.renamed ? `‘${ev.name}’(으)로 인정 · 이름 바뀐 과목` : ev.ocrFixed ? `‘${ev.name}’(으)로 맞춤 · 글자 인식 보정` : ev.how) : failed ? "미이수 등급" : "재수강 이전 기록";
       const opts = ["auto", "GE", "MSC", "MAJOR", "OTHER"].map((k) => `<option value="${k}" ${(c.area || "auto") === k ? "selected" : ""}>${k === "auto" ? `자동: ${area ? AREA_LABEL[area] : "-"}` : AREA_LABEL[k]}</option>`).join("");
       const dc = ev && ev.area === "MAJOR" ? E.designCredit(r, c.name) : 0;
       return `<tr class="${failed ? "fail" : ""} ${ev && ev.guess ? "guess" : ""}">
         <td>${esc(c.term || "")}</td>
-        <td>${esc(c.name)}${dc ? ` <span class="tag dsg">설계 ${fmt(dc)}</span>` : ""}<span class="how">${esc(how)}</span></td>
+        <td><input class="nm-edit" data-rename="${c.id}" value="${esc(c.name)}" aria-label="과목명 고치기">${dc ? ` <span class="tag dsg">설계 ${fmt(dc)}</span>` : ""}<span class="how">${esc(how)}</span></td>
         <td class="num">${fmt(c.credit)}</td><td>${esc(c.grade || "")}</td>
         <td><select data-id="${c.id}" aria-label="${esc(c.name)} 인증 영역">${opts}</select> <button class="del" data-del="${c.id}" aria-label="${esc(c.name)} 삭제" title="삭제">✕</button></td></tr>`;
     }).join("");
