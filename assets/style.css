@@ -150,3 +150,65 @@ button, input, select, textarea { font: inherit; color: inherit; }
 [hidden] { display: none !important; }
 .checks li.toggle-row { display: block; border-bottom: 0; padding-top: 4px; }
 .courses td:first-child { white-space: nowrap; }
+
+/* 탭 */
+.tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 1px solid var(--line); }
+.tabs button { background: none; border: 0; padding: 10px 14px; font-weight: 600; color: var(--ink-3); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+.btn.dark { background: var(--ink); color: #fff; }
+.btn.dark:hover { background: #2b3160; }
+
+/* 체크표 입력 */
+.sheet-form { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr; gap: 8px; }
+.sheet-form input { padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--r-sm); background: #fff; font-size: 14px; }
+@media (max-width: 700px) { .sheet-form { grid-template-columns: 1fr 1fr; } .sheet-form label:first-child { grid-column: 1 / -1; } }
+.sheet-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+
+/* 체크표: 종이 양식처럼 */
+.sheet-wrap { overflow-x: auto; margin-bottom: 16px; background: #e9ebf1; border-radius: var(--r-md); padding: 18px; }
+.sheet { background: #fff; color: #111; min-width: 760px; max-width: 980px; margin: 0 auto; padding: 26px 28px 22px; box-shadow: 0 1px 0 #cfd4e0, 0 6px 18px rgba(28, 33, 64, .08); font-size: 12px; line-height: 1.35; }
+.sheet-title { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.sheet h3 { font-size: 15px; font-weight: 800; }
+.sheet h4 { font-size: 13px; margin: 14px 0 6px; }
+.sheet h5 { font-size: 12px; margin: 10px 0 4px; font-weight: 700; }
+.sheet-meta { font-size: 12px; }
+.fill { display: inline-block; min-width: 80px; border-bottom: 1px solid #333; padding: 0 4px; margin-right: 8px; font-family: inherit; color: #1d3a8a; }
+.form { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.form th, .form td { border: 1px solid #555; padding: 3px 4px; text-align: center; vertical-align: middle; word-break: keep-all; overflow-wrap: anywhere; }
+.form th { background: #f1f2f5; font-weight: 600; font-size: 11px; }
+.form td { color: #1d3a8a; }
+.form td.l { text-align: left; }
+.form td.cat { color: #111; font-weight: 600; background: #fafafa; }
+.form td.sub { font-weight: 500; }
+.form .hint-in { display: block; font-size: 10px; font-weight: 400; color: #555; margin-top: 6px; }
+.form tr.blank td { height: 18px; }
+.form tr.subtotal td { color: #111; font-weight: 700; background: #f7f7f9; }
+.form tr.memo td { color: #666; font-size: 11px; }
+.form .small, .sheet .small { font-size: 10.5px; color: #555; }
+.crit { margin: 4px 0 8px; font-size: 11.5px; }
+.sheet-foot { margin: 8px 0 0; font-size: 11px; text-align: center; color: #333; }
+
+.tips h3 { font-size: 14px; margin: 14px 0 6px; }
+.tips ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; color: var(--ink-2); }
+.tips ul.mine li::marker { color: var(--crimson); }
+.tips details { margin-top: 14px; }
+.tips summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+.tips .docs { margin-top: 8px; columns: 2; display: block; }
+.tips .docs li { margin-bottom: 4px; break-inside: avoid; }
+@media (max-width: 560px) { .tips .docs { columns: 1; } }
+
+/* 인쇄: 체크표만 */
+@media print {
+  @page { size: A4 portrait; margin: 10mm; }
+  body { background: #fff; }
+  .top, .inputs, .tabs, .sheet-controls, .tips, .foot, #panelResult, #empty { display: none !important; }
+  .layout { display: block; padding: 0; }
+  .sheet-wrap { background: none; padding: 0; overflow: visible; }
+  .sheet { box-shadow: none; min-width: 0; max-width: none; padding: 0; }
+  .form td { color: #000; }
+  .form tr { break-inside: avoid; }
+  .sheet h4, .sheet h5 { break-after: avoid; }
+  .crit { break-before: avoid; }
+}
+.results, .inputs { min-width: 0; }
+.sheet-form > label { min-width: 0; } .sheet-form input, .sheet-form select { width: 100%; min-width: 0; }

@@ -1,7 +1,7 @@
 /* 화면 로직 */
 (function () {
   "use strict";
-  const E = window.ABEEK, P = window.TRANSCRIPT, C = window.CAREERS;
+  const E = window.ABEEK, P = window.TRANSCRIPT, C = window.CAREERS, SH = window.SHEET;
   const $ = (s) => document.querySelector(s);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const AREA_LABEL = { GE: "전문교양", MSC: "MSC(BSM)", MAJOR: "전공", OTHER: "인증 영역 아님" };
@@ -11,6 +11,7 @@
   let DATA = null, KNOWN = [];
   const S = { courses: [], program: null, admit: null, basis: null, track: null, next: null, cap: 15, autoProgram: false };
 
+  const PERSON = { sid: "", name: "", gradDate: "" }; // 저장하지 않음
   const store = {
     load() { try { return JSON.parse(localStorage.getItem("abeek-check") || "null"); } catch (e) { return null; } },
     save() { try { localStorage.setItem("abeek-check", JSON.stringify(S)); } catch (e) { /* 저장 불가 환경 */ } },
@@ -178,6 +179,29 @@
       const id = e.target.dataset.del; if (!id) return;
       S.courses = S.courses.filter((x) => x.id !== id); render();
     });
+    const tab = (which) => {
+      S.tab = which;
+      $("#tabResult").setAttribute("aria-selected", which === "result");
+      $("#tabSheet").setAttribute("aria-selected", which === "sheet");
+      $("#panelResult").hidden = which !== "result";
+      $("#panelSheet").hidden = which !== "sheet";
+      render();
+    };
+    $("#tabResult").addEventListener("click", () => tab("result"));
+    $("#tabSheet").addEventListener("click", () => tab("sheet"));
+    $("#sheetKind").addEventListener("change", (e) => { S.sheetKind = e.target.value; render(); });
+    $("#curTerm").addEventListener("change", (e) => { S.curTerm = e.target.value; render(); });
+    ["sid", "sname", "gradDate"].forEach((id) => $("#" + id).addEventListener("input", (e) => { PERSON[id === "sname" ? "name" : id] = e.target.value; render(); }));
+    $("#printBtn").addEventListener("click", () => window.print());
+    $("#csvBtn").addEventListener("click", () => {
+      const r = rule(), res = E.evaluate(r, S.courses);
+      const blob = new Blob([SH.csv(r, res, S.courses, sheetInfo())], { type: "text/csv;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `공학인증_상담표_${prog().name}.csv`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    });
     $("#addForm").addEventListener("submit", (e) => {
       e.preventDefault();
       const name = $("#addName").value.trim(); if (!name) return;
@@ -190,12 +214,18 @@
   function render() {
     if (!S.courses.length) { $("#out").hidden = true; $("#empty").hidden = false; return; }
     $("#out").hidden = false; $("#empty").hidden = true;
+    const tabNow = S.tab === "sheet" ? "sheet" : "result";
+    $("#tabResult").setAttribute("aria-selected", tabNow === "result");
+    $("#tabSheet").setAttribute("aria-selected", tabNow === "sheet");
+    $("#panelResult").hidden = tabNow !== "result";
+    $("#panelSheet").hidden = tabNow !== "sheet";
     const r = rule();
     const res = E.evaluate(r, S.courses);
     const track = C.tracks.find((t) => t.id === S.track);
     const [ny, ns] = S.next.split("-").map(Number);
     const rec = E.recommend(r, res, { track, nextYear: ny, nextSem: ns, cap: S.cap });
     store.save();
+    if (S.tab === "sheet") { renderSheet(r, res); return; }
 
     // 판정
     const shortAreas = res.areas.filter((a) => !a.ok);
@@ -288,6 +318,32 @@
   }
 
   const fmt = (x) => (Math.round(x * 10) / 10).toString();
+
+  function sheetInfo() {
+    const now = new Date();
+    return {
+      programName: prog().name, basis: S.basis, currentTerm: S.curTerm || "",
+      sid: PERSON.sid, name: PERSON.name, gradDate: PERSON.gradDate,
+      date: `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, "0")}.${String(now.getDate()).padStart(2, "0")}`,
+    };
+  }
+
+  function renderSheet(r, res) {
+    const terms = [...new Set(S.courses.map((c) => c.term).filter(Boolean))].sort((a, b) => (E.termOrder(a) || 0) - (E.termOrder(b) || 0));
+    if (S.curTerm === undefined || (S.curTerm && !terms.includes(S.curTerm))) S.curTerm = terms[terms.length - 1] || "";
+    $("#curTerm").innerHTML = `<option value="">없음(모두 이수 완료)</option>` + terms.map((t) => `<option value="${esc(t)}">${esc(t)}</option>`).join("");
+    $("#curTerm").value = S.curTerm;
+    $("#sheetKind").value = S.sheetKind || "consult";
+    const info = sheetInfo();
+    $("#sheetOut").innerHTML = (S.sheetKind || "consult") === "review" ? SH.reviewSheet(r, res, S.courses, info) : SH.consultSheet(r, res, S.courses, info);
+    const t = SH.tips(r, res, S.courses, info);
+    $("#tipsMine").innerHTML = t.mine.length
+      ? `<h3>내 성적에 맞춘 팁</h3><ul class="mine">${t.mine.map((x) => `<li>${x}</li>`).join("")}</ul>`
+      : `<p class="hint">재수강, 선후수 위반, 설계 미인정처럼 따로 챙길 항목이 없습니다.</p>`;
+    $("#tipsGeneral").innerHTML = t.general.map((x) => `<li>${x}</li>`).join("");
+    $("#tipsDocs").innerHTML = t.docs.map((x) => `<li>${esc(x)}</li>`).join("");
+    store.save();
+  }
 
   const SAMPLE = `2024학년도 1학기
 문제해결을위한글쓰기와발표	교필	3	A+

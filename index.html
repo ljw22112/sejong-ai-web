@@ -86,6 +86,11 @@
       </div>
 
       <div id="out" hidden>
+        <div class="tabs" role="tablist" aria-label="결과 보기">
+          <button type="button" role="tab" id="tabResult" aria-selected="true" aria-controls="panelResult">판정과 추천</button>
+          <button type="button" role="tab" id="tabSheet" aria-selected="false" aria-controls="panelSheet">체크표 미리보기</button>
+        </div>
+        <div id="panelResult" role="tabpanel" aria-labelledby="tabResult">
         <div class="verdict" id="verdict"></div>
 
         <section class="block">
@@ -130,6 +135,46 @@
           <h2>이 판정의 근거</h2>
           <div id="notes"></div>
         </section>
+        </div>
+
+        <div id="panelSheet" role="tabpanel" aria-labelledby="tabSheet" hidden>
+          <section class="block sheet-controls">
+            <div class="block-head">
+              <h2>공학인증 체크표 미리 채우기</h2>
+              <span class="sub">졸업심사 때 내는 양식을 성적으로 미리 채워 봅니다. 이름과 학번은 저장하지 않습니다.</span>
+            </div>
+            <div class="sheet-form">
+              <label class="field">양식
+                <select id="sheetKind">
+                  <option value="consult">이수체계준수 상담표</option>
+                  <option value="review">졸업심사서 과목이수 심사표</option>
+                </select>
+              </label>
+              <label class="field">학번 <input id="sid" inputmode="numeric" placeholder="24011234" autocomplete="off"></label>
+              <label class="field">이름 <input id="sname" placeholder="홍길동" autocomplete="off"></label>
+              <label class="field">이번 학기 <select id="curTerm"></select></label>
+              <label class="field">졸업예정 <input id="gradDate" placeholder="2028년 2월"></label>
+            </div>
+            <div class="sheet-actions">
+              <button type="button" class="btn dark" id="printBtn">인쇄 · PDF로 저장</button>
+              <button type="button" class="btn ghost" id="csvBtn">엑셀용 CSV 받기</button>
+            </div>
+          </section>
+
+          <div class="sheet-wrap"><div id="sheetOut"></div></div>
+
+          <section class="block tips">
+            <h2>작성 팁</h2>
+            <div id="tipsMine"></div>
+            <h3>모두에게 해당하는 것</h3>
+            <ul id="tipsGeneral"></ul>
+            <details>
+              <summary>졸업심사 제출 서류 예시</summary>
+              <ul id="tipsDocs" class="docs"></ul>
+              <p class="hint">전자정보통신공학심화 2025년 8월 졸업심사 공지를 예로 든 목록입니다. 학과·학기마다 다르니 학과 공지와 공학교육센터 안내를 따르세요.</p>
+            </details>
+          </section>
+        </div>
       </div>
     </section>
   </main>
@@ -142,6 +187,7 @@
   <script src="assets/engine.js"></script>
   <script src="assets/careers.js"></script>
   <script src="assets/parser.js"></script>
+  <script src="assets/sheet.js"></script>
   <script src="assets/app.js"></script>
 </body>
 </html>

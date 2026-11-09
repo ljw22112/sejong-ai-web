@@ -348,6 +348,14 @@ def build_rule(pid, year, html):
                 if not any(nkey(k) == nkey(nm) for k in dcred):
                     dcred[nm] = float(m.group(1))
     rule["designCredits"] = dcred
+    # 선후수 지정(설계 순서 외): 'A→B' 형태
+    pre = []
+    for a, b in re.findall(r"([가-힣A-Za-z0-9]+)\s*→\s*([가-힣A-Za-z0-9]+)", s.get("MSC", "") + " " + mj_txt):
+        if re.search(r"설계|캡스톤|Capstone|요소|종합", a + b) or a in ("이상", "이하") or len(a) < 2 or len(b) < 2:
+            continue
+        if (a, b) not in pre:
+            pre.append((a, b))
+    rule["prereqs"] = [list(x) for x in pre]
     rule["catalog"] = cat
     return rule
 
