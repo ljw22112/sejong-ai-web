@@ -76,7 +76,13 @@
     catRow("basic", "학문기초교양", is.basic, r.geBasic);
     catRow("mBasic", "전공기초", is.mBasic, r.majorBasic);
     catRow("mReq", "전공필수", is.mReq, r.majorReq);
-    catRow("mTotal", "전공(필수+선택)", (c) => is.mReq(c) || is.mElec(c), r.majorReq + r.majorElec);
+    // 전공필수를 기준보다 많이 들으면 넘친 학점은 전공선택으로 인정
+    const reqCr = sum(is.mReq), extra = Math.max(0, reqCr - r.majorReq);
+    if (r.majorElec > 0) {
+      const elecCr = sum(is.mElec) + extra;
+      rows.push(Object.assign({ id: "mElec", label: "전공선택", earned: elecCr, min: r.majorElec, ok: elecCr >= r.majorElec,
+        note: extra > 0 ? `전공필수 초과 ${extra}학점을 전공선택으로 인정` : "" }, catKnown ? {} : { unknown: true, ok: null, note: unknownNote }));
+    }
 
     // 졸업인증제
     if (dr.cert) {
@@ -96,7 +102,7 @@
     const gap = (id) => { const x = gradRes.rows.find((r) => r.id === id); return x && !x.unknown ? Math.max(0, x.min - x.earned) : 0; };
     const totalGap = gap("total");
     const geGap = gap("balance") + gap("basic") + gap("ge1");
-    const majorGap = gap("mBasic") + Math.max(gap("mReq"), gap("mTotal"));
+    const majorGap = gap("mBasic") + gap("mReq") + gap("mElec");
     const commonCr = (gradRes.missingCommon || []).reduce((s, x) => s + (x.credit || 1), 0);
     // 포기: 학과 졸업요건만
     const quit = Math.max(totalGap, geGap + majorGap + commonCr);

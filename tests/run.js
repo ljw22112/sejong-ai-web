@@ -87,6 +87,16 @@ t("학과 졸업요건 판정", () => {
   eq(g.rows.find((x) => x.id === "mReq").earned, 3);
 });
 
+t("전공필수 초과분은 전공선택으로 인정", () => {
+  const dr = G.deptRule(GD, "03", 2024); // 전필 21, 전선 39
+  const cs = Array.from({ length: 9 }, (_, i) => ({ id: "r" + i, name: "전필과목" + i, credit: 3, grade: "A0", cat: "전필", term: "2024-1" }))
+    .concat(Array.from({ length: 4 }, (_, i) => ({ id: "e" + i, name: "전선과목" + i, credit: 3, grade: "A0", cat: "전선", term: "2024-1" })));
+  const g = G.evaluateGrad(dr, cs, {});
+  const req = g.rows.find((x) => x.id === "mReq"), el = g.rows.find((x) => x.id === "mElec");
+  eq([req.earned, req.ok, el.earned], [27, true, 18]); // 전필 27 → 초과 6 + 전선 12
+  ok(/초과 6학점/.test(el.note));
+});
+
 t("시간표: 겹침 없음", () => {
   eq(T.parseTime("화목09:00-10:30,금13:00-15:00").length, 3);
   const secs = { A: [{ cl: "001", t: "월수09:00-10:30" }], B: [{ cl: "001", t: "월10:00-11:00" }, { cl: "002", t: "화10:00-11:00" }], C: [{ cl: "001", t: "" }] };
