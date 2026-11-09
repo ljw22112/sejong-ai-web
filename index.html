@@ -1,87 +1,147 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>세종대 AI 어시스턴트</title>
-    <!-- 디자인을 예쁘게 만들어주는 Tailwind CSS 자동 로드 -->
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>세종대 공학인증 점검</title>
+  <meta name="description" content="세종대학교 공학교육인증(ABEEK) 졸업요건을 성적표로 점검하고, 희망 진로에 맞춰 남은 학기 수강을 추천합니다.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="assets/style.css">
 </head>
-<body class="bg-gray-100 h-screen flex flex-col items-center justify-center p-4">
-    <div class="w-full max-w-2xl bg-white rounded-xl shadow-2xl flex flex-col h-[85vh] overflow-hidden">
-        
-        <!-- 상단 헤더 -->
-        <div class="bg-red-700 p-5 text-white font-bold text-xl flex items-center shadow-md">
-            🎓 세종대 전용 AI 캠퍼스 플랫폼
-        </div>
-        
-        <!-- 대화가 표시되는 창 -->
-        <div id="chat-box" class="flex-1 p-5 overflow-y-auto space-y-4 bg-gray-50">
-            <div class="bg-white border border-gray-200 text-gray-800 p-4 rounded-xl rounded-tl-none w-max max-w-[80%] shadow-sm">
-                안녕하세요! 세종대 학사 일정, 공학인증, 실시간 식단 등 무엇이든 물어보세요.
-            </div>
-        </div>
-
-        <!-- 질문 입력 창 -->
-        <div class="p-4 bg-white border-t border-gray-200 flex gap-3">
-            <input type="text" id="user-input" class="flex-1 border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-600 transition" placeholder="여기에 질문을 입력하세요...">
-            <button onclick="sendMessage()" class="bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-lg font-bold transition duration-200 shadow-md">전송</button>
-        </div>
+<body>
+  <header class="top">
+    <div class="wrap top-in">
+      <div>
+        <h1>공학인증 점검</h1>
+        <p class="lede">성적표를 넣으면 세종대 공학인증(ABEEK) 졸업요건을 영역별로 따져 보고, 모자란 부분을 희망 진로에 맞춰 남은 학기에 배치합니다.</p>
+      </div>
+      <p class="privacy">성적표는 이 브라우저 안에서만 읽고, 어디에도 전송하지 않습니다.</p>
     </div>
+  </header>
 
-    <!-- 백엔드 서버와 통신하는 자바스크립트 로직 -->
-    <script>
-        async function sendMessage() {
-            const input = document.getElementById('user-input');
-            const message = input.value.trim();
-            if (!message) return;
+  <main class="wrap layout">
+    <!-- 입력 -->
+    <aside class="inputs" aria-label="입력">
+      <section class="step">
+        <h2><span class="n">1</span>성적 넣기</h2>
+        <label class="drop" id="drop">
+          <input type="file" id="file" accept=".pdf,.txt,.csv,.tsv" hidden>
+          <strong>성적증명서 PDF 선택</strong>
+          <span>또는 파일을 여기로 끌어다 놓기 · PDF, CSV, TXT</span>
+        </label>
+        <details class="paste">
+          <summary>표를 복사해서 붙여넣기</summary>
+          <p class="hint">학사정보시스템 ‘기이수성적조회’ 표를 통째로 복사해 붙여넣으면 됩니다. 한 줄에 과목명·학점·등급이 있으면 읽습니다.</p>
+          <textarea id="paste" rows="7" placeholder="2025학년도 1학기&#10;자료구조및실습	전필	3	A+&#10;공학설계기초(산학프로젝트입문)	전필	3	A0"></textarea>
+          <button type="button" class="btn ghost" id="pasteBtn">붙여넣은 내용 읽기</button>
+        </details>
+        <p class="status" id="readStatus" role="status"></p>
+        <button type="button" class="link" id="sampleBtn">예시 성적으로 먼저 둘러보기</button>
+      </section>
 
-            const chatBox = document.getElementById('chat-box');
-            
-            // 내가 보낸 질문 화면에 표시
-            chatBox.innerHTML += `<div class="bg-red-600 text-white p-4 rounded-xl rounded-tr-none w-max max-w-[80%] ml-auto shadow-sm">${message}</div>`;
-            input.value = '';
+      <section class="step">
+        <h2><span class="n">2</span>인증 프로그램</h2>
+        <label class="field">학과(프로그램)
+          <select id="program"></select>
+        </label>
+        <div class="row2">
+          <label class="field">입학 연도
+            <select id="admit"></select>
+          </label>
+          <label class="field">적용 기준
+            <select id="basis"></select>
+          </label>
+        </div>
+        <p class="hint" id="programNote"></p>
+      </section>
 
-            // AI가 답변을 고민하는 '...' 표시 추가
-            const aiMessageId = 'ai-msg-' + Date.now();
-            chatBox.innerHTML += `<div id="${aiMessageId}" class="bg-white border border-gray-200 text-gray-800 p-4 rounded-xl rounded-tl-none w-max max-w-[80%] mt-4 shadow-sm">...</div>`;
-            chatBox.scrollTop = chatBox.scrollHeight;
+      <section class="step">
+        <h2><span class="n">3</span>희망 진로</h2>
+        <div class="chips" id="tracks" role="radiogroup" aria-label="희망 진로"></div>
+      </section>
 
-            try {
-                // 백엔드 서버로 질문 전송 (로컬 테스트용 주소. 배포 시 Render 주소로 변경)
-                const response = await fetch('http://localhost:8000/api/v1/chat/completions', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message })
-                });
+      <section class="step">
+        <h2><span class="n">4</span>남은 학기</h2>
+        <div class="row2">
+          <label class="field">다음 학기
+            <select id="nextTerm"></select>
+          </label>
+          <label class="field">학기당 인증과목
+            <select id="cap">
+              <option value="9">9학점</option>
+              <option value="12">12학점</option>
+              <option value="15" selected>15학점</option>
+              <option value="18">18학점</option>
+            </select>
+          </label>
+        </div>
+      </section>
+    </aside>
 
-                // 스트리밍(타이핑 효과) 데이터 받아오기
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder('utf-8');
-                const aiElement = document.getElementById(aiMessageId);
-                aiElement.innerHTML = ''; 
+    <!-- 결과 -->
+    <section class="results" aria-live="polite">
+      <div id="empty" class="empty">
+        <h2>성적을 넣으면 여기에 결과가 나옵니다</h2>
+        <p>왼쪽에서 성적증명서를 고르거나, 예시 성적으로 화면을 먼저 확인해 보세요. 학과와 입학 연도는 성적표를 읽은 뒤에도 바꿀 수 있습니다.</p>
+      </div>
 
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-                    const chunk = decoder.decode(value);
-                    const lines = chunk.split('\n');
-                    for (const line of lines) {
-                        if (line.startsWith('data: ')) {
-                            aiElement.innerHTML += line.replace('data: ', '');
-                            chatBox.scrollTop = chatBox.scrollHeight;
-                        }
-                    }
-                }
-            } catch (error) {
-                document.getElementById(aiMessageId).innerHTML = "서버 연결에 실패했습니다. 백엔드 서버가 켜져 있는지 확인해주세요.";
-            }
-        }
+      <div id="out" hidden>
+        <div class="verdict" id="verdict"></div>
 
-        // 엔터키를 눌러도 전송되도록 설정
-        document.getElementById('user-input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') sendMessage();
-        });
-    </script>
+        <section class="block">
+          <h2>영역별 학점</h2>
+          <div id="rulers" class="rulers"></div>
+        </section>
+
+        <section class="block">
+          <h2>필수 조건</h2>
+          <ul id="checks" class="checks"></ul>
+        </section>
+
+        <section class="block">
+          <div class="block-head">
+            <h2>추천 수강 계획</h2>
+            <span class="sub" id="planSub"></span>
+          </div>
+          <ol id="plan" class="plan"></ol>
+          <div id="picks"></div>
+        </section>
+
+        <section class="block">
+          <div class="block-head">
+            <h2>읽어 들인 과목</h2>
+            <span class="sub">영역이 틀리면 바로 고쳐 주세요. 판정이 다시 계산됩니다.</span>
+          </div>
+          <div class="table-wrap">
+            <table class="courses">
+              <thead><tr><th>학기</th><th>과목</th><th class="num">학점</th><th>등급</th><th>인증 영역</th></tr></thead>
+              <tbody id="courseRows"></tbody>
+            </table>
+          </div>
+          <form id="addForm" class="add">
+            <input id="addName" placeholder="빠진 과목 직접 추가 (예: 선형대수)" aria-label="과목명">
+            <input id="addCredit" type="number" min="0.5" max="6" step="0.5" value="3" aria-label="학점">
+            <input id="addTerm" placeholder="2025-2" aria-label="학기" size="7">
+            <button class="btn ghost" type="submit">추가</button>
+          </form>
+        </section>
+
+        <section class="block notes">
+          <h2>이 판정의 근거</h2>
+          <div id="notes"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap foot">
+    <p>요건은 세종대학교 공학교육센터 ‘교과과정/공학인증요건’ 페이지(2021~2026학번)를 자동 수집해 만든 것입니다. 학번별 대체과목, 학과 공지, 개설 여부는 반영되지 않을 수 있으니 최종 확인은 공학교육센터와 학과 사무실에서 하세요.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="assets/engine.js"></script>
+  <script src="assets/careers.js"></script>
+  <script src="assets/parser.js"></script>
+  <script src="assets/app.js"></script>
 </body>
 </html>
