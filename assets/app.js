@@ -8,7 +8,7 @@
   const GROUP_LABEL = { GE: "전문교양", MSC: "MSC", MAJOR: "전공", DESIGN: "설계", EXTRA: "추가 조건" };
   const FAMILY_ORDER = ["sw", "robot", "ee", "mech", "aero", "nano", "nuclear", "civil", "arch", "env", "energy"];
 
-  let DATA = null, KNOWN = [], GRADD = null, OFFERED = null;
+  let DATA = null, KNOWN = [], GRADD = null, OFFERED = null, SEASON = null;
   const GR = window.GRAD;
   const S = { courses: [], program: null, admit: null, basis: null, track: null, next: null, cap: 15, autoProgram: false };
 
@@ -39,7 +39,7 @@
     if (DATA.updated) $("#stamp").textContent = `요건 기준 ${DATA.updated.replace(/-/g, ".")} · 매 학기 공학교육센터 요건 자동 확인`;
     // 부가 데이터: 없어도 동작
     const opt = (u) => fetch(u).then((r) => (r.ok ? r.json() : null)).catch(() => null);
-    [GRADD, OFFERED] = await Promise.all([opt("data/grad.json"), opt("data/offered.json")]);
+    [GRADD, OFFERED, SEASON] = await Promise.all([opt("data/grad.json"), opt("data/offered.json"), opt("data/season.json")]);
     opt("data/notices.json").then((n) => {
       if (!n || !n.items || !n.items.length) return;
       $("#notices").innerHTML = n.items.slice(0, 4).map((x) => `<li><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.title)}</a> <span class="date">${esc(x.date)}</span></li>`).join("");
@@ -402,6 +402,7 @@
     ["sid", "sname", "gradDate"].forEach((id) => $("#" + id).addEventListener("input", (e) => { PERSON[id === "sname" ? "name" : id] = e.target.value; render(); }));
     $("#printBtn").addEventListener("click", () => window.print());
     $("#ttBtn").addEventListener("click", makeTimetable);
+    $("#seasonCap").addEventListener("change", () => render());
     $("#ttNext").addEventListener("click", () => { ttState.i = (ttState.i + 1) % ttState.list.length; renderTimetable(); });
     $("#summaryBtn").addEventListener("click", () => {
       document.body.classList.add("print-summary");
@@ -526,6 +527,7 @@
       $("#verdict").insertAdjacentHTML("beforeend", `<p class="both"><span class="pill ${res.ok ? "ok" : "no"}">공학인증 ${res.ok ? "충족" : "미충족"}</span><span class="pill ${g.ok ? "ok" : open.length ? "no" : "unk"}">학과 졸업 ${g.ok ? "충족" : open.length ? `미충족 ${open.length}개` : "확인 필요"}</span>${unk ? `<span class="hint">이수구분 정보가 없어 ${unk}개 항목은 판정하지 못했습니다.</span>` : ""}</p>`);
       if (res.ok && !g.ok && open.length) $("#verdict").className = "verdict no";
     }
+    renderSeason(rule(), res, rec, g);
     $("#ttSub").textContent = OFFERED ? `${OFFERED.semester || "현재"} 수강편람 기준 · 강좌 ${OFFERED.count}개` : "";
 
     // 계획
@@ -650,6 +652,58 @@
       </div>
       <p class="hint">2016학번부터는 공학인증을 이수해야 졸업할 수 있고, 포기는 ${esc(GR.QUIT_REASONS.slice(0, 7).join("·"))} 등 사유가 있을 때만 3학년 2학기에 포기서로 가능합니다. 사유가 없어지면 다시 인증을 이수해야 합니다. 남은 학점은 이수구분 기준 추정치입니다.</p>`;
     return g;
+  }
+
+  // ---------- 계절학기 추천 ----------
+  function renderSeason(r, res, rec, g) {
+    const box = $("#seasonBlock");
+    if (!SEASON || !SEASON.courses) { box.hidden = true; return; }
+    box.hidden = false;
+    const track = C.tracks.find((t) => t.id === S.track);
+    const taken = (n) => res.courses.some((c) => E.same(c.name, n));
+    const missing = new Set(res.checks.filter((c) => !c.ok).flatMap((c) => c.missing || []).map(E.nkey));
+    const inRec = (n) => rec.chosen.find((c) => E.same(c.name, n));
+    const gap = (id) => { const x = g && g.rows.find((y) => y.id === id); return x && x.ok === false; };
+    const commonMissing = new Set(((g && g.missingCommon) || []).map((x) => E.nkey(x.name)));
+    const depts = ((GR && GR.DEPT[S.program]) || []).map((dn) => dn.replace(/(학과|전공|학부)$/, ""));
+    const own = (secs) => secs.some((x) => depts.some((dn) => (x.d || "").replace(/\s/g, "").includes(dn)));
+    const cands = [];
+    Object.entries(SEASON.courses).forEach(([n, secs]) => {
+      if (taken(n)) return;
+      const k = secs[0].k || "", why = [];
+      let w = 0;
+      const rc = inRec(n);
+      if (missing.has(E.nkey(n))) { w += 110; why.push("공학인증 필수"); }
+      else if (rc) { w += rc.kind === "required" ? 100 : rc.design ? 80 : 60; why.push(rc.design ? `공학인증 설계 ${fmt(rc.design)}학점` : "공학인증 계획 과목"); }
+      if (commonMissing.has(E.nkey(n))) { w += 90; why.push("교양 공통필수"); }
+      if (/^균필/.test(k) && gap("balance")) { w += 50; why.push("균형교양 부족분"); }
+      if (/^기필/.test(k) && gap("basic")) { w += 50; why.push("학문기초교양 부족분"); }
+      if (/^전[필선기]/.test(k) && own(secs) && (gap("mReq") || gap("mElec") || gap("mBasic"))) { w += 40; why.push("학과 전공학점 부족분"); }
+      const f = E.careerScore(track, n);
+      if (f > 0 && (own(secs) || (r.catalog || []).some((c) => E.same(c.name, n)) || !/^전/.test(k))) { w += 20 + f * 3; why.push("희망 진로"); }
+      else if (f > 0) { w += 8 + f * 2; why.push("희망 진로 · 타 학과 과목(학점 인정 확인)"); }
+      if (w > 0) cands.push({ n, secs, w, why, cr: secs[0].cr || 3, f });
+    });
+    cands.sort((a, b) => b.w - a.w || b.f - a.f);
+    // 들을 학점 안에서 시간이 겹치지 않게 고르기
+    const cap = +$("#seasonCap").value, pick = [];
+    let total = 0;
+    for (const c of cands) {
+      if (total + c.cr > cap) continue;
+      const sec = c.secs.map((x) => ({ x, slots: TT.parseTime(x.t) })).find((x) => !pick.some((p2) => TT.clash(p2.slots, x.slots)));
+      if (!sec) continue;
+      pick.push(Object.assign({}, c, { sec: sec.x, slots: sec.slots }));
+      total += c.cr;
+    }
+    const others = cands.filter((c) => !pick.includes(c) && !pick.some((p2) => p2.n === c.n)).slice(0, 6);
+    $("#seasonSub").textContent = `${SEASON.label} 개설 ${SEASON.count}분반 · ${SEASON.updated} 기준`;
+    $("#seasonNote").textContent = SEASON.current
+      ? "공학인증·졸업에 모자란 과목을 먼저, 남는 학점은 희망 진로 과목으로 골랐습니다."
+      : `아직 다가오는 계절학기 개설 강좌가 공개되지 않아 지난 ${SEASON.label} 개설 과목으로 보여 드립니다. 새 계절학기 강좌가 개설되면 자동으로 바뀝니다.`;
+    $("#seasonList").innerHTML = pick.length ? `<li><div class="when">추천<small>${fmt(total)}학점</small></div><ul>${pick.map((c) =>
+      `<li class="c"><span><span class="nm">${esc(c.n)}</span>${c.why.map((w2) => `<span class="tag ${/필수/.test(w2) ? "req" : /진로/.test(w2) ? "fit" : "dsg"}">${esc(w2)}</span>`).join("")}<span class="why">${esc(c.sec.cl)}분반 · ${esc(c.sec.p || "교수 미정")} · ${esc(c.sec.t || "시간 미정")} · ${esc(c.sec.d || "")}</span></span><span class="cr">${fmt(c.cr)}학점</span></li>`).join("")}</ul></li>`
+      + (others.length ? `<li><div class="when">다른 후보</div><ul><li class="c"><span class="why">${others.map((c) => `${esc(c.n)}(${esc(c.why.join("·"))})`).join(", ")}</span></li></ul></li>` : "")
+      : `<li><div class="when">추천 없음</div><ul><li class="c"><span>이번 계절학기 개설 과목 중에는 공학인증·졸업이나 희망 진로에 맞는 과목이 없습니다.</span></li></ul></li>`;
   }
 
   // ---------- 추천 시간표 ----------
