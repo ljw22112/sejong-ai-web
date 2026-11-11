@@ -38,7 +38,7 @@
     for (const k of ys) {
       const y = gradData.years[k];
       const name = (DEPT[pid] || []).find((n) => y.depts[n]);
-      if (name) return { year: k, asked: String(year), from: y.from, dept: name, req: y.depts[name], common: y.common, cert: y.cert, src: y.src };
+      if (name) return { year: k, asked: String(year), from: y.from, dept: name, req: y.depts[name], common: y.common, cert: y.cert, src: y.src, catalog: y.catalog, diff: (y.catalogDiff || {})[name] };
     }
     return null;
   }

@@ -18,7 +18,7 @@
 - **상담용 한 장 요약**: 판정, 졸업요건, 계획을 A4 한 장으로 인쇄합니다.
 - **공지·설치**: 공학교육센터 최근 공지를 보여 주고, 홈 화면에 앱처럼 설치해 오프라인에서도 열 수 있습니다.
 - **검증 도구**: `verify.html`(학과별 요건 원문 대조표), `node tests/run.js`(회귀 테스트).
-- **과목명 변경 대응**: `data/renames.json`에 수강편람의 공식 동일·대체 과목(34개), 이수체계표 표기 차이(16개), 학번별 이수체계표·개설강좌 비교로 찾은 이름 변경 추정(40개, 학과 확인 필요)을 근거와 함께 관리합니다. 추정 항목은 해당 인증 프로그램에서만 적용하며, 목록은 `verify.html`에서 볼 수 있습니다.
+- **과목명 변경 대응**: `data/renames.json`에 2021-1~2026-2학기 수강편람 12권의 공식 동일·대체 과목(34개, 처음 실린 학기 포함)과 교양필수 지정해제 과목, 이수체계표 표기 차이(16개), 학번별 이수체계표·개설강좌 비교로 찾은 이름 변경 추정(40개, 학과 확인 필요)을 근거와 함께 관리합니다. 추정 항목은 해당 인증 프로그램에서만 적용하며, 목록은 `verify.html`에서 볼 수 있습니다.
 - **대상**: 공학교육센터에 게시된 15개 인증 프로그램의 2021~2026학번 기준.
 
 ## 구조
@@ -36,7 +36,7 @@ assets/style.css
 data/abeek.json       학과·학번별 인증요건과 이수체계표 (자동 생성)
 tools/build_data.py   공학교육센터 페이지 수집 → data/abeek.json
 tools/overrides.json  자동 추출 보정, 추가 조건
-tools/build_grad.py   연도별 교과과정(+ --catalog 수강편람 텍스트) → data/grad.json (학과 졸업요건)
+tools/build_grad.py   연도별 교과과정 + --catalog 수강편람 텍스트 여러 개(최근 학기 우선, 웹과 다른 값은 catalogDiff로 기록) → data/grad.json
 data/renames.json     과목명 변경·동일·대체 과목 묶음
 tools/build_offered.py 수강편람(올클 공개 API) → data/offered.json, --season 으로 계절학기 → data/season.json
 tools/build_notices.py 공학교육센터 공지 → data/notices.json

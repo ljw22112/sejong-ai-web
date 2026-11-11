@@ -125,6 +125,15 @@ t("시간표: 겹침 없음", () => {
   eq(r.courses.map((c) => c.name + c.sec.cl), ["A001", "B002", "C001"]);
 });
 
+t("수강편람 2021-1~2026-2 반영", () => {
+  ok(E.renamed("고급프로그래밍입문", "프로그래밍활용-C", null), "고급프로그래밍입문 = 프로그래밍활용-C");
+  ok(E.renamed("English Writing 1", "영어3", null));
+  ok(!E.renamed("프로그래밍입문", "프로그래밍활용-P", null), "프로그래밍입문(옛 C)과 -P는 다른 과목");
+  eq(G.deptRule(GD, "05", 2025).req.majorReq, 31);
+  eq(G.deptRule(GD, "18", 2021).dept, "인공지능학과");
+  eq(G.deptRule(GD, "10", 2022).req.majorElec, 48);
+});
+
 if (OFF) t("수강편람 데이터 형식", () => { ok(OFF.count > 300); ok(Object.values(OFF.courses)[0][0].hasOwnProperty("t")); });
 
 console.log(`${pass}개 통과, ${fail}개 실패`);
