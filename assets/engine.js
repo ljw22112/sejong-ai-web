@@ -9,20 +9,6 @@
     ["확률및통계", "확률과통계"],
     ["capstone디자인", "캡스톤디자인", "capstone디자인산학협력프로젝트"],
   ];
-  // 학번에 따라 이름이 바뀐 과목 (공학교육센터 학번별 요건을 비교해 정리. 대체 인정은 학과 확인 필요)
-  const RENAMED = [
-    ["문제해결을위한글쓰기와발표", "비판적사고와창의적글쓰기", "비판적사고와글쓰기"],
-    ["미적분학1", "기초미적분학", "일변수미적분학", "미적분학"],
-    ["미적분학2", "다변수미적분학"],
-    ["일반물리학1", "일반물리학및실험1"],
-    ["일반물리학2", "일반물리학및실험2"],
-    ["일반화학1", "일반화학"],
-    ["확률및통계", "확률통계및프로그래밍", "확률과통계및프로그래밍"],
-    ["선형대수", "선형대수및프로그래밍"],
-    ["공업수학1", "공업수학"],
-    ["SW기초코딩", "소프트웨어기초코딩"],
-    ["고급프로그래밍활용", "프로그래밍활용-C"],
-  ];
   function nkey(s) {
     return String(s || "")
       .replace(/Ⅰ/g, "1").replace(/Ⅱ/g, "2").replace(/Ⅲ/g, "3")
@@ -43,13 +29,28 @@
     for (const k of keys(b)) if (k && ka.has(k)) return true;
     return false;
   }
-  const RENAMED_OF = {};
-  RENAMED.forEach((g) => { const c = "~" + nkey(g[0]); g.forEach((n) => (RENAMED_OF[nkey(n)] = c)); });
-  /** 학번별 이름 변경으로 같은 과목으로 볼 수 있는가 (same 이 아닐 때만 의미) */
-  function renamed(a, b) {
-    const ra = [...keys(a)].map((k) => RENAMED_OF[k]).filter(Boolean);
-    const rb = [...keys(b)].map((k) => RENAMED_OF[k]).filter(Boolean);
-    return ra.some((x) => rb.includes(x));
+  // ---------- 이름 바뀐 과목 (data/renames.json) ----------
+  let GROUPS = [];
+  const TYPE_ORDER = { same: 0, sub: 1, probable: 2 };
+  function setRenames(data) {
+    GROUPS = [];
+    ((data && data.groups) || []).forEach((g) => {
+      if (g.type === "notation") {
+        const c = ALIAS_OF[nkey(g.names[0])] || nkey(g.names[0]);
+        g.names.forEach((n) => (ALIAS_OF[nkey(n)] = c));
+      } else GROUPS.push(g);
+    });
+    GROUPS.sort((x, y) => (TYPE_ORDER[x.type] ?? 9) - (TYPE_ORDER[y.type] ?? 9));
+  }
+  /** a 와 b 가 같은 과목으로 지정·추정된 묶음이면 그 묶음을 돌려준다 */
+  function renamed(a, b, pid) {
+    for (const g of GROUPS) {
+      if (g.programs && pid && !g.programs.includes(pid)) continue;
+      if (g.programs && !pid) continue;
+      const ia = g.names.findIndex((n) => same(n, a)), ib = g.names.findIndex((n) => same(n, b));
+      if (ia >= 0 && ib >= 0 && ia !== ib) return g;
+    }
+    return null;
   }
   function inList(name, list) { return (list || []).some((x) => same(name, x)); }
   function findIn(name, list) { return (list || []).find((x) => same(name, x)); }
@@ -122,8 +123,10 @@
   function mapRenamed(rule, c) {
     const names = ruleNames(rule);
     if (names.some((n) => same(c.name, n))) return c;
-    const hit = names.find((n) => renamed(c.name, n));
-    if (hit) return Object.assign({}, c, { name: hit, origName: c.name, renamed: true });
+    for (const n of names) {
+      const g = renamed(c.name, n, rule.pid);
+      if (g) return Object.assign({}, c, { name: n, origName: c.name, renamed: true, renameType: g.type, renameNote: g.note || "" });
+    }
     // 글자 인식으로 앞뒤가 잘린 과목명: 이 학번 과목 중 하나에만 통째로 들어 있으면 그 과목
     const k = nkey(c.name);
     if (c.ocr && k.length >= 5) {
@@ -235,7 +238,7 @@
     ];
     areas.forEach((a) => (a.ok = a.earned >= a.min));
     const ok = areas.every((a) => a.ok) && checks.every((c) => c.ok);
-    const renamedList = courses.filter((c) => c.renamed).map((c) => ({ from: c.origName, to: c.name }));
+    const renamedList = courses.filter((c) => c.renamed).map((c) => ({ from: c.origName, to: c.name, type: c.renameType, note: c.renameNote }));
     return { ok, areas, checks, courses, designRows, renamed: renamedList };
   }
 
@@ -352,7 +355,7 @@
     return { semesters: sems, unplaced, picks, chosen, gaps };
   }
 
-  const api = { renamed, mapRenamed, nkey, keys, same, inList, findIn, evaluate, recommend, classify, uniqueCourses, termOrder, careerScore, designCredit };
+  const api = { setRenames, renamed, mapRenamed, nkey, keys, same, inList, findIn, evaluate, recommend, classify, uniqueCourses, termOrder, careerScore, designCredit };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.ABEEK = api;
 })(typeof self !== "undefined" ? self : this);

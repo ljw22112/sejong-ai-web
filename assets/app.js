@@ -28,7 +28,10 @@
       $("#readStatus").className = "status err";
       return;
     }
+    const RN = await fetch("data/renames.json").then((r) => (r.ok ? r.json() : null)).catch(() => null);
+    if (RN) E.setRenames(RN);
     const names = new Set();
+    if (RN) RN.groups.forEach((g) => g.names.forEach((n) => names.add(n)));
     Object.values(DATA.programs).forEach((p) => Object.values(p.years).forEach((r) => {
       r.catalog.forEach((c) => names.add(c.name));
       [r.ge.required, r.ge.electives, r.msc.required, r.msc.electives, r.major.required, r.design.basic, r.design.element, r.design.capstone]
@@ -573,7 +576,8 @@
       const ev = evalMap.get(c.id);
       const failed = !ev && c.grade && /^(F|NP|U|W)$/i.test(c.grade);
       const area = ev ? ev.area : null;
-      const how = ev ? (ev.renamed ? `‘${ev.name}’(으)로 인정 · 이름 바뀐 과목` : ev.ocrFixed ? `‘${ev.name}’(으)로 맞춤 · 글자 인식 보정` : ev.how) : failed ? "미이수 등급" : "재수강 이전 기록";
+      const RT = { same: "공식 동일과목", sub: "공식 대체과목", probable: "이름 변경 추정·학과 확인 필요" };
+      const how = ev ? (ev.renamed ? `‘${ev.name}’(으)로 인정 · ${RT[ev.renameType] || "이름 바뀐 과목"}` : ev.ocrFixed ? `‘${ev.name}’(으)로 맞춤 · 글자 인식 보정` : ev.how) : failed ? "미이수 등급" : "재수강 이전 기록";
       const opts = ["auto", "GE", "MSC", "MAJOR", "OTHER"].map((k) => `<option value="${k}" ${(c.area || "auto") === k ? "selected" : ""}>${k === "auto" ? `자동: ${area ? AREA_LABEL[area] : "-"}` : AREA_LABEL[k]}</option>`).join("");
       const dc = ev && ev.area === "MAJOR" ? E.designCredit(r, c.name) : 0;
       return `<tr class="${failed ? "fail" : ""} ${ev && ev.guess ? "guess" : ""}">
@@ -588,7 +592,8 @@
     const guesses = res.courses.filter((c) => c.guess).length;
     const n = r.notes || {};
     $("#notes").innerHTML = `
-      ${res.renamed.length ? `<p class="warn">${esc(S.admit)}학번 기준에는 이름이 다르게 올라 있어 같은 과목으로 인정한 과목: ${res.renamed.map((x) => `${esc(x.from)} → ${esc(x.to)}`).join(", ")}. 학번별 대체과목 인정은 학과마다 다를 수 있으니 확인해 주세요.</p>` : ""}
+      ${res.renamed.filter((x) => x.type !== "probable").length ? `<p>${esc(S.admit)}학번 과목명과 달라도 수강편람의 공식 동일·대체 과목이라 인정한 과목: ${res.renamed.filter((x) => x.type !== "probable").map((x) => `${esc(x.from)} → ${esc(x.to)}`).join(", ")}.</p>` : ""}
+      ${res.renamed.filter((x) => x.type === "probable").length ? `<p class="warn">이수체계표 비교로 이름이 바뀐 것으로 추정해 인정한 과목: ${res.renamed.filter((x) => x.type === "probable").map((x) => `${esc(x.from)} → ${esc(x.to)}`).join(", ")}. 공식 동일과목 지정은 학사정보시스템에서만 볼 수 있으니 학과에 확인해 주세요.</p>` : ""}
       ${guesses ? `<p class="warn">교과과정표에 없는 과목 ${guesses}개는 성적표 이수구분(전필·전선)만 보고 전공으로 셌습니다. 노란 테두리 과목을 확인해 주세요.</p>` : ""}
       ${notDesign.length ? `<p class="warn">설계학점으로 인정하지 않은 과목: ${notDesign.map((x) => `${esc(x.name)}(${esc(x.why)})`).join(", ")}</p>` : ""}
       ${r.catalogFrom ? `<p>${esc(S.admit)}학번 이수체계표가 게시되지 않아, 과목 분류와 추천에는 ${esc(r.catalogFrom)}학번 표를 사용했습니다.</p>` : ""}

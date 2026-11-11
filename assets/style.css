@@ -326,3 +326,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .tt-list { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 4px; font-size: 13px; }
 .tt-list li { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: baseline; }
 .tt-list .why { color: var(--ink-3); font-size: 12px; }
+#renames details { margin-top: 8px; }
+#renames summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+#renames .courses { margin-top: 6px; }

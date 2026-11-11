@@ -45,6 +45,7 @@
 
   function sameCommon(a, b) {
     if (E.same(a, b)) return true;
+    if (E.renamed && E.renamed(a, b, null)) return true; // 수강편람 공식 동일·대체 과목
     return COMMON_ALIAS.some((g) => g.some((x) => E.same(x, a)) && g.some((x) => E.same(x, b)));
   }
 

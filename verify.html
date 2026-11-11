@@ -43,6 +43,7 @@
       <label class="field">인증 프로그램 <select id="prog"></select></label>
       <p class="hint" id="stamp"></p>
     </div>
+    <section class="vyear" id="renames"></section>
     <div id="out"></div>
   </main>
   <script src="assets/engine.js"></script>
@@ -50,7 +51,17 @@
   <script>
     (async function () {
       const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-      const [A, G] = await Promise.all([fetch("data/abeek.json").then((r) => r.json()), fetch("data/grad.json").then((r) => r.json()).catch(() => null)]);
+      const [A, G, RN] = await Promise.all([fetch("data/abeek.json").then((r) => r.json()), fetch("data/grad.json").then((r) => r.json()).catch(() => null), fetch("data/renames.json").then((r) => r.json()).catch(() => null)]);
+      if (RN) {
+        const T = { same: "공식 동일과목", sub: "공식 대체과목", notation: "표기 차이·오타", probable: "이름 변경 추정" };
+        const progName = (id) => (A.programs[id] ? A.programs[id].name : id);
+        const rows = (type) => RN.groups.filter((g) => g.type === type).map((g) => `<tr><td>${esc(g.names[0])}</td><td>${esc(g.names.slice(1).join(", "))}</td><td>${esc(g.since || "")}</td><td>${esc(g.programs ? g.programs.map(progName).join(", ") : "전체")}</td><td>${esc(g.note || "")}</td></tr>`).join("");
+        document.getElementById("renames").innerHTML = `<h2>과목명 변경·동일과목 목록 <span class="hint">${RN.updated} 기준</span></h2>
+          <p class="hint">판정할 때 아래 과목들은 같은 과목으로 봅니다. 공식 목록은 <a href="${esc(RN.sources.catalogUrl)}" target="_blank" rel="noopener">${esc(RN.sources.catalog)}</a>에서, 추정 목록은 공학교육센터 학번별 이수체계표와 개설강좌 비교에서 나왔습니다. 추정 항목은 학과 확인이 필요합니다.</p>
+          ${["same", "sub", "probable", "notation"].map((t) => `<details ${t === "probable" ? "open" : ""}><summary>${T[t]} (${RN.groups.filter((g) => g.type === t).length})</summary>
+            <div class="table-wrap"><table class="courses"><thead><tr><th>현재 과목명</th><th>예전 과목명</th><th>변경</th><th>적용 프로그램</th><th>비고</th></tr></thead><tbody>${rows(t)}</tbody></table></div></details>`).join("")}
+          <details><summary>검토했지만 같은 과목으로 보지 않은 것 (${RN.rejected.length})</summary><ul>${RN.rejected.map((x) => `<li>${esc(x.names.join(" ↔ "))}: ${esc(x.reason)}</li>`).join("")}</ul></details>`;
+      }
       document.getElementById("stamp").textContent = `공학인증 요건 수집 ${A.updated} · 학과 졸업요건 수집 ${G ? G.updated : "-"}`;
       const sel = document.getElementById("prog");
       sel.innerHTML = Object.entries(A.programs).map(([id, p]) => `<option value="${id}">${esc(p.name)} · ${esc(p.dept)}</option>`).join("");

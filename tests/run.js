@@ -9,6 +9,7 @@ const G = require("../assets/grad.js");
 const SH = require("../assets/sheet.js");
 const T = require("../assets/timetable.js");
 const D = require("../data/abeek.json");
+E.setRenames(require("../data/renames.json"));
 const GD = require("../data/grad.json");
 const OFF = fs.existsSync(path.join(__dirname, "../data/offered.json")) ? require("../data/offered.json") : null;
 const fx = (f) => fs.readFileSync(path.join(__dirname, "fixtures", f), "utf8");
@@ -44,7 +45,27 @@ t("엑셀 머리글 매핑", () => {
 t("이름 바뀐 과목 인정", () => {
   const r = D.programs["03"].years["2023"];
   const res = E.evaluate(r, [{ id: "1", name: "미적분학1", credit: 3, grade: "A0", term: "2023-1" }]);
-  eq(res.renamed, [{ from: "미적분학1", to: "기초미적분학" }]);
+  eq(res.renamed.map((x) => [x.from, x.to, x.type]), [["미적분학1", "기초미적분학", "sub"]]);
+});
+
+t("이름 변경: 공식·추정·오판 구분", () => {
+  ok(E.renamed("일반물리학및실험1", "일반물리학1", null), "공식 동일");
+  ok(!E.renamed("고급프로그래밍활용", "프로그래밍활용-C", "13"), "서로 다른 과목");
+  ok(E.renamed("고급프로그래밍입문-C", "프로그래밍활용-C", null));
+  ok(E.renamed("확률통계및프로그래밍", "확률및통계", "03"), "추정은 지정 학과에서만");
+  ok(!E.renamed("확률통계및프로그래밍", "확률및통계", "13"));
+  ok(E.same("확률통계및프록래밍", "확률통계및프로그래밍"), "표기 차이");
+  const r = D.programs["19"].years["2026"];
+  const res = E.evaluate(r, [{ id: "1", name: "기초설계", credit: 3, grade: "A0", term: "2025-2" }]);
+  eq(res.renamed.map((x) => [x.to, x.type]), [["AI융합기초설계", "probable"]]);
+});
+
+t("2026학번 공통필수 7과목(수강편람)", () => {
+  const dr = G.deptRule(GD, "03", 2026);
+  eq(dr.common.map((x) => x.name), ["세종인을위한진로설계", "세종인을위한전공탐색", "대학영어", "창업과기업가정신", "비판적사고와창의적글쓰기", "서양철학:쟁점과토론", "취창업과진로역량개발"]);
+  eq(dr.req.geCommon, 12);
+  const g = G.evaluateGrad(G.deptRule(GD, "03", 2025), [{ id: "1", name: "창업과기업가정신", credit: 1, grade: "P", cat: "공필", term: "2026-1" }], {});
+  ok(!g.missingCommon.some((x) => x.name === "창업과기업가정신1"), "새 이름으로 들어도 2025학번 공통필수 인정");
 });
 
 t("설계 순서: 기초설계 전 요소설계 미인정", () => {

@@ -87,9 +87,46 @@ def parse(html):
     return out
 
 
+COMMON_VOCAB = ["세종인을위한진로설계", "세종인을위한전공탐색", "대학영어", "창업과기업가정신", "창업과기업가정신1", "비판적사고와창의적글쓰기",
+                "문제해결을위한글쓰기와발표", "서양철학:쟁점과토론", "취창업과진로역량개발", "취창업과진로설계", "우주자연인간",
+                "신입생세미나A", "신입생세미나B", "EnglishListeningPractice1", "EnglishReadingPractice1", "신입생세미나", "대학생활과진로설계"]
+
+
+def parse_catalog(txt):
+    """수강편람 PDF 텍스트(pdftotext -layout)의 '❚ YYYY학년도 입학자 교과과정' 절에서 학과별 학점과 공통필수 과목을 읽는다."""
+    out = {}
+    parts = re.split(r"❚\s*(\d{4})학년도 입학자 교과과정", txt)
+    for i in range(1, len(parts), 2):
+        y, body = parts[i], parts[i + 1]
+        block = re.sub(r"\s+", "", body[:body.find("계열별")] if "계열별" in body[:4000] else body[:2500])
+        vocab = sorted(COMMON_VOCAB, key=len, reverse=True)
+        found, used = [], []
+        for v in vocab:
+            for m2 in re.finditer(re.escape(v), block):
+                if any(m2.start() < e and s0 < m2.end() for s0, e in used):
+                    continue
+                used.append((m2.start(), m2.end())); found.append((m2.start(), v))
+        common = [v for _, v in sorted(found)]
+        depts = {}
+        mpos = re.search(r"단일전공 이수\s*시 학과별 졸업 이수학점", body)
+        t = body[mpos.start():] if mpos else ""
+        for line in t.split("\n")[:140]:
+            mm = re.search(r"([가-힣A-Za-z]+(?:\s[가-힣]+)?(?:학과|전공|학부))\s+((?:\d+\s+){8}\d+)\s*$", line.strip())
+            if not mm:
+                continue
+            n = mm.group(1).split()[-1] if not mm.group(1).endswith(" 융합전공") else mm.group(1).replace(" ", "")
+            v = [int(x) for x in mm.group(2).split()]
+            depts[n] = {"geCommon": v[0], "geBalance": v[1], "geBasic": v[2], "majorBasic": v[3], "majorReq": v[4],
+                        "majorElec": v[5], "majorTotal": v[6], "grad": v[8]}
+        if depts:
+            out[y] = {"common": common, "depts": depts}
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--cache")
+    ap.add_argument("--catalog", help="수강편람 PDF를 pdftotext -layout 으로 바꾼 텍스트 파일 (웹에 없는 학번 보충)")
     a = ap.parse_args()
     years = {}
     for y in YEARS:
@@ -107,6 +144,19 @@ def main():
             p["src"] = URL.format(y)
             years[str(y)] = p
             print(y, len(p["depts"]), "depts,", len(p["common"]), "common", file=sys.stderr)
+    if a.catalog:
+        cat = parse_catalog(open(a.catalog, encoding="utf-8").read())
+        for y in YEARS:
+            c = cat.get(str(y))
+            if not c or str(y) in years:
+                continue
+            prev = years.get(str(y - 1), {})
+            credit = {x["name"]: x["credit"] for x in prev.get("common", [])}
+            alias = {"창업과기업가정신": "창업과기업가정신1", "비판적사고와창의적글쓰기": "문제해결을위한글쓰기와발표", "취창업과진로역량개발": "취창업과진로설계"}
+            common = [{"name": n, "credit": credit.get(n, credit.get(alias.get(n, ""), 1))} for n in c["common"]]
+            years[str(y)] = {"common": common, "depts": c["depts"], "cert": prev.get("cert"), "balanceNote": "",
+                             "src": "세종대학교 수강편람 '입학년도별 교과과정 안내'"}
+            print(y, "from catalog:", len(c["depts"]), "depts,", len(common), "common", file=sys.stderr)
     for y in YEARS:
         if str(y) not in years:
             prev = [k for k in years if int(k) < y]

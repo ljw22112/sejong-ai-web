@@ -238,7 +238,9 @@
     pre.filter((r) => r.ok === false && r.kind === "지정").forEach((r) => mine.push(`<b>${esc(r.pre)} → ${esc(r.post)}</b> 선후수 순서가 지켜지지 않았습니다(${esc(r.note)}). 선이수 여부에 X를 적고, <b>후수과목이수능력확인서</b>를 써서 ${esc(r.post)} 담당 교수님 서명을 받아 제출해야 합니다.`));
     notCounted.forEach((r) => mine.push(`<b>${esc(r.name)}</b>${j(r.name, "은/는").slice(r.name.length)} ${esc(r.why)}${/[가-힣]$/.test(r.why) && (r.why.charCodeAt(r.why.length - 1) - 0xac00) % 28 ? "이라서" : "라서"} 설계학점이 0으로 인정됩니다. 설계 이수학점 칸을 비우거나 0으로 적으세요.`));
     if (now.length) mine.push(`이번 학기 수강 중인 ${esc(j(now.map((c) => c.name).join(", "), "은/는"))} ‘이번학기 수강학점’ 칸에 적습니다. 성적이 나오기 전이라도 상담표에는 포함합니다.`);
-    (res.renamed || []).forEach((x) => mine.push(`<b>${esc(x.from)}</b>${j(x.from, "은/는").slice(x.from.length)} ${esc(info.basis)}학번 기준의 <b>${esc(x.to)}</b>${j(x.to, "으로/로").slice(x.to.length)} 인정해 계산했습니다. 체크표에는 실제 들은 과목명을 적고 비고에 ‘${esc(x.to)} 대체’라고 적은 뒤, 학과 조교에게 인정 여부를 확인하세요.`));
+    (res.renamed || []).forEach((x) => mine.push(x.type === "probable"
+      ? `<b>${esc(x.from)}</b>${j(x.from, "은/는").slice(x.from.length)} ${esc(info.basis)}학번 기준의 <b>${esc(x.to)}</b>${j(x.to, "으로/로").slice(x.to.length)} 이름이 바뀐 것으로 보고 인정해 계산했습니다(추정). 체크표에는 실제 들은 과목명을 적고 비고에 ‘${esc(x.to)} 대체’라고 적은 뒤 학과 조교에게 확인하세요.`
+      : `<b>${esc(x.from)}</b>${j(x.from, "은/는").slice(x.from.length)} 수강편람에 <b>${esc(x.to)}</b>의 ${x.type === "sub" ? "대체" : "동일"}과목으로 지정돼 있어 인정했습니다. 체크표에는 실제 들은 과목명을 적고 비고에 ‘${esc(x.to)} ${x.type === "sub" ? "대체" : "동일"}과목’이라고 적으세요.`));
     guesses.forEach((c) => mine.push(`<b>${esc(c.name)}</b>${j(c.name, "은/는").slice(c.name.length)} ${esc(info.basis)}학번 교과과정표에 없는 과목입니다. 대체과목으로 인정받는 경우에만 넣고, 비고에 ‘대체과목 인정’과 원래 과목명을 적으세요.`));
     const geEl = (rule.ge.electives || []).filter((n) => res.courses.some((c) => E.same(c.name, n)));
     if (rule.ge.pickN && geEl.length < rule.ge.pickN) mine.push(`전문교양 인증선택 과목(${(rule.ge.electives || []).join(", ")}) 중 ${rule.ge.pickN - geEl.length}과목이 더 필요합니다. 일반 균형교양은 인증선택으로 인정되지 않습니다.`);

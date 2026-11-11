@@ -380,6 +380,7 @@ def main():
                 print("skip", f, e, file=sys.stderr); continue
             r = build_rule(pid, int(y), html)
             r["src"] = BASE + f
+            r["pid"] = pid
             years[y] = r
         # 이수체계표가 그림/누락인 연도는 가장 가까운 연도의 표를 빌려 쓴다(추천용)
         have = [y for y in years if years[y]["catalog"]]
