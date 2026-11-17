@@ -1,0 +1,5345 @@
+{
+ "updated": "2026-11-17",
+ "semester": "2026-2",
+ "src": "세종대학교 2026-2학기 수강편람 '마이크로디그리 이수 안내'·'AI 마이크로디그리 이수 안내'",
+ "srcUrl": "https://www.sejong.ac.kr/kor/intro/notice3.do?mode=view&articleNo=891086",
+ "rules": {
+  "general": [
+   "가. 이수조건 : 마이크로디그리에 관심이 있는 재학생",
+   "나. 이수학점 : 마이크로디그리 별로 설정된 9-15학점 이수",
+   "다. 신청방법 : 재학기간 내 마이크로디그리 교과과정 모두 이수 후, 재학 중 두드림 시스템에서 이수 신청",
+   "라. 유의사항",
+   "1) 최대 3개 과정까지 이수 가능",
+   "2) 소속 전공의 최소 이수학점 이수하여야 하며, 마이크로디그리 교과과정 이수만으로 졸업 불가"
+  ],
+  "ai": [
+   "가. 이수조건 : AI 마이크로디그리를 이수하고자 하는 재학생 누구나",
+   "나. 이수학점 : 주관학과에서 지정한 AI기초/AI심화/AI-X 과목 10-12학점 이수",
+   "다. 신청방법 : AI 마이크로디그리 지정 교과목 이수 후 이수증 신청",
+   "라. 유의사항 : 카테고리별 “택1”로 표시된 과목은 이수증 신청시 해당 카테고리에서 1과목만을 취득학점으로 인정"
+  ]
+ },
+ "programs": [
+  {
+   "id": "md01",
+   "kind": "general",
+   "type": "연계융합형",
+   "name": "머신러닝",
+   "credits": 12,
+   "dept": "",
+   "contact": "학사지원과(학생회관 205호, 02-3408-3410)",
+   "courses": [
+    {
+     "name": "고급인공지능활용",
+     "credit": 3,
+     "code": "011322"
+    },
+    {
+     "name": "K-MOOC:기계학습",
+     "credit": 3,
+     "code": "011199"
+    },
+    {
+     "name": "K-MOOC:딥러닝개론및응용",
+     "credit": 3,
+     "code": "011427"
+    },
+    {
+     "name": "자기주도창의전공Ⅰ(머신러닝)",
+     "credit": 3,
+     "code": "010418"
+    }
+   ],
+   "notes": [],
+   "page": 74,
+   "rule": "all"
+  },
+  {
+   "id": "md02",
+   "kind": "general",
+   "type": "산학연계형",
+   "name": "스마트도시물관리",
+   "credits": 12,
+   "dept": "",
+   "contact": "건설환경공학과(충무관 718호, 02-3408-3332)",
+   "courses": [
+    {
+     "name": "유체역학및연습",
+     "credit": 3,
+     "code": "010657"
+    },
+    {
+     "name": "도시수문학",
+     "credit": 3,
+     "code": "011422"
+    },
+    {
+     "name": "도시수재해공학",
+     "credit": 3,
+     "code": "011425"
+    },
+    {
+     "name": "스마트시티프로젝트(종합설계)",
+     "credit": 3,
+     "code": "011423"
+    }
+   ],
+   "notes": [],
+   "page": 74,
+   "rule": "all"
+  },
+  {
+   "id": "md03",
+   "kind": "general",
+   "type": "산학연계형",
+   "name": "스마트도시물환경",
+   "credits": 12,
+   "dept": "",
+   "contact": "건설환경공학과(충무관 718호, 02-3408-3332)",
+   "courses": [
+    {
+     "name": "환경공학및실험",
+     "credit": 3,
+     "code": "004674"
+    },
+    {
+     "name": "스마트수처리시스템공학",
+     "credit": 3,
+     "code": "011426"
+    },
+    {
+     "name": "물재생자원순환",
+     "credit": 3,
+     "code": "010596"
+    },
+    {
+     "name": "스마트시티프로젝트(종합설계)",
+     "credit": 3,
+     "code": "011423"
+    }
+   ],
+   "notes": [],
+   "page": 75,
+   "rule": "all"
+  },
+  {
+   "id": "md04",
+   "kind": "general",
+   "type": "대학공유형",
+   "name": "자율지능 IoT 마이크로디그리(AIoT-STAR 마이크로디그리)",
+   "credits": 12,
+   "dept": "",
+   "contact": "지능IoT학과(집현관 606호, inteliotdpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "지능IoT플랫폼",
+     "credit": 3,
+     "code": "011990"
+    },
+    {
+     "name": "지능IoT시스템",
+     "credit": 3,
+     "code": "012026"
+    },
+    {
+     "name": "사물인공지능",
+     "credit": 3,
+     "code": "012025"
+    },
+    {
+     "name": "캡스톤디자인A",
+     "credit": 3,
+     "code": "009947",
+     "pick": 1,
+     "group": "g3"
+    },
+    {
+     "name": "캡스톤디자인B",
+     "credit": 3,
+     "code": "009948",
+     "pick": 1,
+     "group": "g3"
+    },
+    {
+     "name": "Capstone디자인(산학협력프로젝트)",
+     "credit": 6,
+     "code": "009960",
+     "pick": 1,
+     "group": "g3"
+    }
+   ],
+   "notes": [
+    "이수학점 12학점 이수 원칙(단, Capstone디자인(산학협력프로젝트) 포함 시 15학점 이수)",
+    "지능IoT플랫폼 / 지능IoT시스템 / 사물인공지능 교과목을 이수하고 캡스톤디자인A / 캡스톤디자인B / Capstone디자인(산학협력프로젝트) 교과목 중 1과목 이수",
+    "지능IoT시스템(동국대 제작) 및 사물인공지능(대전대 제작)은 학점교류로 진행 캡스톤과목을 제외한 위 3과목(온라인)은 혁신융합대학(사물인터넷) 컨소시엄 대학별로 동일함"
+   ],
+   "page": 75,
+   "rule": "all"
+  },
+  {
+   "id": "md05",
+   "kind": "general",
+   "type": "대학공유형",
+   "name": "IoT 인공지능 마이크로디그리(AIoT-CORE 마이크로디그리)",
+   "credits": 12,
+   "dept": "",
+   "contact": "지능IoT학과(집현관 606호, inteliotdpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "지능사물인터넷개론",
+     "credit": 3,
+     "code": "011901"
+    },
+    {
+     "name": "사물인공지능",
+     "credit": 3,
+     "code": "012025"
+    },
+    {
+     "name": "사물강화학습",
+     "credit": 3,
+     "code": "012027"
+    },
+    {
+     "name": "정보시스템설계",
+     "credit": 3,
+     "code": "006935",
+     "pick": 1,
+     "group": "g3"
+    },
+    {
+     "name": "자율지능시스템설계",
+     "credit": 3,
+     "code": "011962",
+     "pick": 1,
+     "group": "g3"
+    }
+   ],
+   "notes": [
+    "지능사물인터넷개론 / 사물인공지능 / 사물강화학습 교과목을 이수하고 자율지능시스템설계 / 정보시스템설계 교과목 중 1과목 이수",
+    "사물인터넷혁신융합대학(IoT COSS) : 교육부와 한국연구재단이 주관하는 첨단분야 혁신융합대학 사업의 일환으로, 세종대학교를 주관 대학으로 하고 동국대학교, 대전대학교, 제주대학교, 제주한라대학교의 4개 참여대학 제주특별자치도를 참여 광역지자체로 하는 사물인터넷 분야 융합인력 양성 사업을 위한 컨소시엄이다."
+   ],
+   "page": 76,
+   "rule": "all"
+  },
+  {
+   "id": "md06",
+   "kind": "general",
+   "type": "연계융합형",
+   "name": "IT융합기획 마이크로디그리",
+   "credits": 9,
+   "dept": "",
+   "contact": "HUSS 인문사회 융합인재양성사업단(집현관 615호, husssejong@gmail.com)",
+   "courses": [
+    {
+     "name": "초연결사회와 기술의 이해",
+     "credit": 3,
+     "univ": "선문대"
+    },
+    {
+     "name": "AI리터러시의 이해",
+     "credit": 3,
+     "univ": "선문대"
+    },
+    {
+     "name": "데이터분석기술의이해",
+     "credit": 3,
+     "code": "011611"
+    },
+    {
+     "name": "시민활동가의 역할과 자질",
+     "credit": 3,
+     "univ": "선문대"
+    },
+    {
+     "name": "Chat-GPT와 사회이슈",
+     "credit": 3,
+     "univ": "선문대"
+    },
+    {
+     "name": "프로젝트 기획론",
+     "credit": 3,
+     "univ": "선문대"
+    },
+    {
+     "name": "리더십과 감성지능",
+     "credit": 3,
+     "univ": "선문대"
+    },
+    {
+     "name": "초연결사회의국가정책",
+     "credit": 3,
+     "code": "011669"
+    },
+    {
+     "name": "사회 빅데이터 분석",
+     "credit": 3,
+     "univ": "한밭대"
+    },
+    {
+     "name": "초연결시대 사업전략",
+     "credit": 3,
+     "univ": "한밭대"
+    },
+    {
+     "name": "사회적 가치와 공공윤리",
+     "credit": 3,
+     "univ": "한밭대"
+    },
+    {
+     "name": "디지털 사회와 범죄",
+     "credit": 3,
+     "univ": "선문대"
+    },
+    {
+     "name": "초연결사회와 문해력 기술의 이해",
+     "credit": 3,
+     "univ": "순천대"
+    },
+    {
+     "name": "디지털 사회문제와 정책",
+     "credit": 3,
+     "univ": "순천대"
+    },
+    {
+     "name": "디지털 사회법정책",
+     "credit": 3,
+     "univ": "한밭대"
+    },
+    {
+     "name": "사회적 기업과 조직이론",
+     "credit": 3,
+     "univ": "한밭대"
+    },
+    {
+     "name": "경제성 분석",
+     "credit": 3,
+     "univ": "한밭대"
+    },
+    {
+     "name": "콘텐츠와 소비심리 조사",
+     "credit": 3,
+     "univ": "선문대"
+    },
+    {
+     "name": "콘텐츠 필드 리서치",
+     "credit": 3,
+     "univ": "선문대"
+    },
+    {
+     "name": "AI와 미디어 윤리",
+     "credit": 3,
+     "univ": "선문대"
+    },
+    {
+     "name": "시와 콘텐츠 창작",
+     "credit": 3,
+     "univ": "선문대"
+    },
+    {
+     "name": "데이터와 미디어 리터러시",
+     "credit": 3,
+     "univ": "선문대"
+    },
+    {
+     "name": "컨텐츠 창업과 법률",
+     "credit": 3,
+     "univ": "한밭대"
+    },
+    {
+     "name": "디지털 기술트렌드",
+     "credit": 3,
+     "univ": "한밭대"
+    },
+    {
+     "name": "일본 정보 사회분석 비교",
+     "credit": 3,
+     "univ": "선문대"
+    },
+    {
+     "name": "동아시아 문화정책 비교",
+     "credit": 3,
+     "univ": "순천향대"
+    },
+    {
+     "name": "한·중 문화콘텐츠 개발(PBL) 1",
+     "credit": 3,
+     "univ": "순천향대"
+    },
+    {
+     "name": "한·중 문화콘텐츠 개발(PBL) 2",
+     "credit": 3,
+     "univ": "순천향대"
+    },
+    {
+     "name": "중국역사문화컨텐츠의 이해",
+     "credit": 3,
+     "univ": "순천향대"
+    },
+    {
+     "name": "초연결사회의 치유와 문화산업",
+     "credit": 3,
+     "univ": "순천향대"
+    },
+    {
+     "name": "세계사회와 한류",
+     "credit": 3,
+     "univ": "순천향대"
+    },
+    {
+     "name": "사업기획론(심화)",
+     "credit": 3,
+     "univ": "선문대"
+    },
+    {
+     "name": "사회이슈 프로젝트 분석론",
+     "credit": 3,
+     "univ": "선문대"
+    },
+    {
+     "name": "AI시대의정책결정론",
+     "credit": 3,
+     "code": "012078"
+    },
+    {
+     "name": "글로벌 문화콘텐츠 개발(PBL) 1",
+     "credit": 3,
+     "univ": "순천향대"
+    },
+    {
+     "name": "글로벌 문화콘텐츠 개발(PBL) 2",
+     "credit": 3,
+     "univ": "순천향대"
+    },
+    {
+     "name": "스마트계약과 지식재산",
+     "credit": 3,
+     "univ": "한밭대"
+    },
+    {
+     "name": "콘텐츠 아이템발굴과 창업",
+     "credit": 3,
+     "univ": "선문대"
+    }
+   ],
+   "notes": [
+    "인문사회융합인재양성사업단이 참여하는 HUSS 위험사회 컨소시엄의 융합교과목으로 38개 교과목 중 9학점(3과목)을 이수하면 된다.",
+    "인문사회융합인재양성사업단(HUSS) 위험사회 컨소시엄 : 교육부와 한국연구재단이 주관하는 인문사회융합인재양성 사업의 일환으로, 선문대학교를 주관으로 세종대학교, 한밭대학교, 순천대학교, 순천향대학교가 참여하는 위험사회 분야 융합인재 양성을 위한 컨소시엄이다."
+   ],
+   "page": 77,
+   "rule": "credits"
+  },
+  {
+   "id": "md07",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "스마트IoT네트워크 마이크로디그리(특화형 마이크로디그리)",
+   "credits": 12,
+   "dept": "",
+   "contact": "지능IoT학과(집현관 606호, inteliotdpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "신호및시스템",
+     "credit": 3,
+     "code": "005246"
+    },
+    {
+     "name": "무선통신",
+     "credit": 3,
+     "code": "003284"
+    },
+    {
+     "name": "C#프로그래밍",
+     "credit": 3,
+     "code": "006474"
+    },
+    {
+     "name": "딥러닝",
+     "credit": 3,
+     "code": "010881"
+    }
+   ],
+   "notes": [],
+   "page": 78,
+   "rule": "all"
+  },
+  {
+   "id": "md08",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "자율지능시스템 마이크로디그리(특화형 마이크로디그리)",
+   "credits": 12,
+   "dept": "",
+   "contact": "지능IoT학과(집현관 606호, inteliotdpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "시스템프로그래밍",
+     "credit": 3,
+     "code": "001878"
+    },
+    {
+     "name": "임베디드시스템",
+     "credit": 3,
+     "code": "006139"
+    },
+    {
+     "name": "지능IoT플랫폼",
+     "credit": 3,
+     "code": "011990"
+    },
+    {
+     "name": "자율지능시스템설계",
+     "credit": 3,
+     "code": "011962"
+    }
+   ],
+   "notes": [],
+   "page": 78,
+   "rule": "all"
+  },
+  {
+   "id": "md09",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "자율이동로봇 마이크로디그리(특화형 마이크로디그리)",
+   "credits": 12,
+   "dept": "",
+   "contact": "지능IoT학과(집현관 606호, inteliotdpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "동역학",
+     "credit": 3,
+     "code": "004642"
+    },
+    {
+     "name": "기계학습",
+     "credit": 3,
+     "code": "010000"
+    },
+    {
+     "name": "로보틱스",
+     "credit": 3,
+     "code": "006486"
+    },
+    {
+     "name": "AI로봇비전시스템",
+     "credit": 3,
+     "code": "011653",
+     "pick": 1,
+     "group": "g3"
+    },
+    {
+     "name": "머신비전시스템",
+     "credit": 3,
+     "code": "010239",
+     "pick": 1,
+     "group": "g3"
+    }
+   ],
+   "notes": [
+    "동역학 / 기계학습 / 로보틱스 교과목을 이수하고 AI로봇비전시스템 / 머신비전시스템 교과목 중 1과목 이수"
+   ],
+   "page": 79,
+   "rule": "all"
+  },
+  {
+   "id": "md10",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "인공지능융합반도체설계 마이크로디그리(특화형 마이크로디그리)",
+   "credits": 12,
+   "dept": "",
+   "contact": "지능IoT학과(집현관 606호, inteliotdpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "전기회로",
+     "credit": 3,
+     "code": "004114",
+     "pick": 1,
+     "group": "g0"
+    },
+    {
+     "name": "전기회로1",
+     "credit": 3,
+     "code": "011983",
+     "pick": 1,
+     "group": "g0"
+    },
+    {
+     "name": "디지털논리회로",
+     "credit": 3,
+     "code": "005611",
+     "pick": 1,
+     "group": "g2"
+    },
+    {
+     "name": "디지털회로설계",
+     "credit": 3,
+     "code": "010571",
+     "pick": 1,
+     "group": "g2"
+    },
+    {
+     "name": "전자회로1",
+     "credit": 3,
+     "code": "007453",
+     "pick": 2,
+     "group": "g4"
+    },
+    {
+     "name": "시스템반도체설계",
+     "credit": 3,
+     "code": "011368",
+     "pick": 2,
+     "group": "g4"
+    },
+    {
+     "name": "AI반도체설계",
+     "credit": 3,
+     "code": "011875",
+     "pick": 2,
+     "group": "g4"
+    }
+   ],
+   "notes": [
+    "전기회로 / 전기회로1 교과목 중 1과목을 이수하고 디지털논리회로 / 디지털회로설계 교과목 중 1과목을 이수하고 전자회로1 / 시스템반도체설계 / AI반도체설계 교과목 중 2과목 이수"
+   ],
+   "page": 79,
+   "rule": "all"
+  },
+  {
+   "id": "md11",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "지능형에이전트 마이크로디그리(특화형 마이크로디그리)",
+   "credits": 12,
+   "dept": "",
+   "contact": "지능IoT학과(집현관 606호, inteliotdpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320"
+    },
+    {
+     "name": "기계학습개론",
+     "credit": 3,
+     "code": "011259"
+    },
+    {
+     "name": "인공지능수학",
+     "credit": 3,
+     "code": "011172"
+    },
+    {
+     "name": "기계학습실습",
+     "credit": 3,
+     "code": "011497"
+    }
+   ],
+   "notes": [],
+   "page": 80,
+   "rule": "all"
+  },
+  {
+   "id": "md12",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "지능형IoT통신 마이크로디그리(특화형 마이크로디그리)",
+   "credits": 12,
+   "dept": "",
+   "contact": "지능IoT학과(집현관 606호, inteliotdpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "신호및시스템",
+     "credit": 3,
+     "code": "005246"
+    },
+    {
+     "name": "사물기계학습",
+     "credit": 3,
+     "code": "012091"
+    },
+    {
+     "name": "통신이론",
+     "credit": 3,
+     "code": "004474"
+    },
+    {
+     "name": "통신시스템설계",
+     "credit": 3,
+     "code": "007585"
+    }
+   ],
+   "notes": [],
+   "page": 80,
+   "rule": "all"
+  },
+  {
+   "id": "md13",
+   "kind": "general",
+   "type": "산학연계형",
+   "name": "창의자율 마이크로디그리(AIoT-비즈니스 마이크로디그리)",
+   "credits": 10,
+   "dept": "",
+   "contact": "지능IoT학과(집현관 606호, inteliotdpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "자기주도창의전공Ⅰ",
+     "credit": 3,
+     "code": "010418"
+    },
+    {
+     "name": "자기주도창의전공Ⅱ",
+     "credit": 3,
+     "code": "010419"
+    },
+    {
+     "name": "SIP창업실행세미나",
+     "credit": 3,
+     "code": "012174"
+    },
+    {
+     "name": "SIP재무투자세미나",
+     "credit": 1,
+     "code": "012175"
+    }
+   ],
+   "notes": [],
+   "page": 81,
+   "rule": "all"
+  },
+  {
+   "id": "md14",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "AI콘텐츠",
+   "credits": 12,
+   "dept": "",
+   "contact": "인공지능데이터사이언스학과(대양AI센터 401호, 02-6935-2544)",
+   "courses": [
+    {
+     "name": "영상처리",
+     "credit": 3,
+     "code": "011506"
+    },
+    {
+     "name": "컴퓨터비전",
+     "credit": 3,
+     "code": "011514"
+    },
+    {
+     "name": "AR/VR/MR",
+     "credit": 3,
+     "code": "011518"
+    },
+    {
+     "name": "Human-AI Interaction",
+     "credit": 3,
+     "code": "011932"
+    },
+    {
+     "name": "생성형AI",
+     "credit": 3,
+     "code": "012284"
+    },
+    {
+     "name": "PhysicalAI",
+     "credit": 3,
+     "code": "신설"
+    }
+   ],
+   "notes": [],
+   "page": 81,
+   "rule": "credits"
+  },
+  {
+   "id": "md15",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "데이터인텔리전스",
+   "credits": 12,
+   "dept": "",
+   "contact": "인공지능데이터사이언스학과(대양AI센터 401호, 02-6935-2544)",
+   "courses": [
+    {
+     "name": "데이터베이스",
+     "credit": 3,
+     "code": "007219"
+    },
+    {
+     "name": "데이터시각화",
+     "credit": 3,
+     "code": "010143"
+    },
+    {
+     "name": "설명가능한인공지능",
+     "credit": 3,
+     "code": "011930"
+    },
+    {
+     "name": "데이터문제해결및실습",
+     "credit": 3,
+     "code": "010145"
+    },
+    {
+     "name": "텍스트마이닝",
+     "credit": 3,
+     "code": "010148"
+    },
+    {
+     "name": "대용량데이터처리",
+     "credit": 3,
+     "code": "011176"
+    }
+   ],
+   "notes": [],
+   "page": 82,
+   "rule": "credits"
+  },
+  {
+   "id": "md16",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "지능형에이전트",
+   "credits": 12,
+   "dept": "",
+   "contact": "인공지능데이터사이언스학과(대양AI센터 401호, 02-6935-2544)",
+   "courses": [
+    {
+     "name": "시계열분석",
+     "credit": 3,
+     "code": "011505"
+    },
+    {
+     "name": "자연어처리",
+     "credit": 3,
+     "code": "011173"
+    },
+    {
+     "name": "강화학습",
+     "credit": 3,
+     "code": "011181"
+    },
+    {
+     "name": "인공지능문제해결및실습",
+     "credit": 3,
+     "code": "011516"
+    },
+    {
+     "name": "멀티모달AI",
+     "credit": 3,
+     "code": "012288"
+    },
+    {
+     "name": "AgenticAI",
+     "credit": 3,
+     "code": "신설"
+    }
+   ],
+   "notes": [],
+   "page": 82,
+   "rule": "credits"
+  },
+  {
+   "id": "md17",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "실감형 공간 시뮬레이션 전문가",
+   "credits": 12,
+   "dept": "",
+   "contact": "콘텐츠소프트웨어학과(대양AI센터 401호, 02-3408-3667)",
+   "courses": [
+    {
+     "name": "실시간컴퓨터그래픽스",
+     "credit": 3,
+     "alias": [
+      "컴퓨터그래픽스"
+     ],
+     "code": "003281"
+    },
+    {
+     "name": "일반물리및시뮬레이션",
+     "credit": 3,
+     "code": "010206"
+    },
+    {
+     "name": "디지털이미지프로그래밍",
+     "credit": 3,
+     "alias": [
+      "멀티미디어프로그래밍"
+     ],
+     "code": "005619"
+    },
+    {
+     "name": "가상현실",
+     "credit": 3,
+     "code": "006208"
+    },
+    {
+     "name": "머신러닝",
+     "credit": 3,
+     "alias": [
+      "기계학습"
+     ],
+     "code": "010000"
+    },
+    {
+     "name": "생성형AI",
+     "credit": 3,
+     "code": "011904"
+    },
+    {
+     "name": "컴퓨터비전및실습",
+     "credit": 3,
+     "alias": [
+      "컴퓨터비전시스템"
+     ],
+     "code": "012018"
+    }
+   ],
+   "notes": [],
+   "page": 83,
+   "rule": "credits"
+  },
+  {
+   "id": "md18",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "UI/UX 기반 인터렉티브 콘텐츠 개발자",
+   "credits": 12,
+   "dept": "",
+   "contact": "콘텐츠소프트웨어학과(대양AI센터 401호, 02-3408-3667)",
+   "courses": [
+    {
+     "name": "실시간컴퓨터그래픽스",
+     "credit": 3,
+     "alias": [
+      "컴퓨터그래픽스"
+     ],
+     "code": "003281"
+    },
+    {
+     "name": "데이터베이스",
+     "credit": 3,
+     "code": "007219"
+    },
+    {
+     "name": "객체지향프로그래밍JAVA",
+     "credit": 3,
+     "alias": [
+      "문제해결및실습:JAVA"
+     ],
+     "code": "009956"
+    },
+    {
+     "name": "생성형AI",
+     "credit": 3,
+     "code": "011904"
+    },
+    {
+     "name": "음성및오디오처리",
+     "credit": 3,
+     "alias": [
+      "음성오디오처리"
+     ],
+     "code": "011175"
+    },
+    {
+     "name": "객체지향XR프로그래밍",
+     "credit": 3,
+     "code": "012015"
+    },
+    {
+     "name": "XR엔진개론",
+     "credit": 3,
+     "code": "011903"
+    }
+   ],
+   "notes": [],
+   "page": 84,
+   "rule": "credits"
+  },
+  {
+   "id": "md19",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "원자력공학기초2",
+   "credits": 12,
+   "dept": "",
+   "contact": "양자원자력공학과(충무관 103호, 02-3408-3491)",
+   "courses": [
+    {
+     "name": "원자및핵물리",
+     "credit": 3,
+     "code": "008991"
+    },
+    {
+     "name": "원자력공학개론1",
+     "credit": 3,
+     "code": "011390"
+    },
+    {
+     "name": "원자력공학개론2",
+     "credit": 3,
+     "code": "011391"
+    },
+    {
+     "name": "원자로열전달",
+     "credit": 3,
+     "code": "008999"
+    }
+   ],
+   "notes": [],
+   "page": 84,
+   "rule": "all"
+  },
+  {
+   "id": "md20",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "차세대SMR핵심설계",
+   "credits": 12,
+   "dept": "",
+   "contact": "양자원자력공학과(충무관 103호, 02-3408-3491)",
+   "courses": [
+    {
+     "name": "발전소계통공학",
+     "credit": 3,
+     "code": "009577"
+    },
+    {
+     "name": "미래형원전재료",
+     "credit": 3,
+     "code": "012019"
+    },
+    {
+     "name": "종합설계A",
+     "credit": 3,
+     "code": "009850"
+    },
+    {
+     "name": "종합설계B",
+     "credit": 3,
+     "code": "009851"
+    }
+   ],
+   "notes": [],
+   "page": 85,
+   "rule": "all"
+  },
+  {
+   "id": "md21",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "전문무용수",
+   "credits": 9,
+   "dept": "",
+   "contact": "무용과(용덕관 M303호, dancedpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "한국전통무용기본1",
+     "credit": 2,
+     "code": "008902"
+    },
+    {
+     "name": "한국전통무용기본2",
+     "credit": 2,
+     "code": "008903"
+    },
+    {
+     "name": "현대무용기본1",
+     "credit": 2,
+     "code": "003768"
+    },
+    {
+     "name": "현대무용기본2",
+     "credit": 2,
+     "code": "003770"
+    },
+    {
+     "name": "발레기초1",
+     "credit": 2,
+     "code": "007217"
+    },
+    {
+     "name": "발레기초2",
+     "credit": 2,
+     "code": "007282"
+    },
+    {
+     "name": "컨템포러리댄스4",
+     "credit": 1,
+     "code": "008852"
+    },
+    {
+     "name": "고급현대무용1",
+     "credit": 1,
+     "code": "005660"
+    },
+    {
+     "name": "고급현대무용2",
+     "credit": 1,
+     "code": "005269"
+    },
+    {
+     "name": "고급현대무용3",
+     "credit": 1,
+     "code": "005661"
+    },
+    {
+     "name": "고급현대무용4",
+     "credit": 1,
+     "code": "005930"
+    },
+    {
+     "name": "발레테크닉5",
+     "credit": 1,
+     "code": "008838"
+    },
+    {
+     "name": "발레테크닉6",
+     "credit": 1,
+     "code": "008839"
+    },
+    {
+     "name": "발레테크닉7",
+     "credit": 1,
+     "code": "008840"
+    },
+    {
+     "name": "발레테크닉8",
+     "credit": 1,
+     "code": "008841"
+    },
+    {
+     "name": "발레레파토리8",
+     "credit": 1,
+     "code": "008871"
+    },
+    {
+     "name": "한국전통무용안무1",
+     "credit": 1,
+     "code": "008853"
+    },
+    {
+     "name": "한국전통무용안무2",
+     "credit": 1,
+     "code": "008854"
+    },
+    {
+     "name": "한국창작무용안무1",
+     "credit": 1,
+     "code": "008855"
+    },
+    {
+     "name": "한국창작무용안무2",
+     "credit": 1,
+     "code": "008856"
+    },
+    {
+     "name": "한국창작무용작품분석2",
+     "credit": 1,
+     "code": "008866"
+    }
+   ],
+   "notes": [
+    "이수학점 21학점 (9학점~15학점 이내 선택이수)"
+   ],
+   "page": 85,
+   "listed": 21,
+   "rule": "credits"
+  },
+  {
+   "id": "md22",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "AI 안무창작 및 기획",
+   "credits": 9,
+   "dept": "",
+   "contact": "무용과(용덕관 M303호, dancedpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "AI창작안무법",
+     "credit": 2,
+     "code": "012253"
+    },
+    {
+     "name": "무용제작실습",
+     "credit": 1,
+     "code": "008848"
+    },
+    {
+     "name": "미디어무용작품분석",
+     "credit": 2,
+     "code": "012252"
+    },
+    {
+     "name": "즉흥",
+     "credit": 2,
+     "code": "004894"
+    },
+    {
+     "name": "무용구성법",
+     "credit": 2,
+     "code": "001188"
+    }
+   ],
+   "notes": [],
+   "page": 86,
+   "rule": "all"
+  },
+  {
+   "id": "md23",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "무용 AIž미디어 융합",
+   "credits": 22,
+   "dept": "",
+   "contact": "무용과(용덕관 M303호, dancedpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "AI무용미디어리서치",
+     "credit": 2,
+     "code": "012255"
+    },
+    {
+     "name": "무용테크놀로지",
+     "credit": 2,
+     "code": "004884"
+    },
+    {
+     "name": "AI공연기획및운영실습",
+     "credit": 2,
+     "code": "012258"
+    },
+    {
+     "name": "무용음악",
+     "credit": 2,
+     "code": "006927"
+    },
+    {
+     "name": "AI창작안무법",
+     "credit": 2,
+     "code": "012253"
+    },
+    {
+     "name": "신체요법",
+     "credit": 2,
+     "code": "008831"
+    },
+    {
+     "name": "AI융합워크샵1",
+     "credit": 1,
+     "code": "012247"
+    },
+    {
+     "name": "AI융합워크샵2",
+     "credit": 1,
+     "code": "012249"
+    },
+    {
+     "name": "AI융합워크샵3",
+     "credit": 1,
+     "code": "012250"
+    },
+    {
+     "name": "AI융합워크샵4",
+     "credit": 1,
+     "code": "012251"
+    },
+    {
+     "name": "AI기반한국무용음악분석",
+     "credit": 2,
+     "code": "012254"
+    },
+    {
+     "name": "한국무용창작기법",
+     "credit": 2,
+     "code": "008858"
+    },
+    {
+     "name": "캐릭터댄스",
+     "credit": 2,
+     "code": "008861"
+    }
+   ],
+   "notes": [],
+   "page": 87,
+   "rule": "all"
+  },
+  {
+   "id": "md24",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "무용교육 및 예술콘텐츠개발",
+   "credits": 9,
+   "dept": "",
+   "contact": "무용과(용덕관 M303호, dancedpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "AI무용미디어리서치",
+     "credit": 2,
+     "code": "012255"
+    },
+    {
+     "name": "무용테크놀로지",
+     "credit": 2,
+     "code": "004884"
+    },
+    {
+     "name": "AI공연기획및운영실습",
+     "credit": 2,
+     "code": "012258"
+    }
+   ],
+   "notes": [],
+   "page": 87,
+   "rule": "credits"
+  },
+  {
+   "id": "md25",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "무용현장기획과 협업실무",
+   "credits": 15,
+   "dept": "",
+   "contact": "무용과(용덕관 M303호, dancedpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "무용인턴쉽",
+     "credit": 3,
+     "code": "008873"
+    },
+    {
+     "name": "오디션실습",
+     "credit": 1,
+     "code": "010969"
+    },
+    {
+     "name": "AI공연기획및운영실습",
+     "credit": 2,
+     "code": "012258"
+    },
+    {
+     "name": "무용제작실습",
+     "credit": 1,
+     "code": "008848"
+    },
+    {
+     "name": "통합예술교육콘텐츠기획",
+     "credit": 3,
+     "code": "010963"
+    },
+    {
+     "name": "레파토리",
+     "credit": 2,
+     "code": "004896"
+    },
+    {
+     "name": "무용사회학",
+     "credit": 2,
+     "code": "008846"
+    },
+    {
+     "name": "무용미학과디지털비평",
+     "credit": 2,
+     "code": "012257"
+    }
+   ],
+   "notes": [],
+   "page": 88,
+   "rule": "credits"
+  },
+  {
+   "id": "md26",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "AI 콘텐츠 크리에이터 마이크로디그리",
+   "credits": 12,
+   "dept": "",
+   "contact": "영상디자인융합전공(군자관 415호, 02-6935-2409, midesign@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "AI기반콘텐츠전략기획1",
+     "credit": 3,
+     "code": "012139"
+    },
+    {
+     "name": "AI영상디자인스튜디오1",
+     "credit": 3,
+     "code": "012137"
+    },
+    {
+     "name": "AI기반콘텐츠전략기획2",
+     "credit": 3,
+     "code": "012382"
+    },
+    {
+     "name": "AI영상디자인스튜디오2",
+     "credit": 3,
+     "code": "012138"
+    }
+   ],
+   "notes": [],
+   "page": 88,
+   "rule": "all"
+  },
+  {
+   "id": "md27",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "경영학의기초모듈",
+   "credits": 12,
+   "dept": "",
+   "contact": "경영학부(광개토관 317호, 02-3408-3311)",
+   "courses": [
+    {
+     "name": "경영학원론",
+     "credit": 3,
+     "code": "000137"
+    },
+    {
+     "name": "경영통계학",
+     "credit": 3,
+     "code": "005155"
+    },
+    {
+     "name": "마케팅관리",
+     "credit": 3,
+     "code": "004076"
+    },
+    {
+     "name": "회계원리1",
+     "credit": 3,
+     "code": "004008"
+    },
+    {
+     "name": "재무관리",
+     "credit": 3,
+     "code": "002869"
+    },
+    {
+     "name": "경영정보론",
+     "credit": 3,
+     "code": "004218"
+    },
+    {
+     "name": "생산운영관리",
+     "credit": 3,
+     "code": "006808"
+    },
+    {
+     "name": "조직행동론",
+     "credit": 3,
+     "code": "003061"
+    }
+   ],
+   "notes": [
+    "이수학점 24학점(8과목) 중 12학점(4과목) 이상 이수"
+   ],
+   "page": 88,
+   "listed": 24,
+   "rule": "credits"
+  },
+  {
+   "id": "md28",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "마케팅사이언티스트모듈",
+   "credits": 12,
+   "dept": "",
+   "contact": "경영학부(광개토관 317호, 02-3408-3311)",
+   "courses": [
+    {
+     "name": "마케팅커뮤니케이션",
+     "credit": 3,
+     "code": "007436"
+    },
+    {
+     "name": "유통경로관리",
+     "credit": 3,
+     "code": "006798"
+    },
+    {
+     "name": "마케팅조사",
+     "credit": 3,
+     "code": "001092"
+    },
+    {
+     "name": "소비자행동론",
+     "credit": 3,
+     "code": "001766"
+    },
+    {
+     "name": "브랜드관리",
+     "credit": 3,
+     "code": "009258"
+    },
+    {
+     "name": "K-MOOC:빅데이터와인공 지능마케팅",
+     "credit": 3,
+     "code": "011934"
+    },
+    {
+     "name": "마케팅애널리틱스",
+     "credit": 3,
+     "code": "010615"
+    }
+   ],
+   "notes": [
+    "이수학점 21학점(7과목) 중 12학점(4과목) 이상 이수"
+   ],
+   "page": 89,
+   "listed": 21,
+   "rule": "credits"
+  },
+  {
+   "id": "md29",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "생산운영전문가모듈",
+   "credits": 9,
+   "dept": "",
+   "contact": "경영학부(광개토관 317호, 02-3408-3311)",
+   "courses": [
+    {
+     "name": "공급사슬관리",
+     "credit": 3,
+     "code": "006698"
+    },
+    {
+     "name": "서비스운영관리",
+     "credit": 3,
+     "code": "007991"
+    },
+    {
+     "name": "경영과학",
+     "credit": 3,
+     "code": "009253"
+    },
+    {
+     "name": "구매및공급관리",
+     "credit": 3,
+     "code": "012322"
+    },
+    {
+     "name": "로지스틱스",
+     "credit": 3,
+     "code": "010617"
+    },
+    {
+     "name": "계량경영분석",
+     "credit": 3,
+     "code": "010621"
+    },
+    {
+     "name": "경영시뮬레이션",
+     "credit": 3,
+     "code": "007613"
+    }
+   ],
+   "notes": [
+    "이수학점 21학점(7과목) 중 9학점(3과목) 이상 이수"
+   ],
+   "page": 89,
+   "listed": 21,
+   "rule": "credits"
+  },
+  {
+   "id": "md30",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "인사전문가모듈",
+   "credits": 12,
+   "dept": "",
+   "contact": "경영학부(광개토관 317호, 02-3408-3311)",
+   "courses": [
+    {
+     "name": "인적자원관리",
+     "credit": 3,
+     "code": "007186"
+    },
+    {
+     "name": "조직관리",
+     "credit": 3,
+     "code": "007187"
+    },
+    {
+     "name": "노사관계론",
+     "credit": 3,
+     "code": "000834"
+    },
+    {
+     "name": "인적자원개발론",
+     "credit": 3,
+     "code": "007251"
+    }
+   ],
+   "notes": [],
+   "page": 90,
+   "rule": "all"
+  },
+  {
+   "id": "md31",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "재무·금융전문가모듈",
+   "credits": 12,
+   "dept": "",
+   "contact": "경영학부(광개토관 317호, 02-3408-3311)",
+   "courses": [
+    {
+     "name": "기업재무",
+     "credit": 3,
+     "code": "006802"
+    },
+    {
+     "name": "투자론",
+     "credit": 3,
+     "code": "003359"
+    },
+    {
+     "name": "선물옵션이론",
+     "credit": 3,
+     "code": "005589"
+    },
+    {
+     "name": "채권분석",
+     "credit": 3,
+     "code": "008437"
+    }
+   ],
+   "notes": [],
+   "page": 91,
+   "rule": "all"
+  },
+  {
+   "id": "md32",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "회계·세무전문가모듈",
+   "credits": 9,
+   "dept": "",
+   "contact": "경영학부(광개토관 317호, 02-3408-3311)",
+   "courses": [
+    {
+     "name": "회계원리2",
+     "credit": 3,
+     "code": "004010"
+    },
+    {
+     "name": "중급회계1",
+     "credit": 3,
+     "code": "009872"
+    },
+    {
+     "name": "중급회계2",
+     "credit": 3,
+     "code": "009873"
+    },
+    {
+     "name": "원가회계",
+     "credit": 3,
+     "code": "002340"
+    },
+    {
+     "name": "세무회계",
+     "credit": 3,
+     "code": "001753"
+    },
+    {
+     "name": "고급회계",
+     "credit": 3,
+     "code": "000257"
+    },
+    {
+     "name": "회계감사",
+     "credit": 3,
+     "code": "003993"
+    }
+   ],
+   "notes": [
+    "이수학점 21학점(7과목) 중 9학점(3과목) 이상 이수"
+   ],
+   "page": 91,
+   "listed": 21,
+   "rule": "credits"
+  },
+  {
+   "id": "md33",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "AI Essentials for Business",
+   "credits": 12,
+   "dept": "",
+   "contact": "경영학부(광개토관 317호, 02-3408-3311)",
+   "courses": [
+    {
+     "name": "AI기반신제품개발",
+     "credit": 3,
+     "code": "012383"
+    },
+    {
+     "name": "AI애널리틱스",
+     "credit": 3,
+     "code": "012384"
+    },
+    {
+     "name": "AI마케팅",
+     "credit": 3,
+     "code": "012326"
+    },
+    {
+     "name": "BA AI경영시뮬레이션 (캡스톤디자인)",
+     "credit": 3,
+     "code": "012054"
+    }
+   ],
+   "notes": [],
+   "page": 92,
+   "rule": "all"
+  },
+  {
+   "id": "md34",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "영어 데이터 분석 AI 연계",
+   "credits": 12,
+   "dept": "",
+   "contact": "영어데이터융합전공 (집현관 801호, engdpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "데이터로배우는영어습득",
+     "credit": 3,
+     "code": "012381"
+    },
+    {
+     "name": "AI활용영어의미탐구",
+     "credit": 3,
+     "code": "012380"
+    },
+    {
+     "name": "LLM을활용한영어읽기와쓰기",
+     "credit": 3,
+     "code": "012379"
+    },
+    {
+     "name": "응용데이터분석",
+     "credit": 3,
+     "code": "012378"
+    }
+   ],
+   "notes": [],
+   "page": 93,
+   "rule": "all"
+  },
+  {
+   "id": "md35",
+   "kind": "general",
+   "type": "연계융합형",
+   "name": "디지털·AI콘텐츠 기획/제작 마이크로디그리",
+   "credits": 12,
+   "dept": "",
+   "contact": "미디어커뮤니케이션학과(집현관 405호, mediacomm@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "GMSW-AI영상편집",
+     "credit": 3,
+     "code": "011970"
+    },
+    {
+     "name": "영상콘텐츠제작기초",
+     "credit": 3,
+     "code": "010467"
+    },
+    {
+     "name": "방송콘텐츠기획",
+     "credit": 3,
+     "code": "011556"
+    },
+    {
+     "name": "1인미디어종합설계",
+     "credit": 3,
+     "code": "011557"
+    },
+    {
+     "name": "GMSW-포스트영상프로덕션",
+     "credit": 3,
+     "code": "010101"
+    }
+   ],
+   "notes": [],
+   "page": 93,
+   "rule": "credits"
+  },
+  {
+   "id": "md36",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "브랜드전략커뮤니케이션 마이크로디그리",
+   "credits": 12,
+   "dept": "",
+   "contact": "미디어커뮤니케이션학과(집현관 405호, mediacomm@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "광고매체기획",
+     "credit": 3,
+     "code": "008427"
+    },
+    {
+     "name": "통합마케팅커뮤니케이션기획",
+     "credit": 3,
+     "code": "010469"
+    },
+    {
+     "name": "광고크리에이티브",
+     "credit": 3,
+     "code": "011560"
+    },
+    {
+     "name": "SNS전략커뮤니케이션",
+     "credit": 3,
+     "code": "010472"
+    },
+    {
+     "name": "IMC와소비자",
+     "credit": 3,
+     "code": "011562"
+    },
+    {
+     "name": "브랜디드콘텐츠종합설계",
+     "credit": 3,
+     "code": "011563"
+    }
+   ],
+   "notes": [],
+   "page": 94,
+   "rule": "credits"
+  },
+  {
+   "id": "md37",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "저널리즘 마이크로디그리",
+   "credits": 12,
+   "dept": "",
+   "contact": "미디어커뮤니케이션학과(집현관 405호, mediacomm@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "취재보도론",
+     "credit": 3,
+     "code": "004661"
+    },
+    {
+     "name": "디지털저널리즘",
+     "credit": 3,
+     "code": "010470"
+    },
+    {
+     "name": "뉴스큐레이션",
+     "credit": 3,
+     "code": "010262"
+    },
+    {
+     "name": "미디어법제",
+     "credit": 3,
+     "code": "007408"
+    }
+   ],
+   "notes": [],
+   "page": 94,
+   "rule": "all"
+  },
+  {
+   "id": "md38",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "PR전략커뮤니케이션 마이크로디그리",
+   "credits": 12,
+   "dept": "",
+   "contact": "미디어커뮤니케이션학과(집현관 405호, mediacomm@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "통합마케팅커뮤니케이션기획",
+     "credit": 3,
+     "code": "010469"
+    },
+    {
+     "name": "PR전략",
+     "credit": 3,
+     "code": "011558"
+    },
+    {
+     "name": "SNS전략커뮤니케이션",
+     "credit": 3,
+     "code": "010472"
+    },
+    {
+     "name": "PR캠페인기획",
+     "credit": 3,
+     "code": "010473"
+    },
+    {
+     "name": "콘텐츠라이팅",
+     "credit": 3,
+     "code": "011561"
+    }
+   ],
+   "notes": [],
+   "page": 95,
+   "rule": "credits"
+  },
+  {
+   "id": "md39",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "AI교수설계",
+   "credits": 12,
+   "dept": "",
+   "contact": "교육학과(집현관 801호, 02-3408-3304)",
+   "courses": [
+    {
+     "name": "교육공학의이론과실제",
+     "credit": 3,
+     "code": "005285"
+    },
+    {
+     "name": "AI기반학습분석및설계",
+     "credit": 3,
+     "code": "007395"
+    },
+    {
+     "name": "교육과정과프로그램개발",
+     "credit": 3,
+     "code": "007576"
+    },
+    {
+     "name": "에듀테크캡스톤디자인",
+     "credit": 3,
+     "code": "011950"
+    }
+   ],
+   "notes": [],
+   "page": 95,
+   "rule": "all"
+  },
+  {
+   "id": "md40",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "HRD-x",
+   "credits": 12,
+   "dept": "",
+   "contact": "교육학과(집현관 801호, 02-3408-3304)",
+   "courses": [
+    {
+     "name": "인적자원개발론",
+     "credit": 3,
+     "code": "007251"
+    },
+    {
+     "name": "기업교육론",
+     "credit": 3,
+     "code": "006439"
+    },
+    {
+     "name": "리더십프로그램개발",
+     "credit": 3,
+     "code": "009493"
+    },
+    {
+     "name": "AI기반학습분석및설계",
+     "credit": 3,
+     "code": "007395"
+    }
+   ],
+   "notes": [],
+   "page": 96,
+   "rule": "all"
+  },
+  {
+   "id": "md41",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "교육학 기초",
+   "credits": 12,
+   "dept": "",
+   "contact": "교육학과(집현관 801호, 02-3408-3304)",
+   "courses": [
+    {
+     "name": "교육철학의 이해",
+     "credit": 3,
+     "code": "005071"
+    },
+    {
+     "name": "교육공학의이론과실제",
+     "credit": 3,
+     "code": "005285"
+    },
+    {
+     "name": "교육행정의이론과실제",
+     "credit": 3,
+     "code": "005072"
+    },
+    {
+     "name": "교육심리의이론과실제",
+     "credit": 3,
+     "code": "008737"
+    },
+    {
+     "name": "교육통계",
+     "credit": 3,
+     "code": "007712"
+    },
+    {
+     "name": "학생상담의이론과실제",
+     "credit": 3,
+     "code": "006689"
+    }
+   ],
+   "notes": [],
+   "page": 96,
+   "rule": "credits"
+  },
+  {
+   "id": "md42",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "인공지능시스템",
+   "credits": 12,
+   "dept": "",
+   "contact": "컴퓨터공학과(대양AI센터 401호, cedpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "인공지능",
+     "credit": 3,
+     "code": "002505"
+    },
+    {
+     "name": "딥러닝",
+     "credit": 3,
+     "code": "010881"
+    },
+    {
+     "name": "K-MOOC: 모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251"
+    },
+    {
+     "name": "K-MOOC: 생성형인공지능입문",
+     "credit": 3,
+     "code": "011771"
+    },
+    {
+     "name": "Human-AI Interaction",
+     "credit": 3,
+     "code": "011271"
+    },
+    {
+     "name": "지능형엣지시스템",
+     "credit": 3,
+     "code": "012001"
+    }
+   ],
+   "notes": [],
+   "page": 97,
+   "rule": "credits"
+  },
+  {
+   "id": "md43",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "메타버스플랫폼",
+   "credits": 12,
+   "dept": "",
+   "contact": "컴퓨터공학과(대양AI센터 401호, cedpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "지능형컴퓨터그래픽스",
+     "credit": 3,
+     "code": "012142"
+    },
+    {
+     "name": "지능형 XR 시스템 (가상현실)",
+     "credit": 3,
+     "code": "006208"
+    },
+    {
+     "name": "영상처리",
+     "credit": 3,
+     "code": "006132"
+    },
+    {
+     "name": "멀티코어프로그래밍",
+     "credit": 3,
+     "code": "008636"
+    },
+    {
+     "name": "K-MOOC: 멀티미디어",
+     "credit": 3,
+     "code": "011200"
+    },
+    {
+     "name": "디지털신호처리",
+     "credit": 3,
+     "code": "004600"
+    }
+   ],
+   "notes": [],
+   "page": 97,
+   "rule": "credits"
+  },
+  {
+   "id": "md44",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "클라우드SW인프라/시스템",
+   "credits": 12,
+   "dept": "",
+   "contact": "컴퓨터공학과(대양AI센터 401호, cedpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "통신시스템",
+     "credit": 3,
+     "code": "004599"
+    },
+    {
+     "name": "운영체제",
+     "credit": 3,
+     "code": "004310"
+    },
+    {
+     "name": "데이터베이스",
+     "credit": 3,
+     "code": "007219"
+    },
+    {
+     "name": "신호및시스템",
+     "credit": 3,
+     "code": "005246"
+    },
+    {
+     "name": "리눅스프로그래밍및실습",
+     "credit": 3,
+     "code": "012000"
+    },
+    {
+     "name": "소프트웨어공학",
+     "credit": 3,
+     "code": "001769"
+    }
+   ],
+   "notes": [],
+   "page": 98,
+   "rule": "credits"
+  },
+  {
+   "id": "md45",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "클라우드네트워킹/보안/응용",
+   "credits": 12,
+   "dept": "",
+   "contact": "컴퓨터공학과(대양AI센터 401호, cedpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "웹프로그래밍",
+     "credit": 3,
+     "code": "006237"
+    },
+    {
+     "name": "웹기반시스템",
+     "credit": 3,
+     "code": "009962"
+    },
+    {
+     "name": "XML프로그래밍",
+     "credit": 3,
+     "code": "006324"
+    },
+    {
+     "name": "무선통신",
+     "credit": 3,
+     "code": "006478"
+    },
+    {
+     "name": "정보보호개론",
+     "credit": 3,
+     "code": "006135"
+    },
+    {
+     "name": "AI네트워킹",
+     "credit": 3,
+     "code": "011920"
+    }
+   ],
+   "notes": [],
+   "page": 98,
+   "rule": "credits"
+  },
+  {
+   "id": "md46",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "기초물리",
+   "credits": 12,
+   "dept": "",
+   "contact": "물리천문학과(영실관 105A호, physicsastronomy@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "역학1",
+     "credit": 3,
+     "code": "002095"
+    },
+    {
+     "name": "수리물리1",
+     "credit": 3,
+     "code": "001776"
+    },
+    {
+     "name": "전자기학1",
+     "credit": 3,
+     "code": "002974"
+    },
+    {
+     "name": "양자역학1",
+     "credit": 3,
+     "code": "002035"
+    }
+   ],
+   "notes": [],
+   "page": 99,
+   "rule": "all"
+  },
+  {
+   "id": "md47",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "양자정보",
+   "credits": 12,
+   "dept": "",
+   "contact": "물리천문학과(영실관 105A호, physicsastronomy@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "양자계산과학",
+     "credit": 3,
+     "code": "012115"
+    },
+    {
+     "name": "양자역학2",
+     "credit": 3,
+     "code": "002037"
+    },
+    {
+     "name": "양자정보과학",
+     "credit": 3,
+     "code": "012141"
+    },
+    {
+     "name": "고체물리학2",
+     "credit": 3,
+     "code": "000284"
+    }
+   ],
+   "notes": [],
+   "page": 99,
+   "rule": "all"
+  },
+  {
+   "id": "md48",
+   "kind": "general",
+   "type": "산학연계형",
+   "name": "산업응용물리",
+   "credits": 12,
+   "dept": "",
+   "contact": "물리천문학과(영실관 105A호, physicsastronomy@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "나노소자의이해",
+     "credit": 3,
+     "code": "010885"
+    },
+    {
+     "name": "디스플레이광학",
+     "credit": 3,
+     "code": "009138"
+    },
+    {
+     "name": "고체물리학1",
+     "credit": 3,
+     "code": "000283"
+    },
+    {
+     "name": "반도체소자물리학",
+     "credit": 3,
+     "code": "009139"
+    }
+   ],
+   "notes": [],
+   "page": 100,
+   "rule": "all"
+  },
+  {
+   "id": "md49",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "고급물리",
+   "credits": 12,
+   "dept": "",
+   "contact": "물리천문학과(영실관 105A호, physicsastronomy@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "통계물리학",
+     "credit": 3,
+     "code": "003335"
+    },
+    {
+     "name": "고체물리학2",
+     "credit": 3,
+     "code": "000284"
+    },
+    {
+     "name": "중력과상대론",
+     "credit": 3,
+     "code": "009703"
+    },
+    {
+     "name": "핵및입자물리학",
+     "credit": 3,
+     "code": "010887"
+    }
+   ],
+   "notes": [],
+   "page": 100,
+   "rule": "all"
+  },
+  {
+   "id": "md50",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "천문학",
+   "credits": 15,
+   "dept": "",
+   "contact": "물리천문학과(영실관 105A호, physicsastronomy@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "항성천문학",
+     "credit": 3,
+     "code": "003677"
+    },
+    {
+     "name": "은하천문학",
+     "credit": 3,
+     "code": "006651"
+    },
+    {
+     "name": "항성대기",
+     "credit": 3,
+     "code": "007740"
+    },
+    {
+     "name": "전파천문학",
+     "credit": 3,
+     "code": "008044"
+    },
+    {
+     "name": "현대우주론",
+     "credit": 3,
+     "code": "007741"
+    }
+   ],
+   "notes": [],
+   "page": 101,
+   "rule": "all"
+  },
+  {
+   "id": "md51",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "차세대 이차전지 소재 전문가",
+   "credits": 12,
+   "dept": "",
+   "contact": "화학과(영실관 105A호, 02-3408-3317)",
+   "courses": [
+    {
+     "name": "물리화학1",
+     "credit": 3,
+     "code": "001282"
+    },
+    {
+     "name": "무기화학",
+     "credit": 3,
+     "code": "001114"
+    },
+    {
+     "name": "이차전지개론",
+     "credit": 3,
+     "code": "011445"
+    },
+    {
+     "name": "무기화학실험",
+     "credit": 3,
+     "code": "004460"
+    },
+    {
+     "name": "고등분석화학",
+     "credit": 3,
+     "code": "008591"
+    }
+   ],
+   "notes": [],
+   "page": 101,
+   "rule": "credits"
+  },
+  {
+   "id": "md52",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "AI 기반 화학 융합 전문가",
+   "credits": 12,
+   "dept": "",
+   "contact": "화학과(영실관 105A호, 02-3408-3317)",
+   "courses": [
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320"
+    },
+    {
+     "name": "화학과소프트웨어1",
+     "credit": 3,
+     "code": "008579"
+    },
+    {
+     "name": "화학을위한머신러닝",
+     "credit": 3,
+     "code": "011942"
+    },
+    {
+     "name": "분자모델링",
+     "credit": 3,
+     "code": "008588"
+    }
+   ],
+   "notes": [],
+   "page": 102,
+   "rule": "all"
+  },
+  {
+   "id": "md53",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "정밀 화합물 분석 전문가",
+   "credits": 12,
+   "dept": "",
+   "contact": "화학과(영실관 105A호, 02-3408-3317)",
+   "courses": [
+    {
+     "name": "기기분석화학",
+     "credit": 3,
+     "code": "004461"
+    },
+    {
+     "name": "극미량분석",
+     "credit": 3,
+     "code": "004308"
+    },
+    {
+     "name": "응용분석화학",
+     "credit": 3,
+     "code": "006367"
+    },
+    {
+     "name": "환경화학",
+     "credit": 3,
+     "code": "003989"
+    }
+   ],
+   "notes": [],
+   "page": 102,
+   "rule": "all"
+  },
+  {
+   "id": "md54",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "지능형 기능소재 설계 전문가",
+   "credits": 12,
+   "dept": "",
+   "contact": "화학과(영실관 105A호, 02-3408-3317)",
+   "courses": [
+    {
+     "name": "유기화학1",
+     "credit": 3,
+     "code": "002355"
+    },
+    {
+     "name": "물리화학1",
+     "credit": 3,
+     "code": "001282"
+    },
+    {
+     "name": "고분자화학",
+     "credit": 3,
+     "code": "000264"
+    },
+    {
+     "name": "고분자화학실험",
+     "credit": 3,
+     "code": "008033"
+    },
+    {
+     "name": "신소재화학",
+     "credit": 3,
+     "code": "010557"
+    }
+   ],
+   "notes": [],
+   "page": 102,
+   "rule": "credits"
+  },
+  {
+   "id": "md55",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "기능성식품 R&D",
+   "credits": 12,
+   "dept": "",
+   "contact": "식품생명공학전공 (충무관 103A호, 02-3408-3319)",
+   "courses": [
+    {
+     "name": "기능성식품학",
+     "credit": 3,
+     "code": "006591"
+    },
+    {
+     "name": "식품분자생물학및실험",
+     "credit": 3,
+     "code": "010197"
+    },
+    {
+     "name": "향장식품소재공학",
+     "credit": 3,
+     "code": "011082"
+    },
+    {
+     "name": "최신식품생명동향연구",
+     "credit": 3,
+     "code": "010203"
+    }
+   ],
+   "notes": [],
+   "page": 103,
+   "rule": "all"
+  },
+  {
+   "id": "md56",
+   "kind": "general",
+   "type": "연계융합형",
+   "name": "AI기반 천연물·식품소재 개발",
+   "credits": 12,
+   "dept": "",
+   "contact": "스마트생명산업융합학과(충무관 103A호, 02-3408-3661),",
+   "courses": [
+    {
+     "name": "자원식물학",
+     "credit": 3,
+     "code": "009159"
+    },
+    {
+     "name": "천연물화학및실험Ⅰ",
+     "credit": 3,
+     "code": "011135"
+    },
+    {
+     "name": "식품분자생물학 및 실험",
+     "credit": 3,
+     "code": "010197"
+    },
+    {
+     "name": "향장식품소재공학",
+     "credit": 3,
+     "code": "011082"
+    }
+   ],
+   "notes": [],
+   "page": 103,
+   "rule": "all"
+  },
+  {
+   "id": "md57",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "분자생리기반 바이오소재의 이해",
+   "credits": 12,
+   "dept": "",
+   "contact": "스마트생명산업융합학과 (충무관 103A호, 02-3408-3661)",
+   "courses": [
+    {
+     "name": "분자세포생물학및실험1",
+     "credit": 3,
+     "code": "011122"
+    },
+    {
+     "name": "곤충생리학",
+     "credit": 3,
+     "code": "011129"
+    },
+    {
+     "name": "천연물화학및실험1",
+     "credit": 3,
+     "code": "011135"
+    },
+    {
+     "name": "어류생리학",
+     "credit": 3,
+     "code": "011134"
+    }
+   ],
+   "notes": [],
+   "page": 104,
+   "rule": "all"
+  },
+  {
+   "id": "md58",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "데이터 기반 스마트농업의 이해",
+   "credits": 12,
+   "dept": "",
+   "contact": "스마트생명산업융합학과 (충무관 103A호, 02-3408-3661)",
+   "courses": [
+    {
+     "name": "종자생명과학및실습1",
+     "credit": 3,
+     "code": "011128"
+    },
+    {
+     "name": "스마트팜기획및설계",
+     "credit": 3,
+     "code": "011142"
+    },
+    {
+     "name": "빅데이터분석",
+     "credit": 3,
+     "code": "009267"
+    },
+    {
+     "name": "식물생리학",
+     "credit": 3,
+     "code": "011148"
+    }
+   ],
+   "notes": [],
+   "page": 104,
+   "rule": "all"
+  },
+  {
+   "id": "md59",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "AI융합스마트농업설계",
+   "credits": 12,
+   "dept": "",
+   "contact": "스마트생명산업융합학과 (충무관 103A호, 02-3408-3661)",
+   "courses": [
+    {
+     "name": "머신러닝기초및실습",
+     "credit": 3,
+     "code": "011952"
+    },
+    {
+     "name": "식물생명과학및실습",
+     "credit": 3,
+     "code": "011123"
+    },
+    {
+     "name": "생명산업유전학",
+     "credit": 3,
+     "code": "011130"
+    },
+    {
+     "name": "수산동물양식학및실습",
+     "credit": 3,
+     "code": "011136"
+    },
+    {
+     "name": "종자생명산업과학및실습2",
+     "credit": 3,
+     "code": "011139"
+    },
+    {
+     "name": "생물정보학",
+     "credit": 3,
+     "code": "008974"
+    },
+    {
+     "name": "스마트생명자원캡스톤디자인",
+     "credit": 3,
+     "code": "011980"
+    }
+   ],
+   "notes": [],
+   "page": 105,
+   "rule": "credits"
+  },
+  {
+   "id": "md60",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "고부가가치 식·의약 바이오 소재 개발",
+   "credits": 12,
+   "dept": "",
+   "contact": "스마트생명산업융합학과 (충무관 103A호, 02-3408-3661)",
+   "courses": [
+    {
+     "name": "분자세포생물학및실험2",
+     "credit": 3,
+     "code": "011131"
+    },
+    {
+     "name": "유기화학1",
+     "credit": 3,
+     "code": "002354"
+    },
+    {
+     "name": "기능성바이오소재탐색",
+     "credit": 3,
+     "code": "011892"
+    },
+    {
+     "name": "미생물학및실험",
+     "credit": 3,
+     "code": "004751"
+    },
+    {
+     "name": "산업및기능성곤충학",
+     "credit": 3,
+     "code": "011976"
+    },
+    {
+     "name": "융합학문을위한분석화학",
+     "credit": 3,
+     "code": "011126"
+    },
+    {
+     "name": "면역학",
+     "credit": 3,
+     "code": "004702"
+    }
+   ],
+   "notes": [],
+   "page": 105,
+   "rule": "credits"
+  },
+  {
+   "id": "md61",
+   "kind": "general",
+   "type": "전공트랙형",
+   "name": "스마트그린바이오AI",
+   "credits": 12,
+   "dept": "",
+   "contact": "스마트생명산업융합학과(충무관 103A호, 02-3408-3661)",
+   "courses": [
+    {
+     "name": "AI활용기초및실습",
+     "credit": 3,
+     "code": "011952"
+    },
+    {
+     "name": "생화학과AI응용",
+     "credit": 3,
+     "code": "012375"
+    },
+    {
+     "name": "빅데이터분석과AI",
+     "credit": 3,
+     "code": "009267"
+    },
+    {
+     "name": "머신러닝과미래사회",
+     "credit": 3,
+     "code": "012042"
+    }
+   ],
+   "notes": [],
+   "page": 106,
+   "rule": "all"
+  },
+  {
+   "id": "md62",
+   "kind": "general",
+   "type": "대학공유형",
+   "name": "지능IoT플랫폼 마이크로디그리(AIoT-CORE 마이크로디그리)",
+   "credits": 12,
+   "dept": "",
+   "contact": "지능IoT학과(집현관 606호, inteliotdpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "지능사물인터넷개론",
+     "credit": 3,
+     "code": "011901"
+    },
+    {
+     "name": "지능IoT플랫폼",
+     "credit": 3,
+     "code": "011990"
+    },
+    {
+     "name": "오픈소스IoT플랫폼",
+     "credit": 3,
+     "code": "학점교류 교과목"
+    },
+    {
+     "name": "인공지능자율주행실무",
+     "credit": 3
+    }
+   ],
+   "notes": [],
+   "page": 106,
+   "rule": "all"
+  },
+  {
+   "id": "md63",
+   "kind": "general",
+   "type": "대학공유형",
+   "name": "IoT디바이스 마이크로디그리(AIoT-CORE 마이크로디그리)",
+   "credits": 12,
+   "dept": "",
+   "contact": "지능IoT학과(집현관 606호, inteliotdpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "지능사물인터넷개론",
+     "credit": 3,
+     "code": "011901"
+    },
+    {
+     "name": "IoT마이크로프로세서",
+     "credit": 3,
+     "code": "학점교류 교과목"
+    },
+    {
+     "name": "지능IoT시스템",
+     "credit": 3
+    },
+    {
+     "name": "사물인터넷응용설계",
+     "credit": 3
+    }
+   ],
+   "notes": [],
+   "page": 107,
+   "rule": "all"
+  },
+  {
+   "id": "md64",
+   "kind": "general",
+   "type": "대학공유형",
+   "name": "커넥티드IoT네트워크 마이크로디그리(AIoT-CORE 마이크로디그리)",
+   "credits": 12,
+   "dept": "",
+   "contact": "지능IoT학과(집현관 606호, inteliotdpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "신호및시스템",
+     "credit": 3,
+     "code": "005246"
+    },
+    {
+     "name": "IoT네트워크",
+     "credit": 3,
+     "code": "012170"
+    },
+    {
+     "name": "IoT통신시스템",
+     "credit": 3,
+     "code": "012171"
+    },
+    {
+     "name": "정보시스템설계",
+     "credit": 3,
+     "code": "006935"
+    }
+   ],
+   "notes": [],
+   "page": 107,
+   "rule": "all"
+  },
+  {
+   "id": "md65",
+   "kind": "general",
+   "type": "대학공유형",
+   "name": "AIoT 디지털트윈 마이크로디그리(AIoT-X 마이크로디그리)",
+   "credits": 9,
+   "dept": "",
+   "contact": "지능IoT학과(집현관 606호, inteliotdpt@sejong.ac.kr)",
+   "courses": [
+    {
+     "name": "지능형IoT융합서비스(모듈형)",
+     "credit": 3,
+     "code": "012092"
+    },
+    {
+     "name": "디지털트윈개론",
+     "credit": 3,
+     "code": "011984"
+    },
+    {
+     "name": "사물연동디지털트윈",
+     "credit": 3,
+     "code": "011956"
+    }
+   ],
+   "notes": [],
+   "page": 108,
+   "rule": "all"
+  },
+  {
+   "id": "ai01",
+   "kind": "ai",
+   "type": null,
+   "name": "국어국문 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "국어국문학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화"
+    },
+    {
+     "name": "AI를활용한한국어교육",
+     "credit": 3,
+     "code": "011953",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 110,
+   "rule": "all"
+  },
+  {
+   "id": "ai02",
+   "kind": "ai",
+   "type": null,
+   "name": "언어학 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "영어데이터융합전공",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "언어이야기",
+     "credit": 3,
+     "code": "011487",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 110,
+   "rule": "all"
+  },
+  {
+   "id": "ai03",
+   "kind": "ai",
+   "type": null,
+   "name": "언어과학 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "영어데이터융합전공",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "언어과학",
+     "credit": 3,
+     "code": "010326",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 110,
+   "rule": "all"
+  },
+  {
+   "id": "ai04",
+   "kind": "ai",
+   "type": null,
+   "name": "일어일문 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "국제일본학전공",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화"
+    },
+    {
+     "name": "디지털일본학과AI리터러시",
+     "credit": 3,
+     "code": "011946",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 111,
+   "rule": "all"
+  },
+  {
+   "id": "ai05",
+   "kind": "ai",
+   "type": null,
+   "name": "중국지역 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "중국통상학전공",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화"
+    },
+    {
+     "name": "중국의대외관계에대한머신러닝분석",
+     "credit": 3,
+     "code": "011897",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 111,
+   "rule": "all"
+  },
+  {
+   "id": "ai06",
+   "kind": "ai",
+   "type": null,
+   "name": "교육학 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "교육학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:인공지능을위한고급수학",
+     "credit": 3,
+     "code": "012159",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "에듀테크빅데이터의이해와분석",
+     "credit": 3,
+     "code": "011096",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 111,
+   "rule": "all"
+  },
+  {
+   "id": "ai07",
+   "kind": "ai",
+   "type": null,
+   "name": "역사문화 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "역사학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "고급인공지능활용",
+     "credit": 3,
+     "code": "011322",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "AI디지털기반역사문화자원큐레이션",
+     "credit": 3,
+     "code": "011900",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 112,
+   "rule": "all"
+  },
+  {
+   "id": "ai08",
+   "kind": "ai",
+   "type": null,
+   "name": "행정학 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "행정학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화"
+    },
+    {
+     "name": "초연결사회의국가정책",
+     "credit": 3,
+     "code": "011669",
+     "cat": "AI-X",
+     "pick": 1,
+     "group": "AI-X"
+    },
+    {
+     "name": "빅데이터와행정분석",
+     "credit": 3,
+     "code": "009934",
+     "cat": "AI-X",
+     "pick": 1,
+     "group": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 112,
+   "rule": "all"
+  },
+  {
+   "id": "ai09",
+   "kind": "ai",
+   "type": null,
+   "name": "법학 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "법학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화"
+    },
+    {
+     "name": "금융법",
+     "credit": 3,
+     "code": "008732",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 113,
+   "rule": "all"
+  },
+  {
+   "id": "ai10",
+   "kind": "ai",
+   "type": null,
+   "name": "마케팅 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "경영학부",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화"
+    },
+    {
+     "name": "K-MOOC:빅데이터와인공지능마케팅",
+     "credit": 3,
+     "code": "011934",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 113,
+   "rule": "all"
+  },
+  {
+   "id": "ai11",
+   "kind": "ai",
+   "type": null,
+   "name": "핀테크 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "경영학부",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화"
+    },
+    {
+     "name": "핀테크개론",
+     "credit": 3,
+     "code": "011933",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 113,
+   "rule": "all"
+  },
+  {
+   "id": "ai12",
+   "kind": "ai",
+   "type": null,
+   "name": "회계 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "경영학부",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화"
+    },
+    {
+     "name": "회계AI애널리틱스",
+     "credit": 3,
+     "code": "011935",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 113,
+   "rule": "all"
+  },
+  {
+   "id": "ai13",
+   "kind": "ai",
+   "type": null,
+   "name": "경제학 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "경제학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화"
+    },
+    {
+     "name": "계량경제학",
+     "credit": 3,
+     "code": "000209",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 114,
+   "rule": "all"
+  },
+  {
+   "id": "ai14",
+   "kind": "ai",
+   "type": null,
+   "name": "호텔관광 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "호텔관광경영학전공",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화"
+    },
+    {
+     "name": "AI와호스피탈리티산업",
+     "credit": 3,
+     "code": "011607",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 114,
+   "rule": "all"
+  },
+  {
+   "id": "ai15",
+   "kind": "ai",
+   "type": null,
+   "name": "외식경영 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "외식경영학전공",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화"
+    },
+    {
+     "name": "외식빅데이터애널리틱스",
+     "credit": 3,
+     "code": "011974",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 114,
+   "rule": "all"
+  },
+  {
+   "id": "ai16",
+   "kind": "ai",
+   "type": null,
+   "name": "프랜차이즈경영 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "호텔외식관광프랜차이즈경영학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화"
+    },
+    {
+     "name": "빅데이터마이닝&시각화",
+     "credit": 3,
+     "code": "011486",
+     "cat": "AI-X"
+    },
+    {
+     "name": "HRT빅데이터기반상권분석",
+     "credit": 3,
+     "code": "011475",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 115,
+   "rule": "credits"
+  },
+  {
+   "id": "ai17",
+   "kind": "ai",
+   "type": null,
+   "name": "비즈니스 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "호텔외식비즈니스학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화"
+    },
+    {
+     "name": "외식빅데이터마이닝&시각화",
+     "credit": 3,
+     "code": "011587",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 115,
+   "rule": "all"
+  },
+  {
+   "id": "ai18",
+   "kind": "ai",
+   "type": null,
+   "name": "통계적학습 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "수학통계학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초1"
+    },
+    {
+     "name": "고급프로그래밍활용",
+     "credit": 3,
+     "alias": [
+      "고급프로그래밍입문-P"
+     ],
+     "code": "011300",
+     "cat": "AI기초2",
+     "pick": 1,
+     "group": "AI기초2"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초2",
+     "pick": 1,
+     "group": "AI기초2"
+    },
+    {
+     "name": "K-MOOC:인공지능을위한고급수학",
+     "credit": 3,
+     "code": "012159",
+     "cat": "AI심화"
+    },
+    {
+     "name": "통계적학습",
+     "credit": 3,
+     "code": "011938",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 115,
+   "rule": "all"
+  },
+  {
+   "id": "ai19",
+   "kind": "ai",
+   "type": null,
+   "name": "물리천문 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "물리천문학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초1"
+    },
+    {
+     "name": "고급프로그래밍활용",
+     "credit": 3,
+     "alias": [
+      "고급프로그래밍입문-P"
+     ],
+     "code": "011300",
+     "cat": "AI기초2",
+     "pick": 1,
+     "group": "AI기초2"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초2",
+     "pick": 1,
+     "group": "AI기초2"
+    },
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화"
+    },
+    {
+     "name": "데이터분석기법",
+     "credit": 3,
+     "code": "010886",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 116,
+   "rule": "all"
+  },
+  {
+   "id": "ai20",
+   "kind": "ai",
+   "type": null,
+   "name": "화학 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "화학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초1"
+    },
+    {
+     "name": "고급프로그래밍활용",
+     "credit": 3,
+     "alias": [
+      "고급프로그래밍입문-P"
+     ],
+     "code": "011300",
+     "cat": "AI기초2",
+     "pick": 1,
+     "group": "AI기초2"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초2",
+     "pick": 1,
+     "group": "AI기초2"
+    },
+    {
+     "name": "고급인공지능활용",
+     "credit": 3,
+     "code": "011322",
+     "cat": "AI심화"
+    },
+    {
+     "name": "화학을위한머신러닝",
+     "credit": 3,
+     "code": "-",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 116,
+   "rule": "all"
+  },
+  {
+   "id": "ai21",
+   "kind": "ai",
+   "type": null,
+   "name": "푸드테크 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "식품생명공학전공",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화"
+    },
+    {
+     "name": "AI푸드테크",
+     "credit": 3,
+     "code": "011466",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 116,
+   "rule": "all"
+  },
+  {
+   "id": "ai22",
+   "kind": "ai",
+   "type": null,
+   "name": "바이오융합 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "바이오융합공학전공",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급인공지능활용",
+     "credit": 3,
+     "code": "011322",
+     "cat": "AI심화"
+    },
+    {
+     "name": "AI기반세포유전자치료",
+     "credit": 3,
+     "code": "011945",
+     "cat": "AI-X",
+     "pick": 1,
+     "group": "AI-X"
+    },
+    {
+     "name": "바이오메디컬AI",
+     "credit": 3,
+     "code": "011975",
+     "cat": "AI-X",
+     "pick": 1,
+     "group": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 117,
+   "rule": "all"
+  },
+  {
+   "id": "ai23",
+   "kind": "ai",
+   "type": null,
+   "name": "바이오산업자원 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "바이오산업자원공학전공",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급인공지능활용",
+     "credit": 3,
+     "code": "011322",
+     "cat": "AI심화"
+    },
+    {
+     "name": "AI활용대량생물정보분석",
+     "credit": 3,
+     "code": "011899",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 117,
+   "rule": "all"
+  },
+  {
+   "id": "ai24",
+   "kind": "ai",
+   "type": null,
+   "name": "바이오데이터융합분석 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "스마트생명산업융합학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화"
+    },
+    {
+     "name": "머신러닝기초및실습",
+     "credit": 3,
+     "code": "011952",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 117,
+   "rule": "all"
+  },
+  {
+   "id": "ai25",
+   "kind": "ai",
+   "type": null,
+   "name": "전자정보 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "AI융합전자공학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "고급프로그래밍활용",
+     "credit": 3,
+     "alias": [
+      "고급프로그래밍입문-P"
+     ],
+     "code": "011300",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급인공지능활용",
+     "credit": 3,
+     "code": "011322",
+     "cat": "AI심화"
+    },
+    {
+     "name": "인공지능",
+     "credit": 3,
+     "code": "002505",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 118,
+   "rule": "all"
+  },
+  {
+   "id": "ai26",
+   "kind": "ai",
+   "type": null,
+   "name": "AI반도체 AI심화 마이크로디그리",
+   "credits": 12,
+   "dept": "반도체시스템공학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화"
+    },
+    {
+     "name": "반도체개론",
+     "credit": 3,
+     "code": "011345",
+     "cat": "AI-X"
+    },
+    {
+     "name": "반도체소자공학",
+     "credit": 3,
+     "code": "011358",
+     "cat": "AI-X",
+     "pick": 2,
+     "group": "AI-X"
+    },
+    {
+     "name": "시스템반도체설계",
+     "credit": 3,
+     "code": "011368",
+     "cat": "AI-X",
+     "pick": 2,
+     "group": "AI-X"
+    },
+    {
+     "name": "AI반도체설계",
+     "credit": 3,
+     "code": "011875",
+     "cat": "AI-X",
+     "pick": 2,
+     "group": "AI-X"
+    },
+    {
+     "name": "AI반도체소자물리",
+     "credit": 3,
+     "code": "011876",
+     "cat": "AI-X",
+     "pick": 2,
+     "group": "AI-X"
+    },
+    {
+     "name": "AI기반공정자동화",
+     "credit": 3,
+     "code": "011940",
+     "cat": "AI-X",
+     "pick": 2,
+     "group": "AI-X"
+    },
+    {
+     "name": "반도체소자제작및실습2",
+     "credit": 3,
+     "code": "011384",
+     "cat": "AI-X",
+     "pick": 2,
+     "group": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 118,
+   "rule": "all"
+  },
+  {
+   "id": "ai27",
+   "kind": "ai",
+   "type": null,
+   "name": "컴퓨터공학 AI심화 마이크로디그리",
+   "credits": 12,
+   "dept": "컴퓨터공학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화"
+    },
+    {
+     "name": "딥러닝",
+     "credit": 3,
+     "code": "010881",
+     "cat": "AI-X"
+    },
+    {
+     "name": "인공지능",
+     "credit": 3,
+     "code": "002505",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 118,
+   "rule": "all"
+  },
+  {
+   "id": "ai28",
+   "kind": "ai",
+   "type": null,
+   "name": "정보보호 AI심화 마이크로디그리",
+   "credits": 12,
+   "dept": "정보보호학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "고급인공지능활용",
+     "credit": 3,
+     "code": "011322",
+     "cat": "AI심화"
+    },
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화"
+    },
+    {
+     "name": "AI기반시스템프로그래밍",
+     "credit": 3,
+     "code": "001878",
+     "cat": "AI-X"
+    },
+    {
+     "name": "AI기반악성코드분석",
+     "credit": 3,
+     "code": "012008",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 119,
+   "rule": "all"
+  },
+  {
+   "id": "ai29",
+   "kind": "ai",
+   "type": null,
+   "name": "인공지능데이터사이언스 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "인공지능데이터사이언스학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "고급프로그래밍활용",
+     "credit": 3,
+     "alias": [
+      "고급프로그래밍입문-P"
+     ],
+     "code": "011300",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급인공지능활용",
+     "credit": 3,
+     "code": "011322",
+     "cat": "AI심화"
+    },
+    {
+     "name": "딥러닝실습",
+     "credit": 3,
+     "code": "011509",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 119,
+   "rule": "all"
+  },
+  {
+   "id": "ai30",
+   "kind": "ai",
+   "type": null,
+   "name": "로보틱스 AI심화 마이크로디그리",
+   "credits": 12,
+   "dept": "AI로봇학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화"
+    },
+    {
+     "name": "AI로봇학습",
+     "credit": 3,
+     "alias": [
+      "AI로봇설계"
+     ],
+     "code": "011664",
+     "cat": "AI-X"
+    },
+    {
+     "name": "AI로봇비전시스템",
+     "credit": 3,
+     "alias": [
+      "머신비전시스템"
+     ],
+     "code": "011653",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 119,
+   "rule": "all"
+  },
+  {
+   "id": "ai31",
+   "kind": "ai",
+   "type": null,
+   "name": "콘텐츠소프트웨어 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "콘텐츠소프트웨어학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "고급프로그래밍활용",
+     "credit": 3,
+     "alias": [
+      "고급프로그래밍입문-P"
+     ],
+     "code": "011300",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화"
+    },
+    {
+     "name": "생성형AI",
+     "credit": 3,
+     "code": "011904",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 119,
+   "rule": "all"
+  },
+  {
+   "id": "ai32",
+   "kind": "ai",
+   "type": null,
+   "name": "제너레이티브디자인 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "디자인이노베이션전공",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "AI디자인방법론",
+     "credit": 3,
+     "code": "012034",
+     "cat": "AI-X",
+     "pick": 1,
+     "group": "AI-X"
+    },
+    {
+     "name": "제너레이티브디자인",
+     "credit": 3,
+     "code": "012035",
+     "cat": "AI-X",
+     "pick": 1,
+     "group": "AI-X"
+    },
+    {
+     "name": "AI활용UX디자인",
+     "credit": 3,
+     "code": "012036",
+     "cat": "AI-X",
+     "pick": 1,
+     "group": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 120,
+   "rule": "all"
+  },
+  {
+   "id": "ai33",
+   "kind": "ai",
+   "type": null,
+   "name": "제너레이티브디자인 AI심화 마이크로디그리",
+   "credits": 12,
+   "dept": "디자인이노베이션전공",
+   "contact": "",
+   "courses": [
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화"
+    },
+    {
+     "name": "AI디자인방법론",
+     "credit": 3,
+     "code": "012034",
+     "cat": "AI-X"
+    },
+    {
+     "name": "제너레이티브디자인",
+     "credit": 3,
+     "code": "012035",
+     "cat": "AI-X"
+    },
+    {
+     "name": "AI활용UX디자인",
+     "credit": 3,
+     "code": "012036",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 120,
+   "rule": "credits"
+  },
+  {
+   "id": "ai34",
+   "kind": "ai",
+   "type": null,
+   "name": "디지털콘텐츠 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "만화애니메이션텍전공",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화"
+    },
+    {
+     "name": "AI콘텐츠",
+     "credit": 3,
+     "code": "-",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 120,
+   "rule": "all"
+  },
+  {
+   "id": "ai35",
+   "kind": "ai",
+   "type": null,
+   "name": "건축공학 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "건축공학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급프로그래밍활용",
+     "credit": 3,
+     "alias": [
+      "고급프로그래밍입문-P"
+     ],
+     "code": "011300",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화"
+    },
+    {
+     "name": "건축공학AI",
+     "credit": 3,
+     "code": "012037",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 121,
+   "rule": "all"
+  },
+  {
+   "id": "ai36",
+   "kind": "ai",
+   "type": null,
+   "name": "건축학 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "건축학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급인공지능활용",
+     "credit": 3,
+     "code": "011322",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "인공지능과건축환경",
+     "credit": 3,
+     "code": "011965",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 121,
+   "rule": "all"
+  },
+  {
+   "id": "ai37",
+   "kind": "ai",
+   "type": null,
+   "name": "건설환경공학 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "건설환경공학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급프로그래밍활용",
+     "credit": 3,
+     "alias": [
+      "고급프로그래밍입문-P"
+     ],
+     "code": "011300",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급인공지능활용",
+     "credit": 3,
+     "code": "011322",
+     "cat": "AI심화"
+    },
+    {
+     "name": "도시수재해공학",
+     "credit": 3,
+     "code": "011425",
+     "cat": "AI-X",
+     "pick": 1,
+     "group": "AI-X"
+    },
+    {
+     "name": "AI기반건설환경데이터분석",
+     "credit": 3,
+     "code": "011963",
+     "cat": "AI-X",
+     "pick": 1,
+     "group": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 121,
+   "rule": "all"
+  },
+  {
+   "id": "ai38",
+   "kind": "ai",
+   "type": null,
+   "name": "환경융합 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "환경융합공학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급프로그래밍활용",
+     "credit": 3,
+     "alias": [
+      "고급프로그래밍입문-P"
+     ],
+     "code": "011300",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급인공지능활용",
+     "credit": 3,
+     "code": "011322",
+     "cat": "AI심화"
+    },
+    {
+     "name": "환경원격탐사",
+     "credit": 3,
+     "code": "009818",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 122,
+   "rule": "all"
+  },
+  {
+   "id": "ai39",
+   "kind": "ai",
+   "type": null,
+   "name": "지구자원시스템공학 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "에너지자원공학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급프로그래밍활용",
+     "credit": 3,
+     "alias": [
+      "고급프로그래밍입문-P"
+     ],
+     "code": "011300",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화"
+    },
+    {
+     "name": "지오빅데이터활용",
+     "credit": 3,
+     "code": "011941",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 122,
+   "rule": "all"
+  },
+  {
+   "id": "ai40",
+   "kind": "ai",
+   "type": null,
+   "name": "기계공학 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "기계공학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급프로그래밍활용",
+     "credit": 3,
+     "alias": [
+      "고급프로그래밍입문-P"
+     ],
+     "code": "011300",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급인공지능활용",
+     "credit": 3,
+     "code": "011322",
+     "cat": "AI심화"
+    },
+    {
+     "name": "인공지능응용기계공학",
+     "credit": 3,
+     "code": "010919",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 122,
+   "rule": "all"
+  },
+  {
+   "id": "ai41",
+   "kind": "ai",
+   "type": null,
+   "name": "우주항공시스템 AI심화 마이크로디그리",
+   "credits": 12,
+   "dept": "우주항공시스템공학부",
+   "contact": "",
+   "courses": [
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화"
+    },
+    {
+     "name": "항공우주AI기초",
+     "credit": 3,
+     "code": "011352",
+     "cat": "AI-X"
+    },
+    {
+     "name": "항공우주AI응용",
+     "credit": 3,
+     "code": "011349",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 122,
+   "rule": "all"
+  },
+  {
+   "id": "ai42",
+   "kind": "ai",
+   "type": null,
+   "name": "나노신소재공학 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "나노신소재공학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급프로그래밍활용",
+     "credit": 3,
+     "alias": [
+      "고급프로그래밍입문-P"
+     ],
+     "code": "011300",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화"
+    },
+    {
+     "name": "AI재료열역학1",
+     "credit": 3,
+     "code": "011917",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 123,
+   "rule": "all"
+  },
+  {
+   "id": "ai43",
+   "kind": "ai",
+   "type": null,
+   "name": "원자력 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "양자원자력공학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급프로그래밍활용",
+     "credit": 3,
+     "alias": [
+      "고급프로그래밍입문-P"
+     ],
+     "code": "011300",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급인공지능활용",
+     "credit": 3,
+     "code": "011322",
+     "cat": "AI심화"
+    },
+    {
+     "name": "방사선기술의응용",
+     "credit": 3,
+     "code": "009579",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 123,
+   "rule": "all"
+  },
+  {
+   "id": "ai44",
+   "kind": "ai",
+   "type": null,
+   "name": "국방시스템공학 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "국방AI융합시스템공학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "SW기초코딩",
+     "credit": 3,
+     "alias": [
+      "소프트웨어기초코딩"
+     ],
+     "code": "011298",
+     "cat": "AI기초"
+    },
+    {
+     "name": "고급프로그래밍활용",
+     "credit": 3,
+     "alias": [
+      "고급프로그래밍입문-P"
+     ],
+     "code": "011300",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화"
+    },
+    {
+     "name": "국방인공지능개론및실습",
+     "credit": 3,
+     "code": "010934",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 123,
+   "rule": "all"
+  },
+  {
+   "id": "ai45",
+   "kind": "ai",
+   "type": null,
+   "name": "회화 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "회화과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화"
+    },
+    {
+     "name": "미술과AI공존의시대",
+     "credit": 3,
+     "code": "012041",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 124,
+   "rule": "all"
+  },
+  {
+   "id": "ai46",
+   "kind": "ai",
+   "type": null,
+   "name": "패션디자인 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "패션디자인학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화"
+    },
+    {
+     "name": "인공지능과패션디자인",
+     "credit": 3,
+     "code": "011961",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 124,
+   "rule": "all"
+  },
+  {
+   "id": "ai47",
+   "kind": "ai",
+   "type": null,
+   "name": "음악 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "음악과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화"
+    },
+    {
+     "name": "음악AI워크샵",
+     "credit": 3,
+     "code": "-",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 124,
+   "rule": "all"
+  },
+  {
+   "id": "ai48",
+   "kind": "ai",
+   "type": null,
+   "name": "체육학 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "체육학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화"
+    },
+    {
+     "name": "Sports AI & Big Data",
+     "credit": 3,
+     "code": "011959",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 125,
+   "rule": "all"
+  },
+  {
+   "id": "ai49",
+   "kind": "ai",
+   "type": null,
+   "name": "무용 AI연계 마이크로디그리",
+   "credits": 10,
+   "dept": "무용과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화"
+    },
+    {
+     "name": "AI융합워크샵4",
+     "credit": 1,
+     "code": "004882",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 125,
+   "rule": "all"
+  },
+  {
+   "id": "ai50",
+   "kind": "ai",
+   "type": null,
+   "name": "영화예술 AI연계 마이크로디그리",
+   "credits": 12,
+   "dept": "영화예술학과",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화"
+    },
+    {
+     "name": "AI와영상",
+     "credit": 3,
+     "code": "-",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 125,
+   "rule": "all"
+  },
+  {
+   "id": "ai51",
+   "kind": "ai",
+   "type": null,
+   "name": "미디어빅데이터 AI융합 마이크로디그리",
+   "credits": 12,
+   "dept": "글로벌미디어소프트웨어 융합전공",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "K-MOOC:모두를위한머신러닝",
+     "credit": 3,
+     "code": "011251",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "K-MOOC:생성형인공지능입문",
+     "credit": 3,
+     "code": "011771",
+     "cat": "AI심화",
+     "pick": 1,
+     "group": "AI심화"
+    },
+    {
+     "name": "GMSW-미디어빅데이터분석",
+     "credit": 3,
+     "code": "010097",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 126,
+   "rule": "all"
+  },
+  {
+   "id": "ai52",
+   "kind": "ai",
+   "type": null,
+   "name": "비즈니스애널리틱스 AI융합 마이크로디그리",
+   "credits": 12,
+   "dept": "비즈니스애널리틱스 융합전공",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화"
+    },
+    {
+     "name": "BAAI경영시뮬레이션",
+     "credit": 3,
+     "code": "010700",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 126,
+   "rule": "all"
+  },
+  {
+   "id": "ai53",
+   "kind": "ai",
+   "type": null,
+   "name": "콘텐츠전략기획 AI융합 마이크로디그리",
+   "credits": 12,
+   "dept": "영상디자인 융합전공",
+   "contact": "",
+   "courses": [
+    {
+     "name": "컴퓨터사고기반기초코딩",
+     "credit": 3,
+     "alias": [
+      "컴퓨팅사고기반기초코딩"
+     ],
+     "code": "011297",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능과빅데이터",
+     "credit": 3,
+     "code": "011320",
+     "cat": "AI기초"
+    },
+    {
+     "name": "인공지능활용",
+     "credit": 3,
+     "code": "011321",
+     "cat": "AI심화"
+    },
+    {
+     "name": "AI기반콘텐츠전략기획",
+     "credit": 3,
+     "code": "012139",
+     "cat": "AI-X"
+    }
+   ],
+   "notes": [],
+   "page": 126,
+   "rule": "all"
+  }
+ ]
+}

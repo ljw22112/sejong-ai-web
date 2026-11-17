@@ -134,6 +134,27 @@ t("수강편람 2021-1~2026-2 반영", () => {
   eq(G.deptRule(GD, "10", 2022).req.majorElec, 48);
 });
 
+t("마이크로디그리 판정", () => {
+  const MI = require("../assets/micro.js"), MD = require("../data/micro.json");
+  ok(MD.programs.length > 100);
+  const ml = MD.programs.find((p) => p.name === "머신러닝");
+  const c = (name) => ({ name, credit: 3, grade: "A0", term: "2025-1" });
+  let r = MI.evalProgram(ml, ml.courses.slice(0, 3).map((x) => c(x.name)));
+  eq([r.ok, r.earned, r.remain], [false, 9, 3]);
+  r = MI.evalProgram(ml, ml.courses.map((x) => c(x.name)));
+  ok(r.ok);
+  // AI 마이크로디그리: 택1 카테고리는 한 과목만 인정, 동일과목 이름도 인정
+  const lg = MD.programs.find((p) => p.name === "언어학 AI연계 마이크로디그리");
+  r = MI.evalProgram(lg, ["컴퓨팅사고기반기초코딩", "인공지능과빅데이터", "인공지능활용", "K-MOOC:모두를위한머신러닝"].map(c));
+  eq([r.ok, r.earned, r.remain], [false, 9, 3]);
+  r = MI.evalProgram(lg, ["컴퓨팅사고기반기초코딩", "인공지능과빅데이터", "인공지능활용", "언어이야기"].map(c));
+  ok(r.ok, "언어학 AI 마이크로디그리 달성");
+  // 일부 학점만 들으면 되는 과정
+  const bz = MD.programs.find((p) => p.name === "경영학의기초모듈");
+  eq(bz.credits, 12);
+  ok(MI.evalProgram(bz, bz.courses.slice(0, 4).map((x) => c(x.name))).ok);
+});
+
 if (OFF) t("수강편람 데이터 형식", () => { ok(OFF.count > 300); ok(Object.values(OFF.courses)[0][0].hasOwnProperty("t")); });
 
 console.log(`${pass}개 통과, ${fail}개 실패`);

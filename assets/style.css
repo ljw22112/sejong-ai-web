@@ -33,7 +33,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
 
 /* 입력 단계 */
-.inputs { position: sticky; top: 16px; display: grid; gap: 14px; }
+.inputs { position: sticky; top: 16px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.inputs select, .inputs input, .inputs textarea { max-width: 100%; }
 @media (max-width: 900px) { .inputs { position: static; } }
 .step { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-md); padding: 16px; }
 .step h2 { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
@@ -281,7 +282,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   body.print-summary #toggleDone { display: none !important; }
   body.print-summary #panelResult { display: block !important; }
   body.print-summary .layout { display: block; padding: 0; }
-  body.print-summary #ttBlock, body.print-summary #compare .hint, body.print-summary .ruler-foot, body.print-summary .block-head .sub { display: none !important; }
+  body.print-summary #ttBlock, body.print-summary #seasonBlock, body.print-summary #microBlock, body.print-summary #compare .hint, body.print-summary .ruler-foot, body.print-summary .block-head .sub { display: none !important; }
   body.print-summary #panelResult { display: grid !important; grid-template-columns: 1fr 1fr; gap: 6px 10px; align-items: start; }
   body.print-summary .verdict, body.print-summary .block:has(#plan) { grid-column: 1 / -1; }
   body.print-summary .block, body.print-summary .verdict { border: 1px solid #999; margin: 0; padding: 7px 10px; border-radius: 4px; }
@@ -329,3 +330,30 @@ button, input, select, textarea { font: inherit; color: inherit; }
 #renames details { margin-top: 8px; }
 #renames summary { cursor: pointer; font-weight: 600; font-size: 14px; }
 #renames .courses { margin-top: 6px; }
+
+/* 마이크로디그리 */
+.micro-pills { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 4px; }
+.mh { font-size: 14px; margin: 16px 0 8px; color: var(--ink-2); }
+.mcard { border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px 14px; margin-bottom: 10px; background: var(--card); min-width: 0; }
+.mcard.ok { border-color: var(--pass); background: var(--pass-tint); }
+.mhead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 0; }
+.mhead b { font-size: 15px; }
+.mhead .mval { margin-left: auto; font-size: 13px; color: var(--ink-2); padding-left: 10px; }
+.mcard.ok .mval strong { color: var(--pass); }
+.mbar { height: 6px; background: #e8eaf1; border-radius: 99px; margin: 8px 0; overflow: hidden; }
+.mbar span { display: block; height: 100%; background: var(--pass); border-radius: 99px; }
+.mchips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 6px; }
+.mchip { font-size: 12.5px; border: 1px dashed var(--line); border-radius: 6px; padding: 2px 8px; color: var(--ink-2); background: #fff; }
+.mchip.done { border-style: solid; border-color: #b9dccb; background: var(--pass-tint); color: var(--pass); font-weight: 600; }
+.mchip small { font-weight: 400; color: var(--ink-3); }
+.mchip small.op { color: var(--crimson); font-weight: 600; }
+.mcard .hint { margin: 4px 0 0; font-size: 12px; }
+.btn.small { font-size: 13px; padding: 5px 10px; margin-top: 8px; }
+.micro-all { margin: 12px 0; }
+.micro-all summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+.micro-all .field { margin: 10px 0; display: block; }
+.micro-all input { width: 100%; }
+.micro-how { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; border-top: 1px solid var(--line); margin-top: 14px; }
+.micro-how > .hint { grid-column: 1 / -1; }
+.micro-how ol { margin: 0; padding-left: 18px; font-size: 13px; color: var(--ink-2); }
+@media (max-width: 760px) { .micro-how { grid-template-columns: 1fr; } .mhead .mval { margin-left: 0; padding-left: 0; width: 100%; } }

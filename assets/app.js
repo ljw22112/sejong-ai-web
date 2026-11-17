@@ -8,7 +8,7 @@
   const GROUP_LABEL = { GE: "전문교양", MSC: "MSC", MAJOR: "전공", DESIGN: "설계", EXTRA: "추가 조건" };
   const FAMILY_ORDER = ["sw", "robot", "ee", "mech", "aero", "nano", "nuclear", "civil", "arch", "env", "energy"];
 
-  let DATA = null, KNOWN = [], GRADD = null, OFFERED = null, SEASON = null;
+  let DATA = null, KNOWN = [], GRADD = null, OFFERED = null, SEASON = null, MICROD = null;
   const GR = window.GRAD;
   const S = { courses: [], program: null, admit: null, basis: null, track: null, next: null, cap: 15, autoProgram: false };
 
@@ -42,7 +42,7 @@
     if (DATA.updated) $("#stamp").textContent = `요건 기준 ${DATA.updated.replace(/-/g, ".")} · 매 학기 공학교육센터 요건 자동 확인`;
     // 부가 데이터: 없어도 동작
     const opt = (u) => fetch(u).then((r) => (r.ok ? r.json() : null)).catch(() => null);
-    [GRADD, OFFERED, SEASON] = await Promise.all([opt("data/grad.json"), opt("data/offered.json"), opt("data/season.json")]);
+    [GRADD, OFFERED, SEASON, MICROD] = await Promise.all([opt("data/grad.json"), opt("data/offered.json"), opt("data/season.json"), opt("data/micro.json")]);
     opt("data/notices.json").then((n) => {
       if (!n || !n.items || !n.items.length) return;
       $("#notices").innerHTML = n.items.slice(0, 4).map((x) => `<li><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.title)}</a> <span class="date">${esc(x.date)}</span></li>`).join("");
@@ -405,6 +405,7 @@
     ["sid", "sname", "gradDate"].forEach((id) => $("#" + id).addEventListener("input", (e) => { PERSON[id === "sname" ? "name" : id] = e.target.value; render(); }));
     $("#printBtn").addEventListener("click", () => window.print());
     $("#ttBtn").addEventListener("click", makeTimetable);
+    $("#microQ").addEventListener("input", () => renderMicro(renderMicro.rec));
     $("#seasonCap").addEventListener("change", () => render());
     $("#ttNext").addEventListener("click", () => { ttState.i = (ttState.i + 1) % ttState.list.length; renderTimetable(); });
     $("#summaryBtn").addEventListener("click", () => {
@@ -531,6 +532,7 @@
       if (res.ok && !g.ok && open.length) $("#verdict").className = "verdict no";
     }
     renderSeason(rule(), res, rec, g);
+    renderMicro(rec);
     $("#ttSub").textContent = OFFERED ? `${OFFERED.semester || "현재"} 수강편람 기준 · 강좌 ${OFFERED.count}개` : "";
 
     // 계획
@@ -709,6 +711,60 @@
       `<li class="c"><span><span class="nm">${esc(c.n)}</span>${c.why.map((w2) => `<span class="tag ${/필수/.test(w2) ? "req" : /진로/.test(w2) ? "fit" : "dsg"}">${esc(w2)}</span>`).join("")}<span class="why">${esc(c.sec.cl)}분반 · ${esc(c.sec.p || "교수 미정")} · ${esc(c.sec.t || "시간 미정")} · ${esc(c.sec.d || "")}</span></span><span class="cr">${fmt(c.cr)}학점</span></li>`).join("")}</ul></li>`
       + (others.length ? `<li><div class="when">다른 후보</div><ul><li class="c"><span class="why">${others.map((c) => `${esc(c.n)}(${esc(c.why.join("·"))})`).join(", ")}</span></li></ul></li>` : "")
       : `<li><div class="when">추천 없음</div><ul><li class="c"><span>이번 계절학기 개설 과목 중에는 공학인증·졸업이나 희망 진로에 맞는 과목이 없습니다.</span></li></ul></li>`;
+  }
+
+  // ---------- 마이크로디그리 ----------
+  const MI = window.MICRO;
+  function renderMicro(rec) {
+    const box = $("#microBlock");
+    renderMicro.rec = rec;
+    if (!MICROD || !MI) { box.hidden = true; return; }
+    box.hidden = false;
+    const track = C.tracks.find((t) => t.id === S.track);
+    const offered = OFFERED && OFFERED.courses ? (n) => (offeredInfo(n) || []).length > 0 : null;
+    const planned = (S.planned || []).map((p) => p.name).concat(rec ? rec.chosen.map((c) => c.name) : []);
+    const M = MI.evaluate(MICROD, S.courses, { dept: (GR && GR.DEPT[S.program]) || [], track, careerScore: E.careerScore, offered, planned });
+    const nGen = MICROD.programs.filter((p) => p.kind === "general").length, nAi = MICROD.programs.length - nGen;
+    $("#microSub").innerHTML = `${esc(MICROD.semester)}학기 수강편람 기준 · 마이크로디그리 ${nGen}개 · AI 마이크로디그리 ${nAi}개${MICROD.srcUrl ? ` · <a href="${esc(MICROD.srcUrl)}" target="_blank" rel="noopener">원문</a>` : ""}`;
+    $("#microPills").innerHTML = `<span class="pill ${M.ok.length ? "ok" : "unk"}">신청 가능 ${M.ok.length}개</span><span class="pill unk">6학점 이내로 남음 ${M.near.length}개</span>`;
+    const card = (r, why) => {
+      const p = r.p, pct = Math.round((r.earned / r.need) * 100);
+      const chip = (c) => `<span class="mchip ${c.taken ? "done" : ""}">${c.taken ? "✓ " : ""}${esc(c.name)}${c.as ? ` <small>(${esc(c.as)}로 인정)</small>` : ""}${c.choice ? ` <small>${esc(c.choice)}</small>` : ""}${!c.taken && c.offered ? ' <small class="op">이번 학기 개설</small>' : ""}${!c.taken && c.planned ? ' <small class="op">계획에 있음</small>' : ""}${c.univ ? ` <small>${esc(c.univ)}</small>` : ""}</span>`;
+      const leftAddable = r.left.filter((c) => !c.univ && !c.planned).slice(0, 6);
+      return `<article class="mcard ${r.ok ? "ok" : ""}">
+        <div class="mhead"><b>${esc(p.name)}</b><span class="tag ${p.kind === "ai" ? "fit" : "dsg"}">${p.kind === "ai" ? "AI 마이크로디그리" : esc(p.type || "마이크로디그리")}</span>${why ? `<span class="tag mine">${esc(why)}</span>` : ""}
+          <span class="mval">${r.ok ? "<strong>신청 가능</strong>" : `<strong>${r.earned}</strong> / ${r.need}학점 · ${r.remain}학점 남음`}</span></div>
+        <div class="mbar" role="img" aria-label="${pct}% 이수"><span style="width:${pct}%"></span></div>
+        <div class="mchips">${r.done.concat(r.left).map(chip).join("")}</div>
+        <p class="hint">${p.rule === "all" ? "표의 과목을 모두 이수(택N 묶음은 그 수만큼)" : `표의 과목 중 ${p.credits}학점 이수`}${p.dept ? ` · 주관 ${esc(p.dept)}` : ""}${p.contact ? ` · 문의 ${esc(p.contact)}` : ""}</p>
+        ${p.notes.length ? `<p class="hint">${p.notes.map(esc).join("<br>")}</p>` : ""}
+        ${!r.ok && leftAddable.length ? `<button type="button" class="btn ghost small" data-mplan="${esc(p.id)}">남은 과목 ${leftAddable.length}개 계획에 넣기</button>` : ""}
+      </article>`;
+    };
+    const sec = (title, arr, why) => (arr.length ? `<h3 class="mh">${title}</h3>` + arr.map((r) => card(r, why ? why(r) : "")).join("") : "");
+    $("#microList").innerHTML = sec("바로 신청할 수 있어요", M.ok)
+      + sec("조금만 더 들으면 돼요", M.near, (r) => (r.mine ? "내 학과" : r.fit > 0 ? "희망 진로" : ""))
+      + sec("내 학과가 운영하는 과정", M.mine.slice(0, 4))
+      + sec(`${track ? track.label : "희망 진로"}에 맞는 과정`, M.fit, () => "희망 진로")
+      || '<p class="hint">이수한 과목과 겹치는 과정이 아직 없습니다. 아래에서 찾아보세요.</p>';
+    const q = ($("#microQ").value || "").trim();
+    const all = q ? M.list.filter((r) => (r.p.name + r.p.dept + r.p.courses.map((c) => c.name).join(" ")).toLowerCase().includes(q.toLowerCase())).slice(0, 12) : [];
+    $("#microAll").innerHTML = q ? (all.length ? all.map((r) => card(r)).join("") : '<p class="hint">찾는 과정이 없습니다.</p>') : "";
+    const H = MI.HOWTO;
+    $("#microHow").innerHTML = ["general", "ai"].map((k) => `<div><h3 class="mh">${H[k].title}</h3><ol>${H[k].steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol></div>`).join("")
+      + `<p class="hint">과정별 과목 표는 학기마다 바뀔 수 있습니다. 신청 전에 두드림의 과정 안내와 주관학과 공지를 확인하세요.</p>`;
+    box.onclick = (e) => {
+      const b = e.target.closest("[data-mplan]"); if (!b) return;
+      const r = M.list.find((x) => x.p.id === b.dataset.mplan); if (!r) return;
+      let [y, s2] = (S.next || "1-1").split("-").map(Number);
+      const add = r.left.filter((c) => !c.univ && !c.planned).slice(0, 6);
+      add.forEach((c, i) => {
+        if (i && i % 2 === 0) { if (s2 === 2) { y++; s2 = 1; } else s2 = 2; }
+        S.planned = (S.planned || []).filter((p) => !E.same(p.name, c.name)).concat({ name: c.name, credit: c.credit, year: y, sem: s2 });
+      });
+      render();
+      $("#plan").scrollIntoView({ behavior: "smooth", block: "start" });
+    };
   }
 
   // ---------- 추천 시간표 ----------
