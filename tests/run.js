@@ -155,7 +155,27 @@ t("마이크로디그리 판정", () => {
   ok(MI.evalProgram(bz, bz.courses.slice(0, 4).map((x) => c(x.name))).ok);
 });
 
+(async () => {
+  const FC = require("../assets/filecheck.js");
+  const f = (name, bytes) => new File([bytes], name);
+  const rej = async (name, bytes) => { try { await FC.inspect(f(name, bytes)); return false; } catch (e) { return !!e.fileRejected; } };
+  const cases = [
+    ["성적.pdf", new Uint8Array([0x25, 0x50, 0x44, 0x46, 0x2d, 0x31]), false],
+    ["a.xlsx", new Uint8Array([0x50, 0x4b, 0x03, 0x04, 1]), false],
+    ["a.txt", new TextEncoder().encode("미적분학1 3 A+"), false],
+    ["a.pdf", new Uint8Array([0x4d, 0x5a, 0x90, 0]), true],
+    ["a.png", new TextEncoder().encode("%PDF-1.4"), true],
+    ["a.pdf.exe", new TextEncoder().encode("%PDF-1.4"), true],
+    ["a.exe.pdf", new TextEncoder().encode("%PDF-1.4"), true],
+    ["a.svg", new TextEncoder().encode("<svg/>"), true],
+    ["a.txt", new TextEncoder().encode("<script>alert(1)</script>"), true],
+    ["a.csv", new Uint8Array([0x61, 0, 0x62]), true],
+  ];
+  const got = await Promise.all(cases.map(([n, b]) => rej(n, b)));
+  t("파일 검사: 허용·거부", () => eq(got, cases.map((c) => c[2])));
+  console.log(`${pass}개 통과, ${fail}개 실패`);
+  process.exit(fail ? 1 : 0);
+})();
+
 if (OFF) t("수강편람 데이터 형식", () => { ok(OFF.count > 300); ok(Object.values(OFF.courses)[0][0].hasOwnProperty("t")); });
 
-console.log(`${pass}개 통과, ${fail}개 실패`);
-process.exit(fail ? 1 : 0);

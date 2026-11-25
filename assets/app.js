@@ -256,11 +256,12 @@
     pdfjs.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
     let doc;
     try {
-      doc = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+      doc = await pdfjs.getDocument({ data: await file.arrayBuffer(), isEvalSupported: false, enableXfa: false, disableAutoFetch: true }).promise;
     } catch (e) {
       if (e && e.name === "PasswordException") throw new Error("암호가 걸린 PDF입니다. 암호를 풀어 저장하거나, 화면을 캡처한 이미지를 넣어 주세요.");
       throw new Error("PDF를 열지 못했습니다. 파일이 손상되었거나 보호된 문서일 수 있습니다. 화면 캡처 이미지나 기이수성적 엑셀을 넣어 주세요.");
     }
+    if (doc.numPages > 40) throw new Error(`쪽 수가 너무 많습니다(${doc.numPages}쪽). 성적증명서는 보통 1~3쪽입니다.`);
     const items = [];
     for (let p = 1; p <= doc.numPages; p++) items.push((await (await doc.getPage(p)).getTextContent()).items);
     const render = async () => {
@@ -294,11 +295,13 @@
 
   async function readFile(file) {
     const st = $("#readStatus");
-    st.className = "status"; st.textContent = `${file.name} 읽는 중…`;
+    st.className = "status"; st.textContent = `${file.name} 확인 중…`;
     showRaw("");
-    let lastText = "";
+    let lastText = "", kind;
     try {
-      if (/\.pdf$/i.test(file.name) || file.type === "application/pdf") {
+      ({ kind } = await window.FILECHECK.inspect(file));
+      st.textContent = `${file.name} 읽는 중…`;
+      if (kind === "pdf") {
         const pdf = await pdfPages(file);
         lastText = pdf.text;
         let list = P.parseText(pdf.text, KNOWN);
@@ -315,7 +318,7 @@
         accept(list, file.name, lastText);
         return;
       }
-      if (/\.(png|jpe?g|webp|bmp|gif)$/i.test(file.name) || /^image\//.test(file.type)) {
+      if (kind === "image") {
         const text = await ocr([file], st);
         lastText = text;
         const list = P.parseText(text, KNOWN, { fuzzy: true });
@@ -323,9 +326,10 @@
         accept(list, file.name, lastText);
         return;
       }
-      if (/\.(xlsx|xls)$/i.test(file.name)) {
+      if (kind === "xlsx") {
         if (!window.XLSX) throw new Error("엑셀 해석기를 불러오지 못했습니다. 인터넷 연결을 확인하거나 표를 붙여넣어 주세요.");
-        const wb = window.XLSX.read(await file.arrayBuffer(), { type: "array" });
+        const wb = window.XLSX.read(await file.arrayBuffer(), { type: "array", sheetRows: 2000, cellFormula: false, cellHTML: false, bookVBA: false });
+        if (wb.SheetNames.length > 20) throw new Error("시트가 너무 많은 엑셀 파일입니다. 기이수성적 시트만 저장해 넣어 주세요.");
         let best = [];
         wb.SheetNames.forEach((n) => {
           const rows = window.XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, raw: false, defval: "" });
@@ -337,11 +341,13 @@
         return;
       }
       lastText = await file.text();
+      if (lastText.includes("\u0000")) throw new Error("텍스트 파일이 아닙니다.");
       accept(P.parseText(lastText, KNOWN), file.name, lastText);
     } catch (e) {
       st.textContent = e.message || String(e);
       st.className = "status err";
-      showRaw(lastText);
+      if (!e.fileRejected) showRaw(lastText);
+      $("#file").value = "";
     }
   }
 

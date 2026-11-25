@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'wasm-unsafe-eval'; worker-src 'self' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; connect-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net data: blob:; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net data:; img-src 'self' data: blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>세종대 공학인증 점검</title>
   <meta name="description" content="로그인 없이 성적표 하나로 세종대 공학인증(ABEEK) 졸업요건을 점검하고, 진로에 맞춘 남은 학기 계획과 졸업심사 체크표까지 미리 채워 봅니다.">
@@ -43,7 +44,7 @@
       <section class="step">
         <h2><span class="n">1</span>성적 넣기</h2>
         <label class="drop" id="drop">
-          <input type="file" id="file" accept=".pdf,.xlsx,.xls,.png,.jpg,.jpeg,.webp,.txt,.csv,.tsv,image/*" hidden>
+          <input type="file" id="file" accept=".pdf,.xlsx,.xls,.png,.jpg,.jpeg,.webp,.txt,.csv,.tsv,application/pdf,image/png,image/jpeg,image/webp" hidden>
           <strong>성적증명서 PDF · 기이수성적 엑셀 선택</strong>
           <span>또는 파일을 여기로 끌어다 놓기 · PDF, 엑셀, 캡처 이미지</span>
         </label>
@@ -288,7 +289,8 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="assets/vendor/xlsx.full.min.js"></script>
+  <script src="assets/filecheck.js"></script>
   <script src="assets/engine.js"></script>
   <script src="assets/careers.js"></script>
   <script src="assets/parser.js"></script>
@@ -297,6 +299,6 @@
   <script src="assets/timetable.js"></script>
   <script src="assets/micro.js"></script>
   <script src="assets/app.js"></script>
-  <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));</script>
+  <script src="assets/sw-register.js"></script>
 </body>
 </html>
